@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          },
+          map: {
+            "utility": "../../js/src/utility.js"
+          }
+      });
+      System.import('c3-bar.js').then(function(c3){
+        window.chart = c3.generate({
+            transition: {
+              enabled: true,
+              duration: 1000
+            },
+            "data":{
+              "x":"x",
+              "rows":[
+                ['x', '好评率'],
+                ['荣耀畅玩5', '98.1'],
+                ['荣耀畅玩5C', '98.0'],
+                ['华为P9 Plus标准版', '97.9'],
+                ['荣耀8', '97.7'],
+                ['荣耀Note8', '97.9'],
+                ['华为P9标准版', '97.6'],
+                ['华为麦芒5', '97.6'],
+                ['华为Mate8', '97.6'],
+                ['vivo Y51', '97.5'],
+                ['三星Galaxy Note7', '97.5'],
+              ],
+              "type": "bar"
+            },
+            "bar": {
+              "width": {
+                "ratio": 0.5
+              }
+            },
+            "padding":{
+              "left": 50,//左边距
+              "right": 30,//右边距
+              "top": 10,//上边距
+              "bottom": 0//下边距
+            },
+            "grid": {
+              "y": {
+                show: true
+              }
+            },
+            "axis":{
+              // "rotated": true,
+              "x":{
+                "type":"category",
+                "label": "品牌"//X轴标签文本
+              },
+              "y":{
+                "label": "好评率",//Y轴标签文本
+                // "min": 0,//Y轴最小值
+                // "max": 4700,//Y轴最大值
+                "tick":{
+                  "count":5,
+                  "format": function(v){
+                    if (!v) return 0  // 0时返回0
+                    if (parseInt(v) == v) return v  // 整形时,返回原值
+                    if (parseFloat(v) == v) return parseFloat(v).toFixed(2)  // 数字时,取2位小数
+                    return v;  // 非数字时,返回原值
+                  }
+                }
+              }
+            },
+            "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+            "legend":{
+              "show":true,
+              "shape":"circle",
+              "position": "right",
+              // "inset": {
+              //   "anchor": "top-right",
+              //   "y": -15
+              // }
+            },
+            point: {
+              show: false
+            },
+            mark: {
+              max: {
+                show: true,
+                position: "left",
+                text: {
+                  color: null,
+                  size: 14,
+                  content: function(d){
+                    return d.value;
+                  }
+                }
+              },
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

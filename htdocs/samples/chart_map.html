@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <link href="/css/c3.css" rel="stylesheet" type="text/css">
+    <style>
+      html,body{
+        position: relative;
+        height: 100%;
+      }
+      #chart{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+
+    <script src="/js/system.js"></script>
+    <script>
+    System.defaultJSExtensions = true;
+    // set our baseURL reference path
+    System.config({
+      baseURL: '/js/'
+    });
+    System.import('c3-map.js').then(function(c3){
+      var data=[["Gansu", 48],["Qinghai", 47],["Guangxi", 45],["Guizhou", 35],["Chongqing", 34],["Beijing", 12],["Fujian", 35],["Anhui", 6],["Guangdong", 40],["Xizang", 3],["Xinjiang", 12],["Hainan", 21],["Ningxia", 8],["Shaanxi", 40],["Shanxi", 11],["Hubei", 1],["Hunan", 23],["Sichuan", 19],["Yunnan", 19],["Hebei", 34],["Henan", 20],["Liaoning", 14],["Shandong", 0],["Tianjin", 12],["Jiangxi", 20],["Jiangsu", 37],["Shanghai", 34],["Zhejiang", 46],["Jilin", 38],["Inner Mongol", 10],["Heilongjiang", 0],["Taiwan", 45],["Xianggang", 35],["Macau", 10]];
+      var chart = c3.generate({
+        data: {
+          columns: data,
+          type: 'map',
+        },
+        legend: {
+          show: false
+        },
+        map: {
+          label: {
+            show: true
+          },
+          ratio: 1.35,
+          position: {
+            x: 150
+          },
+          scale: {
+            max: 110,
+            position: {
+              top: "center",
+              left: function(width, height){
+                return 30;
+              }
+            },
+            format: function(d){
+              return parseInt(d);
+            }
+          },
+          region: {
+            empty: {
+                color: "rgb(223, 255, 255)"
+            }
+          }
+        },
+        tooltip:{
+          // position: function (data, width, height, element) {
+          //     let containerPosition = $(element).parents(".c3").offset(),
+          //         mapPosition = $(element).position(),
+          //         mapRect = element.getBoundingClientRect(),
+          //         tooltipLeft = mapPosition.left + mapRect.width - containerPosition.left + 5,
+          //         tooltipTop = mapPosition.top + mapRect.height / 2 - containerPosition.top;
+
+          //     return {
+          //         top: tooltipTop, left: tooltipLeft
+          //     };
+          // },
+          // contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+          //     var html = [
+          //         '<div class="chart-tooltip">',
+          //         d[0].properties.name_local.split("|")[1] + ':' + (d[0].value * 100).toFixed(1) + '%',
+          //         '</div>'
+          //     ];
+          //     return html.join("");
+          // }
+        }
+      });
+      chart.focus("");
+    });
+  </script>
+  </body>
+</html>

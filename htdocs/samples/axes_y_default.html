@@ -5,19 +5,29 @@
   <body>
     <div id="chart"></div>
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="//cdn.bootcss.com/d3/3.5.12/d3.js" charset="utf-8"></script>
     <script src="/js/c3.js"></script>
     <script>
       var chart = c3.generate({
         data: {
           columns: [
-            ['data1'],
+            ['data1', 10, 20, 39],
             ['data2'],
           ],
         },
+        padding: {
+          top: 50,
+          left: 30,
+          right: 50
+        },
         axis: {
           y: {
-            default: [-100, 100]
+            // default: [0, 100],
+            // max: 50,
+            // min: 0,
+            // tick: {
+            //   count: 5
+            // }
           }
         }
       });

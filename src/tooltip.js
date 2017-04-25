@@ -1,12 +1,49 @@
-c3_chart_internal_fn.initTooltip = function () {
+var _ = require("underscore");
+var utility = require("./utility");
+
+var config = {
+    show: true,
+    grouped: true,
+    position: undefined,
+    contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+        return this.getTooltipContent ? this.getTooltipContent(d, defaultTitleFormat, defaultValueFormat, color) : '';
+    },
+    focusline: {
+        show: false,
+    },
+    format: {
+        title: undefined,
+        name: undefined,
+        value: undefined,
+    },
+    init: {
+        show: false,
+        x: 0,
+        position: { top: '0px', left: '50px' }
+    }
+};
+var CLASS = {
+    tooltipContainer: 'c3-tooltip-container',
+    tooltip: 'c3-tooltip',
+    tooltipName: 'c3-tooltip-name',
+};
+
+function Tooltip(owner){
+    owner.config = _.extend(owner.config, owner.convert({tooltip: config}));
+    owner.CLASS = _.extend(owner.CLASS, CLASS);
+}
+
+Tooltip.prototype.initTooltip = function () {
     var $$ = this, config = $$.config, i;
+
     $$.tooltip = $$.selectChart
         .style("position", "relative")
-      .append("div")
+        .append("div")
         .attr('class', CLASS.tooltipContainer)
         .style("position", "absolute")
         .style("pointer-events", "none")
         .style("display", "none");
+
     // Show tooltip if needed
     if (config.tooltip_init_show) {
         if ($$.isTimeSeries() && isString(config.tooltip_init_x)) {
@@ -24,65 +61,67 @@ c3_chart_internal_fn.initTooltip = function () {
             .style("display", "block");
     }
 };
-c3_chart_internal_fn.getTooltipContent = function (d, defaultTitleFormat, defaultValueFormat, color) {
+Tooltip.prototype.getTooltipContent = function (d, defaultTitleFormat, defaultValueFormat, color) {
     var $$ = this, config = $$.config,
         titleFormat = config.tooltip_format_title || defaultTitleFormat,
         nameFormat = config.tooltip_format_name || function (name) { return name; },
         valueFormat = config.tooltip_format_value || defaultValueFormat,
-        text, i, title, value, name, bgcolor,
-        orderAsc = $$.isOrderAsc();
+        text, i, title, value, name, bgcolor;
 
-    if (config.data_groups.length === 0) {
-        d.sort(function(a, b){
-            var v1 = a ? a.value : null, v2 = b ? b.value : null;
-            return orderAsc ? v1 - v2 : v2 - v1;
-        });
-    } else {
-        var ids = $$.orderTargets($$.data.targets).map(function (i) {
-            return i.id;
-        });
-        d.sort(function(a, b) {
-            var v1 = a ? a.value : null, v2 = b ? b.value : null;
-            if (v1 > 0 && v2 > 0) {
-                v1 = a ? ids.indexOf(a.id) : null;
-                v2 = b ? ids.indexOf(b.id) : null;
-            }
-            return orderAsc ? v1 - v2 : v2 - v1;
-        });
-    }
+    //排序points内容数据
+    d = d3.nest()
+        .key(function (d) { return d && d.index ? d.index : 0; })
+        .sortValues(function (a, b) { return b.value - a.value; })
+        .entries(d)
+        .reduce(function (a, b) {
+            return a.concat(b.values);
+        }, []);
 
     for (i = 0; i < d.length; i++) {
-        if (! (d[i] && (d[i].value || d[i].value === 0))) { continue; }
+        if (!(d[i] && (d[i].value || d[i].value === 0))) { continue; }
 
-        if (! text) {
-            title = sanitise(titleFormat ? titleFormat(d[i].x) : d[i].x);
-            text = "<table class='" + $$.CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
+        if (!text) {
+            title = titleFormat ? titleFormat(d[i].x) : d[i].x;
+            text = "<table class='" + CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
         }
 
-        value = sanitise(valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d));
+        value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
         if (value !== undefined) {
-            // Skip elements when their name is set to null
-            if (d[i].name === null) { continue; }
-            name = sanitise(nameFormat(d[i].name, d[i].ratio, d[i].id, d[i].index));
+            name = nameFormat(d[i].name, d[i].ratio, d[i].id, d[i].index);
             bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
 
-            text += "<tr class='" + $$.CLASS.tooltipName + "-" + $$.getTargetSelectorSuffix(d[i].id) + "'>";
-            text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + "</td>";
+            text += "<tr class='" + CLASS.tooltipName + "-" + d[i].id + "'>";
+            text += "<td class='name'><svg width='12' height='12'><g>";
+            text += "<path transform='translate(6,6)' style='stroke: #fff;shape-rendering: crispEdges;fill:" + bgcolor + "' d='" + $$.symbol[config.legend_shape || "square"] + "'></path>";
+            text += "</g></svg>&nbsp;" + name + "</td>";
             text += "<td class='value'>" + value + "</td>";
             text += "</tr>";
         }
     }
     return text + "</table>";
 };
-c3_chart_internal_fn.tooltipPosition = function (dataToShow, tWidth, tHeight, element) {
+Tooltip.prototype.tooltipPosition = function (dataToShow, tWidth, tHeight, element) {
     var $$ = this, config = $$.config, d3 = $$.d3;
     var svgLeft, tooltipLeft, tooltipRight, tooltipTop, chartRight;
-    var forArc = $$.hasArcType(),
+    var forArc = $$.hasType("arc") || $$.hasType("tree"),
+        forMap = $$.hasMapType && $$.hasMapType(),
+        forTreeMap = $$.hasTreeMapType && $$.hasTreeMapType(),
+        forCloud = $$.hasCloudType && $$.hasCloudType(),
         mouse = d3.mouse(element);
-  // Determin tooltip position
+
+    //TODO:新增图形后需要在此处添加逻辑判断，待实现动态的处理tooltip坐标计算方式
+
+    // Determin tooltip position
     if (forArc) {
         tooltipLeft = (($$.width - ($$.isLegendRight ? $$.getLegendWidth() : 0)) / 2) + mouse[0];
         tooltipTop = ($$.height / 2) + mouse[1] + 20;
+
+        if (config.pie_split) {
+            tooltipLeft += d3.transform(d3.select(element.parentElement.parentElement).attr("transform")).translate[0];
+        }
+    } else if (forMap || forTreeMap || forCloud){
+        tooltipLeft = mouse[0] + tWidth / 2;
+        tooltipTop = mouse[1] + 20;
     } else {
         svgLeft = $$.getSvgLeft(true);
         if (config.axis_rotated) {
@@ -98,7 +137,7 @@ c3_chart_internal_fn.tooltipPosition = function (dataToShow, tWidth, tHeight, el
         }
 
         if (tooltipRight > chartRight) {
-            // 20 is needed for Firefox to keep tooltip width
+            // 20 is needed for Firefox to keep tooletip width
             tooltipLeft -= tooltipRight - chartRight + 20;
         }
         if (tooltipTop + tHeight > $$.currentHeight) {
@@ -108,14 +147,15 @@ c3_chart_internal_fn.tooltipPosition = function (dataToShow, tWidth, tHeight, el
     if (tooltipTop < 0) {
         tooltipTop = 0;
     }
-    return {top: tooltipTop, left: tooltipLeft};
+    return { top: tooltipTop, left: tooltipLeft };
 };
-c3_chart_internal_fn.showTooltip = function (selectedData, element) {
+Tooltip.prototype.showTooltip = function (selectedData, element) {
     var $$ = this, config = $$.config;
     var tWidth, tHeight, position;
-    var forArc = $$.hasArcType(),
-        dataToShow = selectedData.filter(function (d) { return d && isValue(d.value); }),
-        positionFunction = config.tooltip_position || c3_chart_internal_fn.tooltipPosition;
+    var forArc = $$.hasType("arc"),
+        dataToShow = selectedData.filter(function (d) { return d && utility.isValue(d.value); }),
+        positionFunction = config.tooltip_position || $$.tooltipPosition;
+
     if (dataToShow.length === 0 || !config.tooltip_show) {
         return;
     }
@@ -131,6 +171,8 @@ c3_chart_internal_fn.showTooltip = function (selectedData, element) {
         .style("top", position.top + "px")
         .style("left", position.left + 'px');
 };
-c3_chart_internal_fn.hideTooltip = function () {
+Tooltip.prototype.hideTooltip = function () {
     this.tooltip.style("display", "none");
 };
+
+module.exports = Tooltip;

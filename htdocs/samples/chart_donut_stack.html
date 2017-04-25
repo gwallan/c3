@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <link rel="stylesheet" type="text/css" href="../css/c3.css">
+  </head>
+  <body>
+    <div id="chart"></div>
+
+    <script src="../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '/js/',
+          meta: {
+              'c3.js': {
+                format: 'cjs'
+              }
+          },
+          map: {
+              "utility": "/js/src/utility.js"
+          }
+      });
+      System.import('c3-cloud.js').then(function(c3){
+      var generate = function () { return c3.generate({
+        data: {
+          columns: [
+            ['meizu', 100],
+            ['xiaomi', 200],
+            ['OPPO', 150],
+            ['华为', 240],
+            ['酷派', 40],
+            ['一加', 20]
+          ],
+          type : 'donut',
+        },
+        legend: {
+          shape: "circle",
+          position: 'inset',
+          inset: {
+            anchor: 'top-right',
+            x: 800,
+            y: 10
+          }
+        },
+        donut: {
+          width: 40,
+          stack: {
+            enabled: true,
+            count: 3
+          },
+          label: {
+            show: true
+          }
+        }
+      }); }, chart = generate();
+      });
+    </script>
+  </body>
+</html>

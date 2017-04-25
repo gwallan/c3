@@ -1,5 +1,5 @@
 module.exports = (grunt) ->
-    require('load-grunt-tasks') grunt, pattern: ['grunt-contrib-*', 'grunt-sass', 'grunt-karma']
+    require('load-grunt-tasks') grunt, pattern: ['grunt-contrib-*', 'grunt-sass', 'grunt-karma', 'grunt-http-server','grunt-browser-sync']
 
     grunt.initConfig
         watch:
@@ -9,7 +9,12 @@ module.exports = (grunt) ->
           sass:
             tasks: 'sass'
             files: ['src/scss/*.scss']
-
+        browserSync:
+          bsFiles:
+            src: '*.html'
+          options:
+            server:
+              baseDir: './htdocs/'
         concat:
           dist:
             options:
@@ -83,7 +88,6 @@ module.exports = (grunt) ->
           c3: 'c3.js'
           spec: 'spec/*.js'
           options:
-            reporter: require('jshint-stylish')
             jshintrc: '.jshintrc'
 
         karma:
@@ -107,8 +111,21 @@ module.exports = (grunt) ->
             files:
               'c3.css': 'src/scss/main.scss'
 
+        'http-server':
+          'sample':
+              root: 'htdocs/',
+              port: 8282,
+              host: "0.0.0.0",   
+              showDir : true,
+              autoIndex: true,   
+              ext: "html",   
+              runInBackground: false,
+              openBrowser : true
+
     grunt.registerTask 'lint', ['jshint']
     grunt.registerTask 'test', ['karma']
     grunt.registerTask 'build', ['concat', 'sass']
     grunt.registerTask 'minify', ['cssmin', 'uglify']
     grunt.registerTask 'default', ['lint', 'build', 'test', 'minify']
+    grunt.registerTask 'sample', ['http-server']
+    grunt.registerTask 'live', ['browserSync']

@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <link href="/css/c3.css" rel="stylesheet" type="text/css">
+    <style>
+      html,body{
+        position: relative;
+        height: 100%;
+      }
+      #chart{
+        position: absolute;
+        width: 80%;
+        height: 85%;
+        margin: 20px;
+        border: solid 1px #ccc;
+      }
+      .c3-chart-treemap-node text{
+        font-size: 14px;
+        /*dominant-baseline: middle;*/
+      }
+    </style>
+  </head>
+  <body>
+    <label for="">系数:<input id="ratio" type="text"></label>
+    <label for="">数量:<input id="total" type="text"></label>
+    <button>确定</button>
+    <div id="chart"></div>
+
+    <script src="/js/system.js"></script>
+    <script>
+    System.defaultJSExtensions = true;
+    // set our baseURL reference path
+    System.config({
+        baseURL: '/js/'
+    });
+    System.import('c3-cloud.js').then(function(c3){
+        var positiveLinear = d3.scale.linear()
+            .domain([ 0, 200/4, 200/4*2, 200/4*3, 200])
+            .range(["#89e1d5", "#1ab06c", "#fce2aa", "#f8be49", "#f54e32"]);
+        var negativeLinear = d3.scale.linear()
+            .domain([ 0, 200/4, 200/4*2, 200/4*3, 200 ])
+            .range(["#ffc6c0", "#be5be9", "#6fc4ff", "#213d91", "#899976"]);
+
+        d3.xhr("../data/cloud/demo.csv?121", function (error, data) {
+            // var texts = data.response.split("\n").filter(function(text){return !!text});
+            var texts = JSON.parse(data.response);
+
+            // texts = texts.map(function(text){
+            //     return {
+            //         "count": text.split(/[+-]/g)[1].replace(" ", ""),
+            //         "lemma": text.split(/[+-]/g)[0].replace(" ", ""),
+            //         "type": text.match(/\+/) ? 1 : text.match(/\-/) ? -1 : 0
+            //     };
+            // });
+            texts = texts.data.map(function(text){
+                return {
+                    "count": parseInt(text.num),
+                    "lemma": text.label_str,
+                    "type": text.label_polar.match(/\+/) ? 1 : text.label_polar.match(/\-/) ? -1 : 0
+                };
+            });
+
+            c3.generate({
+                bindto: "#chart",
+                padding: {
+                  top: 0,
+                  left: 0
+                },
+                "data":{
+                    json: texts,
+                    keys: {
+                        value: ["count", "lemma", "type"]
+                    },
+                    type: "cloud"
+                },
+                "legend":{"show":false},
+                cloud: {
+                    domain: {
+                        min: 500,
+                        max: 802672
+                    },
+                    label: {
+                        font: "'Source Han Sans',Helvetica,Tahoma,Arial,'Hiragino Sans GB','Microsoft YaHei',SimSun,Heiti,sans-serif",
+                        color: function(d){
+                            if(d.type == 1)
+                              return positiveLinear(d.count);
+                            else if(d.type == -1)
+                              return negativeLinear(d.count);
+                            else
+                              return "#333";
+                        }
+                    }
+                }
+            });
+            document.querySelector("button").onclick = function(){
+                c3.generate({
+                    bindto: "#chart",
+                    padding: {
+                      top: 0,
+                      left: 0
+                    },
+                    "data":{
+                        json: texts.slice(0, document.querySelector("#total").value || texts.length),
+                        keys: {
+                            value: ["count", "lemma", "type"]
+                        },
+                        type: "cloud"
+                    },
+                    "legend":{"show":false},
+                    cloud: {
+                        ratio: document.querySelector("input").value,
+                        domain: {
+                          max: 2
+                        },
+                        label: {
+                            color: function(d){
+                                if(d.type == 1)
+                                  return positiveLinear(d.count);
+                                else if(d.type == -1)
+                                  return negativeLinear(d.count);
+                                else
+                                  return "#333";
+                            }
+                        }
+                    }
+                });
+            };
+        });
+    });
+  </script>
+  </body>
+</html>

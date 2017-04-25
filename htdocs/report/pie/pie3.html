@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          }
+      });
+      System.import('c3-pie.js').then(function(c3){
+        window.c3 = c3;
+
+        c3.generate({
+            "data":{
+              type : 'donut',
+              "columns":[
+                ["PRO 5","5.3700"],
+                ["魅蓝2","3.5700"],
+                ["MX4","1.5000"],
+                ["MX5","0.5000"]
+              ],
+              "onmouseover": function(d){
+                var legend = d3.selectAll(".c3-legend-item:nth-child(" + (d.index+1) + ")");
+                var arc = d3.select(".c3-chart-arcs");
+                var arcTip = arc.append("g").attr("class", "tip");
+                var arcTipValue = arcTip.append("text");
+                var arcTipTitle = arcTip.append("g");
+                var arcTipTitleMark = arcTipTitle.append("path");
+                var arcTipTitleText = arcTipTitle.append("text");
+
+                arcTipValue
+                  .text((d.ratio * 100).toFixed(1) + '%')
+                  .style("text-anchor", "middle")
+                  .style("font-size", "36px");
+                arcTipTitleText
+                  .text(d.name)
+                  .attr("y", 20)
+                  .style("text-anchor", "middle")
+                  .style("font-size", "16px");
+                arcTipTitleMark
+                  .attr("d", legend.select("path").attr("d"))
+                  .attr("transform", "translate(-" + (arcTipTitleText.node().getBoundingClientRect()["width"]/2 + 10) + ",14)")
+                  .style("fill", legend.select("path").style("fill"));
+              },
+              "onmouseout": function(){
+                d3.selectAll("g.tip").remove();
+              }
+            },
+            "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+            "legend":{
+              "show":false,
+              "shape":"circle",
+            },
+            "donut": {
+              "split": true,
+              "width": 20,
+              "label": {
+                "position": "inner"
+              },
+              "title": {
+                "show": true
+              },
+              "other": "#ddd"
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

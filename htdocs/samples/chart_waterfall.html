@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <link href="/css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      #chart{
+        height: 600px;
+      }
+      .c3-target-data2{
+        opacity: 0!important;
+      }
+    </style>
+    <div id="chart"></div>
+
+    <script src="/js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      System.config({
+        baseURL: '/js/'
+      });
+      System.import('c3.js').then(function(c3){
+        c3.generate({
+          "padding": {
+            top: 30
+          },
+          "data":{
+            columns: [
+              ['data1', 500, 200, 200, 100],
+              ['data2', 0, 300, 100, 0],
+            ],
+            type: 'bar',
+            groups: [
+              ['data1', 'data2']
+            ],
+            "type": "bar"
+          },
+          "bar":{"width":{"ratio":0.45}},
+          "padding":{"bottom":15,"left":35,"right":35,"top":0},
+          "axis":{
+            "x":{
+              "type":"category",
+              // tick: {
+              //   format: function(x, c){
+              //     return c.replace("-", ".");
+              //   }
+              // }
+            },
+            "y":{"min":0,"max":600,"tick":{"count":13}}
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,268 @@
+<html>
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+    <script src="http://gonsakon.github.io/SVGtoPNG/js/StackBlur.js" type="text/javascript"></script>
+    <script src="http://gonsakon.github.io/SVGtoPNG/js/rgbcolor.js" type="text/javascript"></script>
+    <script src="http://gonsakon.github.io/SVGtoPNG/js/canvg.js" type="text/javascript"></script>
+    <link href="/css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <a href="#" class="savePNG">SAVE</a>
+    <div id="chart"></div>
+    <canvas id="canvas" width="1000" height="531"></canvas>
+    <script src="/js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '/js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          }
+      });
+      System.import('c3.js').then(function(c3){
+        window.chart = c3.generate({
+            "padding":{"right":30,"top":10},
+            "axis":{
+              "x":{"type":"timeseries","tick":{"format":"%y/%m/%d","count":8}},
+              "y":{"tick":{"count":6}}
+            },
+            "color":{"pattern":["#f36b54","#fbd66f","#59b5df","#2a75c8","#28cebb","#fdb659","#b364d8","#ff7cdc"]},
+            "point":{"show":true,"r":0,"focus":{"expand":{"enabled":true,"r":3}}},
+            "data":{
+              "x":"x",
+              "columns":[["x","2016-05-18","2016-05-19","2016-05-20","2016-05-21","2016-05-22","2016-05-23","2016-05-24","2016-06-01","2016-06-02","2016-06-04","2016-06-05"],["评论量趋势","4203","3783","3546","2240","1246","413","22","2","1","6","1"]],
+              "colors":["#f36b54"]},
+            "axis": {"x": {"type": "categorized"}},
+            "legend":{"show":false,"shape":"circle"},
+            "tooltip":{"show":false,"focusline":{"show":true}},
+            mark: {
+              max: {
+                show: true,
+                position: "top",
+                text: {
+                  color: "#ccc",
+                  size: "16px",
+                  content: "休闲鞋"
+                }
+              }
+            }
+          });
+      });
+    </script>
+    <script>
+      // c3.generate({
+      //     "padding":{"right":30,"top":10},
+      //     "axis":{
+      //       "x":{"type":"timeseries","tick":{"format":"%y/%m/%d","count":8}},
+      //       "y":{"tick":{"count":6}}
+      //     },
+      //     "color":{"pattern":["#f36b54","#fbd66f","#59b5df","#2a75c8","#28cebb","#fdb659","#b364d8","#ff7cdc"]},
+      //     "point":{"show":true,"r":0,"focus":{"expand":{"enabled":true,"r":3}}},
+      //     "data":{
+      //       "x":"x",
+      //       "columns":[["x","2016-05-18","2016-05-19","2016-05-20","2016-05-21","2016-05-22","2016-05-23","2016-05-24","2016-06-01","2016-06-02","2016-06-04","2016-06-05"],["评论量趋势","4203","3783","3546","2240","1246","413","22","2","1","6","1"]],
+      //       "colors":["#f36b54"]},
+      //     "axis": {"x": {"type": "categorized"}},
+      //     "legend":{"show":false,"shape":"circle"},
+      //     "tooltip":{"show":true,"focusline":{"show":true}}});
+      // var chart = c3.generate({
+      //   size: {
+      //     // width: 300
+      //   },
+      //   data: {
+      //     x: 'x',
+      //     columns: [
+      //       ['x', '0-799', '899-1299', '1300-2199', '2200-3499', '3500-4499', '4500-6099'],
+      //       ['银牌会员', 20, 28, 20, 60, 30, 29],
+      //     ],
+      //     type: 'area',
+      //     // selection: {
+      //     //   grouped: true
+      //     // },
+      //     onclick: function (d, element) { console.log("onclick", d, element); },
+      //   },
+      //   padding: {
+      //     left: 0,
+      //     top: 0,
+      //     right: 0,
+      //     bottom: 0
+      //   },
+      //   "color":{"pattern":["#f36b54","#fbd66f","#59b5df","#2a75c8","#28cebb","#fdb659","#b364d8","#ff7cdc"]},
+      //   axis: {
+      //     rotated: false,
+      //     x: {
+      //       show: false,
+      //       type: 'categorized',//timeseries
+      //       show: true,
+      //       tick:{
+      //         // count: 5,
+      //         width: 80,
+      //         // multiline: true
+      //       }
+      //     },
+      //     y: {
+      //       show: false,
+      //       min: 0
+      //     }
+      //   },
+      //   grid: {
+      //     x: {
+      //       // show: true,
+      //       lines: [
+      //         // {value: "0-799"}
+      //       ],
+      //     },
+      //     y: {
+      //       lines: [
+      //         // {value: "1400"}
+      //       ]
+      //     }
+      //   },
+      //   point: {
+      //     show: false
+      //   },
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   legend: {
+      //     show: false,
+      //     shape: "circle",
+      //     position: "inset",
+      //     inset: {
+      //       y: function(svgHeight, legendHeight){
+      //         return svgHeight - legendHeight;
+      //       },
+      //       x: function(svgWidth, legendWidth){
+      //         return svgWidth/2 - legendWidth/2;
+      //       },
+      //       anchor: 'bottom-right',
+      //       step: 2
+      //     }
+      //   },
+      //   line: {
+      //     connectNull: true
+      //   },
+      //   mark: {
+      //     max: {
+      //       position: "top",
+      //       text: {
+      //         color: "#ccc",
+      //         size: "16px",
+      //         content: function(){
+
+      //         }
+      //       },
+      //       outline: function(){
+
+      //       }
+      //     }
+      //   }
+      // });
+    </script>
+    <script>
+    $(function() {
+      $('.savePNG').on('click',function(e){
+        e.preventDefault;
+        createChartImages();
+      });
+
+       var styles;
+       var createChartImages = function() {
+           // Zoom! Enhance!
+           // $('#chart > svg').attr('transform', 'scale(2)');
+
+           // Remove all defs, which botch PNG output
+           $('defs').remove();
+           // Copy CSS styles to Canvas
+           inlineAllStyles();
+           // Create PNG image
+           var canvas = $('#canvas').empty()[0];
+           canvas.width = $('#chart').width() * 2;
+           canvas.height = $('#chart').height() * 2;
+
+           var canvasContext = canvas.getContext('2d');
+           var svg = $.trim($('#chart > svg')[0].outerHTML);
+           canvasContext.drawSvg(svg, 0, 0);
+           $(".savePNG").attr("href", canvas.toDataURL("png"))
+               .attr("download", function() {
+                   return "_llamacharts.png";
+               });
+       };
+       var inlineAllStyles = function() {
+           var chartStyle, selector;
+           // Get rules from c3.css
+           for (var i = 0; i <= document.styleSheets.length - 1; i++) {
+               if (document.styleSheets[i].href && document.styleSheets[i].href.indexOf('c3.css') !== -1) {
+                   if (document.styleSheets[i].rules !== undefined) {
+                       chartStyle = document.styleSheets[i].rules;
+                   } else {
+                       chartStyle = document.styleSheets[i].cssRules;
+                   }
+               }
+
+           }
+           if (chartStyle !== null && chartStyle !== undefined) {
+               // SVG doesn't use CSS visibility and opacity is an attribute, not a style property. Change hidden stuff to "display: none"
+               var changeToDisplay = function() {
+                   if ($(this).css('visibility') === 'hidden' || $(this).css('opacity') === '0') {
+                       $(this).css('display', 'none');
+                   }
+               };
+               // Inline apply all the CSS rules as inline
+               for (i = 0; i < chartStyle.length; i++) {
+
+                   if (chartStyle[i].type === 1) {
+                       selector = chartStyle[i].selectorText;
+                       styles = makeStyleObject(chartStyle[i]);
+                       $('svg *').each(changeToDisplay);
+                       // $(selector).hide();
+                       $(selector).not($('.c3-chart path')).css(styles);
+                   }
+                   $('.c3-chart path')
+                       .filter(function() {
+                           return $(this).css('fill') === 'none';
+                       })
+                       .attr('fill', 'none');
+
+                   $('.c3-chart path')
+                       .filter(function() {
+                           return !$(this).css('fill') === 'none';
+                       })
+                       .attr('fill', function() {
+                           return $(this).css('fill');
+                       });
+               }
+           }
+       };
+       // Create an object containing all the CSS styles.
+       // TODO move into inlineAllStyles
+       var makeStyleObject = function(rule) {
+           var styleDec = rule.style;
+           var output = {};
+           var s;
+           for (s = 0; s < styleDec.length; s++) {
+               output[styleDec[s]] = styleDec[styleDec[s]];
+           }
+           return output;
+       };
+
+    });
+    </script>
+  </body>
+</html>

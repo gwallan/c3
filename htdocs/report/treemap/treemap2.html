@@ -1,0 +1,134 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+    <style>
+      html,body{
+        position: relative;
+        height: 100%;
+      }
+      #chart{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .c3-chart-treemap-node text{
+        font-size: 14px;
+        /*dominant-baseline: middle;*/
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+
+    <script src="../../js/system.js"></script>
+    <script>
+    System.defaultJSExtensions = true;
+    // set our baseURL reference path
+    System.config({
+      baseURL: '../../js/',
+      meta: {
+        'c3.js': {
+          format: 'cjs'
+        }
+      }
+    });
+    System.import('c3-tree.js').then(function(c3){
+      var ids = [];
+      var data = {
+        "name": "flare",
+        "children": [
+          {
+            "name": "线上",
+            "children": [
+                {
+                    "name": "官网",
+                    "size": 73954
+                },
+                {
+                    "name": "天猫",
+                    "size": 70148
+                },
+                {
+                    "name": "京东",
+                    "size": 123611
+                },
+                {
+                    "name": "一号店",
+                    "size": 3270
+                },
+                {
+                    "name": "其他",
+                    "size": 0
+                }
+            ]
+          },
+          {
+              "name": "线下",
+              "children": [
+                  {
+                      "name": "专卖店",
+                      "size": 122120
+                  },
+                  {
+                      "name": "平台",
+                      "size": 105500
+                  },
+                  {
+                      "name": "苏宁",
+                      "size": 9240
+                  }
+              ]
+          },
+          {
+              "name": "运营商",
+              "children": [
+                  {
+                      "name": "天音",
+                      "size": 300
+                  },
+                  {
+                      "name": "乐语",
+                      "size": 0
+                  },
+                  {
+                      "name": "爱施德",
+                      "size": 0
+                  },
+                  {
+                      "name": "ASD",
+                      "size": 0
+                  }
+              ]
+          },
+          {
+              "name": "其他",
+              "children": [
+                  {
+                      "name": "其他",
+                      "size": 105740
+                  },
+                  {
+                      "name": "海外",
+                      "size": 0
+                  }
+              ]
+          }
+        ]
+      };
+      window.chart = c3.generate({
+        data: {
+          json: data,
+          type: 'tree',
+        },
+        "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+        legend: {
+          show: true
+        },
+        tooltip: {
+          show: false
+        },
+      });
+    });
+  </script>
+  </body>
+</html>

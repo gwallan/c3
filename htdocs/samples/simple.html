@@ -1,22 +1,134 @@
 <html>
   <head>
+    <meta content="width=device-width" name="viewport">
     <link rel="stylesheet" type="text/css" href="/css/c3.css">
   </head>
   <body>
     <div id="chart"></div>
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="//cdn.bootcss.com/d3/3.5.12/d3.js" charset="utf-8"></script>
     <script src="/js/c3.js"></script>
+    <style>
+      body{
+        margin: 0;
+        padding-top: 200px;
+        height: 1000px;
+      }
+      .tooltip{
+        background-color: #4ca4f7;
+        padding: 10px;
+        color: #fff;
+        border-radius: 3px;
+      }
+      .c3-circle{
+      }
+      .c3-circle._expanded_{
+        fill: white!important;
+      }
+      line.c3-xgrid-focus{
+        stroke: #4ca4f7;
+        stroke-dasharray: 5;
+      }
+      .c3-axis path.domain,
+      .c3-axis .tick line,
+      .c3-axis .tick text{
+        stroke: grey;
+      }
+    </style>
     <script>
       var chart = c3.generate({
         data: {
+          x: "x",
           columns: [
-            ['data1', 30, 200, 100, 400, 150, 250],
-            ['data2', 50, 20, 10, 40, 15, 25]
+            ["x",1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+            ["2016.02",9429,6101,9059,8541,9226,8292,6225,6256,7630,6456,9322,8614,8481,7223,8575,8984,8515,7851,7967,8224,7381,7964,6075,6868,7479,6962,8004,8207,7147],
+            ["2016.03",6263,7050,8488,9648,7826,9086,6007,8839,7468,8208,8566,8624,6734,9392,6269,7596,6688,9392,8036,7676,7114,7520,6404,8576,6549,6672,6325,9176,6922,7152,6480],
+            ["2016.04",6181,6161,8978,7949,9191,7443,6917,9029,7104,9080,6747,6993,9615,8008,8067,7880,7604,6477,8463,6692,8978],
           ],
-          onclick: function (d, element) { console.log("onclick", d, element); },
-          onmouseover: function (d) { console.log("onmouseover", d); },
-          onmouseout: function (d) { console.log("onmouseout", d); },
+          type: 'area-spline',
+          colors: {
+            "2016.04": '#5b80eb',
+            "2016.03": '#dbdbdb',
+            "2016.02": '#dbdbdb',
+          }
+          // onclick: function (d, element) { console.log("onclick", d, element); },
+          // onmouseover: function (d) { console.log("onmouseover", d); },
+          // onmouseout: function (d) { console.log("onmouseout", d); },
+        },
+        point: {
+          r: 0,
+          focus: {
+            expand: {
+              enabled: true,
+              r: 5
+            }
+          }
+        },
+        axis: {
+          x: {
+            tick: {
+              fit: true
+            },
+            padding: {
+              left: 0,
+              right: 0.1
+            }
+          },
+          y: {
+            max: 12000,
+            tick: {
+              width: 3,
+              orient: true,
+              count: 6
+            }
+          }
+        },
+        padding: {
+          left: 5,
+          bottom: 30
+        },
+        legend: {
+          shape: "circle",
+          position: 'inset',
+          inset: {
+            anchor: 'bottom-right',
+            x: 0,
+            y: -45,
+            step: 1
+          },
+          item: {
+            width: 70
+          }
+        },
+        tooltip: {
+          focusline: {
+            show: true
+          },
+          position: function (data, width, height, element) {
+            var mouse = d3.mouse(element);
+            var svgLeft = this.getSvgLeft(true);
+            var tooltipLeft = this.getCurrentPaddingLeft(true) + this.x(data[0].x) + 40;
+            var tooltipRight = tooltipLeft + width;
+            var chartRight = this.currentWidth - this.getCurrentPaddingRight();
+
+            if (chartRight - this.x(data[0].x) - 30 < width) {
+              tooltipLeft = this.x(data[0].x) - width/2;
+            }
+
+            return {
+              top: 50, left: tooltipLeft - width/2//offset.left + (offset.width/2 + width/2 - chartOffsetX)
+            };
+          },
+          contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+            var html = [
+              '<div id="tooltip" class="tooltip">',
+              d[1].x + '<br>',
+              d[1].value + '<br>',
+              d[1].value + '<br>',
+              '</div>'
+            ];
+            return html.join("");
+          }
         }
       });
     </script>

@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+      .c3-shape.c3-arc{
+        stroke-width: 0!important;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          }
+      });
+      System.import('c3-pie.js').then(function(c3){
+        window.c3 = c3;
+
+        c3.generate({
+            "onrendered": function(){
+              this.svg
+                .select("defs")
+                .append("filter")
+                .attr('id', 'shadow')
+                .attr("x", "-50%")
+                .attr("y", "-50%")
+                .attr("width", "200%")
+                .attr("height", "200%")
+                .html('<feOffset result="offOut" in="SourceAlpha" dx="0" dy="0"/><feGaussianBlur result="blurOut" in="offOut" stdDeviation="8" /><feBlend in="SourceGraphic" in2="blurOut" mode="normal" /><feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/> </feMerge>');
+            },
+            "data":{
+              type : 'donut',
+              "columns":[
+                ["PRO 5","5.3700"],
+                ["魅蓝2","3.5700"],
+                ["MX4","1.5000"],
+                ["MX5","0.5000"]
+              ],
+              "onmouseover": function(d, e){
+                d3.select(e).attr("filter", "url(#shadow)");
+              },
+              "onmouseout": function(d, e){
+                d3.select(e).attr("filter", null);
+              }
+            },
+            "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+            "legend":{
+              "show":true,
+              "shape":"circle",
+              "position": "right",
+              // "inset": {
+              //   "x": 300,
+              //   "y": 100
+              // },
+              "item": {
+                "height": 30
+              }
+            },
+            "pie": {
+              "label": {
+                "position": "inner"
+              }
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

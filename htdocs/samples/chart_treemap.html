@@ -1,0 +1,128 @@
+<html>
+  <head>
+    <link href="/css/c3.css" rel="stylesheet" type="text/css">
+    <style>
+      html,body{
+        position: relative;
+        height: 100%;
+      }
+      #chart{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .c3-chart-treemap-node text{
+        font-size: 14px;
+        /*dominant-baseline: middle;*/
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="chart.level('graph', 2)">TOP</button>
+    <div id="chart"></div>
+
+    <script src="/js/system.js"></script>
+    <script>
+    System.defaultJSExtensions = true;
+    // set our baseURL reference path
+    System.config({
+      baseURL: '/js/'
+    });
+    System.import('c3-treemap.js').then(function(c3){
+      var ids = [];
+      var data = {
+        "name": "graph",
+        "children": [
+            {
+                "name": "新品发布2",
+                "children": [
+                    {
+                        "name": "数据调研A",
+                        "value": 7897
+                    },
+                    {
+                        "name": "数据调研B",
+                        "value": 76540
+                    },
+                    {
+                        "name": "数据调研C",
+                        "value": 66697
+                    }
+                ]
+            },
+            {
+                "name": "新品发布",
+                "children": [
+                    {
+                        "name": "日常运营",
+                        "children": [
+                            {
+                                "name": "Q-zone",
+                                "value": 11123
+                            },
+                            {
+                                "name": "QQ",
+                                "value": 10120
+                            }
+                        ]
+                    },
+                    {
+                        "name": "广告设计",
+                        "value": 2897
+                    }
+                ]
+            },
+            {
+                "name": "日常运营",
+                "children": [
+                    {
+                        "name": "线下推广",
+                        "children": [
+                            {
+                                "name": "日常运营3",
+                                "value": 149431
+                            },
+                            {
+                                "name": "户外广告",
+                                "value": 900
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+      };
+      window.chart = c3.generate({
+        data: {
+          json: data,
+          type: 'treemap',
+          onclick: function(d){
+            d.parent && d.parent.parent && this.level(d.parent, 3);
+          }
+        },
+        color: {
+          pattern: ["#f36b54", "#fbd66f", "#59b5df", "#2a75c8", "#28cebb", "#fdb659", "#b364d8", "#5cb053", "#6d7a88", "#b6b6b6"]
+        },
+        padding: {
+          left: 0
+        },
+        legend: {
+          show: false
+        },
+        tooltip: {
+          show: false
+        },
+        treemap: {
+            label: {
+                multiline: true,
+                color: "#333"
+            },
+            hierarchy: {
+                show: 3
+            }
+        }
+      });
+    });
+  </script>
+  </body>
+</html>

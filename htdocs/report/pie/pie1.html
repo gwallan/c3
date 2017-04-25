@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../../src/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          },
+          map: {
+            "underscore": "../../../node_modules/underscore/underscore.js",
+            "pathseg": "../../../node_modules/pathseg/pathseg.js",
+            "d3": "../../../node_modules/d3/d3.js"
+          }
+      });
+      System.import('component/c3-pie.js').then(function(c3){
+        c3.generate({
+          transition: {
+            enabled: true,
+            duration: 1500
+          },
+          "data":{
+            type : 'pie',
+            "columns":[
+              ["PRO 5","5.3700"],
+              ["魅蓝2","3.5700"],
+              ["MX5","0.5000"],
+              ["MX4","1.5000"]
+            ],
+          },
+          "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+          "legend":{
+              'shape': 'circle',
+              'position': 'inset',
+              'inset': {
+                'anchor': 'top-right'
+              }
+          },
+          "pie": {
+            "label": {
+              // "show": false,
+              "position": "inner"
+            },
+            "title": {
+              "show": false
+            }
+          }
+        });
+
+        window.c3 = c3;
+      });
+    </script>
+  </body>
+</html>

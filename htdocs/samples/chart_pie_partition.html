@@ -1,0 +1,337 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/css/c3.css">
+    <style>
+    #mychart1,
+    #mychart2{
+      width: 400px;
+      margin: 0 auto;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="mychart1"></div>
+    <div id="mychart2"></div>
+
+    <script src="/js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      System.config({
+        baseURL: '/js/',
+        meta: {
+          'c3.js': {
+            format: 'cjs'
+          }
+        },
+        map: {
+          "utility": "/js/src/utility.js"
+        }
+      });
+      System.import('c3.js').then(function(c3){
+        var chart = c3.generate({
+          bindto: "#mychart1",
+          data: {
+            // names: {
+            //   1: "媒介营销组",
+            //   2: "社会化营销组",
+            //   3: "SEO组",
+            //   4: "创意营销组",
+            //   5: "电商营销组"
+            // },
+            json: {
+              "name": "flare",
+              "children": [
+                {
+                  "name": "线上",
+                  "children": [
+                      {
+                          "name": "官网",
+                          "size": 73954
+                      },
+                      {
+                          "name": "天猫",
+                          "size": 70148
+                      },
+                      {
+                          "name": "京东",
+                          "size": 123611
+                      },
+                      {
+                          "name": "一号店",
+                          "size": 3270
+                      },
+                      {
+                          "name": "其他",
+                          "size": 0
+                      }
+                  ]
+                },
+                {
+                    "name": "线下",
+                    "children": [
+                        {
+                            "name": "专卖店",
+                            "size": 122120
+                        },
+                        {
+                            "name": "平台",
+                            "size": 105500
+                        },
+                        {
+                            "name": "苏宁",
+                            "size": 9240
+                        }
+                    ]
+                },
+                {
+                    "name": "运营商",
+                    "children": [
+                        {
+                            "name": "天音",
+                            "size": 300
+                        },
+                        {
+                            "name": "乐语",
+                            "size": 0
+                        },
+                        {
+                            "name": "爱施德",
+                            "size": 0
+                        },
+                        {
+                            "name": "ASD",
+                            "size": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "其他",
+                    "children": [
+                        {
+                            "name": "其他",
+                            "size": 105740
+                        },
+                        {
+                            "name": "海外",
+                            "size": 0
+                        }
+                    ]
+                }
+              ]
+            },
+            type : 'tree',
+            // onmouseover: function (d, i) { console.log("onmouseover", d, i, this); },
+            // onmouseout: function (d, i) { console.log("onmouseout", d, i, this); },
+            // onclick: function (d, i) { console.log("onclick", d, i, this); },
+            colors: {
+              "媒介营销组": "#564ea0"
+            }
+          },
+          legend: {
+            position: 'inset',
+            shape: "square"
+          },
+          axis: {
+            x: {
+              label: 'Sepal.Width'
+            },
+            y: {
+              label: 'Petal.Width'
+            }
+          },
+          tooltip: {
+            focusline: {
+              show: true
+            },
+            format: {
+              name: function(name, ratio){
+                return name;
+              },
+              value: function(value, ratio){
+                return ratio;
+              }
+            },
+            contents: function(d, defaultTitleFormat, defaultValueFormat, color){
+              var $$ = this, config = $$.config,
+                  nameFormat = config.tooltip_format_name || function (name) { return name; },
+                  valueFormat = config.tooltip_format_value || defaultValueFormat,
+                  text, i, title, value, name, bgcolor;
+
+              for (i = 0; i < d.length; i++) {
+                  if (!(d[i] && (d[i].value || d[i].value === 0))) { continue; }
+
+                  if (!text) {
+                      text = "<table class='" + $$.CLASS.tooltip + "'>";
+                  }
+
+                  value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
+                  if (value !== undefined) {
+                      name = nameFormat(d[i].name, d[i].ratio, d[i].id, d[i].index);
+                      bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
+
+                      text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";
+                      text += "<td class='name'>&nbsp;" + name + "</td>";
+                      text += "<td class='value'>" + value + "</td>";
+                      text += "</tr>";
+                  }
+              }
+              return text + "</table>";
+            }
+          }
+        });
+        var chart = c3.generate({
+          bindto: "#mychart2",
+          data: {
+            // names: {
+            //   1: "媒介营销组",
+            //   2: "社会化营销组",
+            //   3: "SEO组",
+            //   4: "创意营销组",
+            //   5: "电商营销组"
+            // },
+            json: {
+              "name": "flare",
+              "children": [
+                {
+                  "name": "线上",
+                  "children": [
+                      {
+                          "name": "官网",
+                          "size": 73954
+                      },
+                      {
+                          "name": "天猫",
+                          "size": 70148
+                      },
+                      {
+                          "name": "京东",
+                          "size": 123611
+                      },
+                      {
+                          "name": "一号店",
+                          "size": 3270
+                      },
+                      {
+                          "name": "其他",
+                          "size": 0
+                      }
+                  ]
+                },
+                {
+                    "name": "线下",
+                    "children": [
+                        {
+                            "name": "专卖店",
+                            "size": 122120
+                        },
+                        {
+                            "name": "平台",
+                            "size": 105500
+                        },
+                        {
+                            "name": "苏宁",
+                            "size": 9240
+                        }
+                    ]
+                },
+                {
+                    "name": "运营商",
+                    "children": [
+                        {
+                            "name": "天音",
+                            "size": 300
+                        },
+                        {
+                            "name": "乐语",
+                            "size": 0
+                        },
+                        {
+                            "name": "爱施德",
+                            "size": 0
+                        },
+                        {
+                            "name": "ASD",
+                            "size": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "其他",
+                    "children": [
+                        {
+                            "name": "其他",
+                            "size": 105740
+                        },
+                        {
+                            "name": "海外",
+                            "size": 0
+                        }
+                    ]
+                }
+              ]
+            },
+            type : 'tree',
+            // onmouseover: function (d, i) { console.log("onmouseover", d, i, this); },
+            // onmouseout: function (d, i) { console.log("onmouseout", d, i, this); },
+            // onclick: function (d, i) { console.log("onclick", d, i, this); },
+            colors: {
+              "媒介营销组": "#564ea0"
+            }
+          },
+          legend: {
+            position: 'inset',
+            shape: "square"
+          },
+          axis: {
+            x: {
+              label: 'Sepal.Width'
+            },
+            y: {
+              label: 'Petal.Width'
+            }
+          },
+          tooltip: {
+            focusline: {
+              show: true
+            },
+            format: {
+              name: function(name, ratio){
+                return name;
+              },
+              value: function(value, ratio){
+                return ratio;
+              }
+            },
+            contents: function(d, defaultTitleFormat, defaultValueFormat, color){
+              var $$ = this, config = $$.config,
+                  nameFormat = config.tooltip_format_name || function (name) { return name; },
+                  valueFormat = config.tooltip_format_value || defaultValueFormat,
+                  text, i, title, value, name, bgcolor;
+
+              for (i = 0; i < d.length; i++) {
+                  if (!(d[i] && (d[i].value || d[i].value === 0))) { continue; }
+
+                  if (!text) {
+                      text = "<table class='" + $$.CLASS.tooltip + "'>";
+                  }
+
+                  value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
+                  if (value !== undefined) {
+                      name = nameFormat(d[i].name, d[i].ratio, d[i].id, d[i].index);
+                      bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
+
+                      text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";
+                      text += "<td class='name'>&nbsp;" + name + "</td>";
+                      text += "<td class='value'>" + value + "</td>";
+                      text += "</tr>";
+                  }
+              }
+              return text + "</table>";
+            }
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

@@ -1,5 +1,10 @@
-c3_chart_fn.tooltip = function () {};
-c3_chart_fn.tooltip.show = function (args) {
+var utility = require("./utility");
+
+var APITooltip = function () { };
+
+APITooltip.prototype.tooltip = {};
+
+APITooltip.prototype.tooltip.show = function (args) {
     var $$ = this.internal, index, mouse;
 
     // determine mouse position on the chart
@@ -28,12 +33,10 @@ c3_chart_fn.tooltip.show = function (args) {
     // emulate mouse events to show
     $$.dispatchEvent('mouseover', index, mouse);
     $$.dispatchEvent('mousemove', index, mouse);
-
-    $$.config.tooltip_onshow.call($$, args.data);
 };
-c3_chart_fn.tooltip.hide = function () {
+APITooltip.prototype.tooltip.hide = function () {
     // TODO: get target data by checking the state of focus
     this.internal.dispatchEvent('mouseout', 0);
-
-    this.internal.config.tooltip_onhide.call(this);
 };
+
+module.exports = new APITooltip();

@@ -7,7 +7,7 @@
     <div id="chart2"></div>
     <div id="chart3"></div>
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.10/d3.js" charset="utf-8"></script>
     <script src="/js/c3.js"></script>
     <script>
 
@@ -15,34 +15,57 @@
         bindto: '#chart1',
         data: {
           columns: [
-            ['data1', 300, 350, 300, 0, 0, 0],
+            ['data1', 300, 350, 300, 100, 50, 0],
             ['data2', 130, 100, 140, 200, 150, 50]
           ],
           type: 'area-spline'
-        }
+        },
+        point: {
+          show: false
+        },
+        axis: {
+          x: {
+              padding: {
+                  left: 0
+              }
+          },
+          y: {
+              min: 0,
+              tick: {
+                  count: 5,
+                  orient: true,
+                  format: function (x) {
+                      return parseInt(x);
+                  }
+              }
+          }
+        },
+        color: {
+            pattern: ['#71d2ff', '#c1d4e1', '#dbe3f0']
+        },
       });
 
-      var chart2 = c3.generate({
-        bindto: '#chart2',
-        data: {
-          columns: [
-            ['data1', -300, -350, -300, 0, 0, 0],
-            ['data2', -130, -100, -140, -200, -150, -50]
-          ],
-          type: 'area-spline'
-        }
-      });
+      // var chart2 = c3.generate({
+      //   bindto: '#chart2',
+      //   data: {
+      //     columns: [
+      //       ['data1', -300, -350, -300, 0, 0, 0],
+      //       ['data2', -130, -100, -140, -200, -150, -50]
+      //     ],
+      //     type: 'area-spline'
+      //   }
+      // });
 
-      var chart3 = c3.generate({
-        bindto: '#chart3',
-        data: {
-          columns: [
-            ['data1', -300, 350, -300, 0, 0, 0],
-            ['data2', -130, -100, 140, -200, 150, -50]
-          ],
-          type: 'area-spline'
-        }
-      });
+      // var chart3 = c3.generate({
+      //   bindto: '#chart3',
+      //   data: {
+      //     columns: [
+      //       ['data1', -300, 350, -300, 0, 0, 0],
+      //       ['data2', -130, -100, 140, -200, 150, -50]
+      //     ],
+      //     type: 'area-spline'
+      //   }
+      // });
 
     </script>
   </body>

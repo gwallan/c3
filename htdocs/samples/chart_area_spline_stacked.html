@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta content="width=device-width" name="viewport">
     <link href="/css/c3.css" rel="stylesheet" type="text/css">
   </head>
   <body>
@@ -7,8 +8,30 @@
     <div id="chart2"></div>
     <div id="chart3"></div>
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="//cdn.bootcss.com/d3/3.5.12/d3.js" charset="utf-8"></script>
     <script src="/js/c3.js"></script>
+    <style>
+      .tooltip{
+        position: relative;
+        background-color: blue;
+        padding: 5px;
+        color: #fff;
+        border-radius: 3px;
+      }
+      .tooltip:before{
+        content: '.';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        width: 0;
+        height: 0;
+        margin-left: -4px;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 8px solid blue;
+        color: transparent;
+      }
+    </style>
     <script>
 
       var chart1 = c3.generate({
@@ -19,7 +42,34 @@
             ['data2', 130, 0, 140, 200, 0, 50],
           ],
           type: 'area-spline',
-          groups: [['data1', 'data2']],
+          // groups: [['data1', 'data2']],
+        },
+        axis: {
+          y: {
+            max: 500,
+            tick: {
+              // count: 6
+            }
+          }
+        },
+        tooltip: {
+          position: function (data, width, height, element) {
+            var offset = element.getBoundingClientRect();
+
+            return {
+              top: 50, left: offset.left + (offset.width/2 - width/2)
+            };
+          },
+          contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+            var html = [
+              '<div id="tooltip" class="tooltip">',
+              d[0].x + '<br>',
+              d[0].value + '<br>',
+              d[1].value + '<br>',
+              '</div>'
+            ];
+            return html.join("");
+          }
         }
       });
 

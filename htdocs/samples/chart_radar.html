@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <link href="/css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      #chart{
+        height: 600px;
+      }
+      .c3-target-data2{
+        opacity: 0!important;
+      }
+    </style>
+    <div id="chart"></div>
+
+    <script src="/js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      System.config({
+        baseURL: '/js/',
+        meta: {
+          'c3.js': {
+            format: 'cjs'
+          }
+        },
+        map: {
+          "utility": "/js/src/utility.js"
+        }
+      });
+      System.import('c3-radar.js').then(function(c3){
+        c3.generate({
+          padding: {
+            top: 10
+          },
+          "data":{
+            keys: {
+              x: "brand",
+              value: ["info"]
+            },
+            json: [
+              {"brand": "iPhone", info: [
+                // {axis:"Battery Life",value:4.22},
+                // {axis:"Brand",value:4.28},
+                // {axis:"Contract Cost",value:4.29},
+                // {axis:"Design And Quality",value:4.17},
+                // {axis:"Have Internet Connectivity",value:4.22},
+                {axis:"Large Screen",value:4.2},
+                {axis:"Price Of Device",value:4.21},
+                {axis:"To Be A Smartphone",value:4.50}
+              ]},
+              {"brand": "Samsung", info: [
+                // {axis:"Battery Life",value:4.27},
+                // {axis:"Brand",value:4.16},
+                // {axis:"Contract Cost",value:4.35},
+                // {axis:"Design And Quality",value:4.13},
+                // {axis:"Have Internet Connectivity",value:4.20},
+                {axis:"Large Screen",value:4.13},
+                {axis:"Price Of Device",value:4.35},
+                {axis:"To Be A Smartphone",value:4.38}
+              ]}
+            ],
+            "type": "radar"
+          },
+          "radar": {
+            min: 4,
+            max: 4.5,
+            coor: {
+              labelFormat: function(v){
+                return v + "%";
+              }
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

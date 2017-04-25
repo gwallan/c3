@@ -5,7 +5,7 @@
   <body>
     <div id="chart"></div>
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.10/d3.js" charset="utf-8"></script>
     <script src="/js/c3.js"></script>
     <script>
 
@@ -39,54 +39,54 @@
         }
       }); }, chart = generate();
 
-      setTimeout(function () {
-        chart.load({
-          columns: [
-            ["setosa", 130],
-          ]
-        });
-      }, 1000);
+      // setTimeout(function () {
+      //   chart.load({
+      //     columns: [
+      //       ["setosa", 130],
+      //     ]
+      //   });
+      // }, 1000);
 
-      setTimeout(function () {
-        chart.unload({
-          ids: 'virginica'
-        });
-      }, 2000);
+      // setTimeout(function () {
+      //   chart.unload({
+      //     ids: 'virginica'
+      //   });
+      // }, 2000);
 
-      setTimeout(function () {
-        chart.load({
-          columns: [
-            ["new data", 300],
-          ]
-        });
-      }, 3000);
+      // setTimeout(function () {
+      //   chart.load({
+      //     columns: [
+      //       ["new data", 300],
+      //     ]
+      //   });
+      // }, 3000);
 
-      setTimeout(function () {
-        sort = false;
-        chart = generate();
-      }, 4000);
+      // setTimeout(function () {
+      //   sort = false;
+      //   chart = generate();
+      // }, 4000);
 
-      setTimeout(function () {
-        chart.load({
-          columns: [
-            ["setosa", 130],
-          ]
-        });
-      }, 5000);
+      // setTimeout(function () {
+      //   chart.load({
+      //     columns: [
+      //       ["setosa", 130],
+      //     ]
+      //   });
+      // }, 5000);
 
-      setTimeout(function () {
-        chart.unload({
-          ids: 'virginica'
-        });
-      }, 6000);
+      // setTimeout(function () {
+      //   chart.unload({
+      //     ids: 'virginica'
+      //   });
+      // }, 6000);
 
-      setTimeout(function () {
-        chart.load({
-          columns: [
-            ["new data", 300],
-          ]
-        });
-      }, 7000);
+      // setTimeout(function () {
+      //   chart.load({
+      //     columns: [
+      //       ["new data", 300],
+      //     ]
+      //   });
+      // }, 7000);
 
     </script>
   </body>

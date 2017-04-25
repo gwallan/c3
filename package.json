@@ -1,16 +1,17 @@
 {
   "name": "c3",
-  "version": "0.4.11",
+  "version": "0.4.11-rc4",
   "description": "D3-based reusable chart library",
   "main": "c3.js",
   "scripts": {
     "lint": "grunt lint",
-    "test": "karma start karma.conf.js",
-    "codecov": "cat coverage/*/lcov.info | codecov"
+    "test": "/usr/local/lib/node_modules/phantomjs/bin/phantomjs test/main.js",
+    "sample": "http-server -p 8086",
+    "build": "rm -rf dist && webpack"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/c3js/c3.git"
+    "url": "git://github.com/masayuki0812/c3.git"
   },
   "keywords": [
     "d3",
@@ -22,26 +23,47 @@
   "gitHead": "84e03109d9a590f9c8ef687c03d751f666080c6f",
   "readmeFilename": "README.md",
   "dependencies": {
-    "d3": "~3.5.0"
+    "d3": "~3.5.0",
+    "d3-cloud": "^1.2.1",
+    "d3-svg-legend": "^1.10.0",
+    "pathseg": "^1.0.2",
+    "topojson": "^1.6.26"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "codecov.io": "^0.1.6",
+    "css-loader": "^0.27.3",
+    "d3": "^3.5.17",
+    "d3-cloud": "^1.2.4",
+    "d3.layout.cloud": "^1.2.0",
+    "extract-text-webpack-plugin": "^2.1.0",
     "grunt": "^0.4.5",
+    "grunt-browser-sync": "^2.2.0",
     "grunt-contrib-concat": "~0.5.0",
     "grunt-contrib-cssmin": "^0.10.0",
-    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-uglify": "~0.4.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-http-server": "^1.13.0",
     "grunt-karma": "^0.12.1",
     "grunt-sass": "^1.0.0",
     "jasmine-core": "^2.3.4",
-    "jshint-stylish": "^2.1.0",
+    "jquery": "^3.1.1",
     "karma": "^0.13.10",
     "karma-coverage": "^0.5.2",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-spec-reporter": "0.0.20",
     "load-grunt-tasks": "~0.2.0",
-    "phantomjs": "^1.9.18"
-  }
+    "mocha": "^3.2.0",
+    "pathseg": "^1.0.2",
+    "phantomjs": "^1.9.18",
+    "shelljs": "^0.7.5",
+    "style-loader": "^0.14.0",
+    "topojson": "^1.6.27",
+    "underscore": "^1.8.3",
+    "webpack": "^2.2.1",
+    "yargs": "^6.6.0"
+  },
+  "private": true
 }

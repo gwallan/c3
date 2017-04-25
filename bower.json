@@ -26,6 +26,7 @@
     "Gruntfile.*"
   ],
   "dependencies": {
-    "d3": "~3.5.0"
+    "d3": "~3.5.0",
+    "d3-legend": "~1.7.0"
   }
 }

@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          }
+      });
+      System.import('c3-line.js').then(function(c3){
+        window.chart = c3.generate({
+            transition: {
+              enabled: true,
+              duration: 1000
+            },
+            "data":{
+              "x":"x",
+              "rows":[
+                ['x', '小米'],
+                ['2016-10-01', '0'],
+                ['2016-10-02', '0'],
+                ['2016-10-03', '0'],
+                ['2016-10-04', '0'],
+                ['2016-10-05', '0'],
+                ['2016-10-06', '0'],
+                ['2016-10-07', '1795'],
+                ['2016-10-08', '6113'],
+                ['2016-10-09', '31824'],
+                ['2016-10-10', '142609'],
+                ['2016-10-11', '241206'],
+                ['2016-10-12', '11083'],
+                ['2016-10-13', '9951'],
+                ['2016-10-14', '44443'],
+                ['2016-10-15', '22132'],
+                ['2016-10-16', '63369'],
+                ['2016-10-17', '12153'],
+                ['2016-10-18', '39746'],
+                ['2016-10-19', '28036'],
+                ['2016-10-20', '21233'],
+                ['2016-10-21', '40871'],
+                ['2016-10-22', '60659'],
+                ['2016-10-23', '10078'],
+              ],
+            },
+            "padding":{
+              "left": 50,//左边距
+              "right": 30,//右边距
+              "top": 10,//上边距
+              "bottom": 0//下边距
+            },
+            "grid": {
+              "y": {
+                show: true
+              }
+            },
+            "regions": {
+              even: ".light"
+            },
+            "axis":{
+              "x":{
+                "type":"timeseries",
+                "label": "时间",//X轴标签文本
+                "tick": {
+                  format: "%m-%d"
+                }
+              },
+              "y":{
+                "label": "销量",//Y轴标签文本
+                "min": 0,
+                // "max": 4700,
+                "tick":{
+                  "count":5
+                }
+              }
+            },
+            "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+            "legend":{
+              "show":true,
+              "shape":"triangle",
+              "position": "inset",
+              "inset": {
+                "anchor": "top-right",
+                "y": -15
+              }
+            },
+            mark: {
+              max: {
+                show: true,
+                position: "top",
+                text: {
+                  color: null,
+                  size: null,
+                  content: function(d){
+                    return d.value;
+                  }
+                }
+              },
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

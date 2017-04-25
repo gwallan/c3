@@ -7,7 +7,7 @@
     <div id="chart2"></div>
     <div id="chart3"></div>
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="//cdn.bootcss.com/d3/3.5.12/d3.js" charset="utf-8"></script>
     <script src="/js/c3.js"></script>
     <script>
 
@@ -15,8 +15,8 @@
         bindto: '#chart1',
         data: {
           columns: [
-            ['data1', 300, 350, 300, 0, 0, 100],
-            ['data2', 130, 0, 140, 200, 0, 50],
+            ['data1', 300, 250, 300, 0, 0, 100],
+            ['data2', 130, 30, 140, 200, 150, 50],
           ],
           type: 'area',
           groups: [['data1', 'data2']],

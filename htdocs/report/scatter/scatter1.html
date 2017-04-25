@@ -1,0 +1,160 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../../css/c3.css">
+  </head>
+  <body>
+    <div id="chart"></div>
+
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '/js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          },
+          map: {
+            "utility": "/js/src/utility.js"
+          }
+      });
+      System.import('c3.js').then(function(c3){
+        function Point(ele) {
+          var pos = ele.getAttribute("transform").replace("translate(", "").replace(")", "").split(",");
+
+          return {
+            "X": pos[0],
+            "Y": pos[1]
+          };
+        }
+        function getDistance( point1, point2 )
+        {
+          var xs = 0;
+          var ys = 0;
+
+          xs = point2.X - point1.X;
+          xs = xs * xs;
+
+          ys = point2.Y - point1.Y;
+          ys = ys * ys;
+
+          return Math.sqrt( xs + ys );
+        }
+
+        c3.generate({"data":{onclick: function(d, ele){
+              var point = Point(ele);
+              var circles = this.query(".c3-circle").filter(function(d){
+                var _point = Point(this);
+                var dist = getDistance(point, _point);
+
+                return dist < +ele.getAttribute("r") + +this.getAttribute("r");
+              });
+
+              console.log(circles.data());
+            },"xs":{"市场营销部(强)":"市场营销部(强)_x","市场营销部(佳)":"市场营销部(佳)_x","市场营销部(鑫)":"市场营销部(鑫)_x","市场营销部":"市场营销部_x","项目管理组":"项目管理组_x"},"columns":[["市场营销部(强)_x",14,26,28,33,37,54,64,253],["市场营销部(佳)_x",15,33,42,79,118,153,194,197,280],["市场营销部(鑫)_x",21,21,21,23,23,33,40,40,58,63,75,75,91,92,92,96,96,96,96,99,99,104,104,107,119,141,175],["市场营销部_x",104,278],["项目管理组_x",301],["市场营销部(强)",0.7,4.2,1.4,2.5,0.62,29.49,8.5,18.93],["市场营销部(佳)",2.54,0.44,0.26,3.09,33.29,1.85,7.25,3.1,1.05],["市场营销部(鑫)",240,50,40,10,5,49.87,130,23.76,0.91,8,100,52.5,49.76,264.2,221.7,52.53,48,45,48.7,31,29,135,55,51.5,128.5,29.8,138.01],["市场营销部",428.54,3.6],["项目管理组",12],["市场营销部(强)_r",214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27],["市场营销部(佳)_r",214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27],["市场营销部(鑫)_r",240,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,264.2,221.7,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27,214.27],["市场营销部_r",428.54,214.27],["项目管理组_r",214.27]],"type":"scatter"},"color":{"pattern":["#f64022","#ffc21a","#1895d0","#004b9d","#00ad99","#e28000","#8e2fbb","#358b2c","4c5f72","#919191"]},"padding":{"right":40,"left":80,"top":10,"bottom":60},"axis":{"x":{"min":0,"label":"","tick":{"mark":true,"count":9,"padding":15,values:[1,2,3,4,5,6,7,8,9]},"padding":{"right":0}},"y":{"min":0,"max":514.248,"tick":{"count":5}},"y2":{"show":true}},grid: {
+  x: {
+    "show":true,
+  },
+  "y":{"show":true}
+},"tooltip":{"show":false},"legend":{"shape":"square", position: "inset", inset: {step: 3, anchor:"bottom-left", x: function(w1, w2){return w1/2 - w2/2;}, y: function(h1, h2){return h1 - h2/3*2;}}},"scatter":{"symbol":{"size":null,"min":5,"max":20},"key":["市场营销部(强)_r","市场营销部(佳)_r","市场营销部(鑫)_r","市场营销部_r","项目管理组_r"]},"size":{"height":345}});
+        return;
+
+        var chart = c3.generate({
+          transition: {
+            enabled: true,
+            duration: 1500
+          },
+          data: {
+            xs: {
+              "setosa_y": 'setosa_x',
+              "versicolor_y": 'versicolor_x'
+              // "virginica_y": 'virginica_x'
+            },
+            columns: [
+              ["setosa_x", 3],
+              ["setosa_y", 10],
+              ["setosa", 1],
+              ["versicolor_x", 4, 4, 5],
+              ["versicolor_y", 3, 3, 3],
+              ["versicolor", 2.4, 1.8, 2.5],
+              // ["virginica_x", 3.3, 2.7, 3.0, 2.9, 3.0],
+              // ["virginica_y", 3, 3, 3, 2, 2],
+              // ["virginica", 2.5, 1.9, 2.1, 1.8, 6.2],
+            ],
+            type : 'scatter',
+            onmouseover: function(d, ele){
+              var point = Point(ele);
+              var circles = this.query(".c3-circle").filter(function(d){
+                var _point = Point(this);
+                var dist = getDistance(point, _point);
+
+                return dist < +ele.getAttribute("r") + +this.getAttribute("r");
+              });
+
+              console.log(circles.data());
+            }
+          },
+          padding: {
+            // right: 10
+          },
+          axis: {
+            x: {
+              // min: 3,
+              // max: 6,
+              label: '日期',
+              // "type":"category",
+              tick: {
+                // fit: false,
+                values: ["12-05","12-06","12-07"],
+                "format": function(v){
+                  if (!v) return 0  // 0时返回0
+                  if (parseInt(v) == v) return v  // 整形时,返回原值
+                  if (parseFloat(v) == v) return parseFloat(v).toFixed(2)  // 数字时,取2位小数
+                  return v;  // 非数字时,返回原值
+                }
+              }
+            },
+            y: {
+              min: 0,
+              label: 'Petal.Width',
+              tick: {
+                "format": function(v){
+                  if (!v) return 0  // 0时返回0
+                  if (parseInt(v) == v) return v  // 整形时,返回原值
+                  if (parseFloat(v) == v) return parseFloat(v).toFixed(2)  // 数字时,取2位小数
+                  return v;  // 非数字时,返回原值
+                }
+              },
+            }
+          },
+          grid: {
+            x: {
+              show: true
+            },
+            y: {
+              show: true
+            }
+          },
+          legend: {
+            "shape":"square",
+            "position": "inset",
+            "inset": {
+              "step": 1,
+              "anchor": "top-right"
+            }
+          },
+          scatter: {
+            key: ["setosa", "versicolor"],
+            symbol: {
+              min: 5,
+              max: 15,
+              size: null
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+    <style>
+      html,body{
+        position: relative;
+        height: 100%;
+      }
+      #chart{
+        position: absolute;
+        left: 100px;
+        top: 100px;
+        width: 1000;
+        height: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+
+    <script src="../../js/system.js"></script>
+    <script>
+    System.defaultJSExtensions = true;
+    // set our baseURL reference path
+    System.config({
+      baseURL: '../../js/',
+      meta: {
+        'c3.js': {
+          format: 'cjs'
+        }
+      }
+    });
+    System.import('c3-map.js').then(function(c3){
+      var data=[["Gansu", 48],["Qinghai", 47],["Guangxi", 45],["Guizhou", 35],["Chongqing", 34],["Beijing", 12],["Fujian", 35],["Anhui", 6],["Guangdong", 40],["Xizang", 3],["Xinjiang", 12],["Hainan", 21],["Ningxia", 8],["Shaanxi", 40],["Shanxi", 11],["Hubei", 1],["Hunan", 23],["Sichuan", 19],["Yunnan", 19],["Hebei", 34],["Henan", 20],["Liaoning", 14],["Shandong", 0],["Tianjin", 12],["Jiangxi", 20],["Jiangsu", 37],["Shanghai", 34],["Zhejiang", 46],["Jilin", 38],["Inner Mongol", 10],["Heilongjiang", 0],["Taiwan", 45],["Xianggang", 35],["Macau", 10]];
+      var chart = c3.generate({
+        "onrendered": function(){
+          this.svg
+            .select("defs")
+            .append("filter")
+            .attr('id', 'shadow')
+            .attr("x", "-50%")
+            .attr("y", "-50%")
+            .attr("width", "200%")
+            .attr("height", "200%")
+            .html('<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"></feGaussianBlur><feOffset in="blur" dx="0" dy="3" result="offsetBlur"></feOffset><feMerge><feMergeNode in="offsetBlur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>');
+        },
+        data: {
+          columns: data,
+          type: 'map',
+          "onmouseover": function(d, ele){
+            d3.select(ele).style("filter", "url(#shadow)");
+            d3.selectAll(".c3-chart-map").sort(function(a, b) {
+                return d.id == a.id;
+            });
+          },
+          "onmouseout": function(d, ele){
+            d3.select(ele).style("filter", null);
+          }
+        },
+        legend: {
+          show: false
+        },
+        map: {
+          label: {
+            show: false//省份区域名称显示
+          },
+          ratio: 1,
+          position: {
+            x: -150
+          },
+          scale: {
+            width: 5,
+            height: 100,
+            max: 100,//比例尺最大值
+            min: 0,//比例尺最小值
+            position: {
+              top: function(w, h){
+                return this.currentHeight - h - 50;
+              },
+              left: "right"
+            },
+            format: function(d){
+              return parseInt(d) + "%";
+            },
+            draw: function(ele, axis){
+              ele.selectAll("text").attr("x", 10);
+              ele.append("circle")
+                .attr("class", "max")
+                .attr("r", 5)
+                .attr("cx", 5/2)
+                .style("fill", this.config.map_scale_colors[1]);
+              ele.append("circle")
+                .attr("class", "min")
+                .attr("r", 5)
+                .attr("cx", 5/2)
+                .attr("cy", 100)
+                .style("fill", this.config.map_scale_colors[0]);
+            }
+          },
+          region: {
+            empty: {
+                color: "rgb(223, 255, 255)"
+            }
+          }
+        }
+      });
+    });
+  </script>
+  </body>
+</html>

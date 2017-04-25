@@ -1,0 +1,252 @@
+<html>
+  <head>
+    <link href="/css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      .detail{
+        text-align: center;
+      }
+      .detail-item{
+        display: inline-block;
+        width: 30%;
+        vertical-align: top;
+      }
+      #chart0{
+        width: 1280px;
+        height: 480px;
+        margin: 0 auto;
+      }
+      #chart1,
+      #chart2{
+        height: 480px;
+      }
+      ul{
+        margin: 10px 0 0 0;
+        padding: 0;
+      }
+      ul li{
+        background-color: #ccc;
+        display: inline-block;
+        list-style: none;
+        margin: 0 20px 0 0;
+        padding: 5px 10px;
+      }
+    </style>
+    <select onchange="load()" id="file">
+      <option value="">机型</option>
+      <option value="huawei_V8_1-3.count">Huawei V8(1-3)</option>
+      <option value="huawei_V8_4-5.count">Huawei V8(4-5)</option>
+      <option value="mi5_1-3.count">Xiaomi 5(1-3)</option>
+      <option value="mi5_4-5.count">Xiaomi 5(4-5)</option>
+      <option value="OPPO_R9_1-3.count">OPPO R9(1-3)</option>
+      <option value="OPPO_R9_4-5.count">OPPO R9(4-5)</option>
+      <option value="">用户</option>
+      <option value="钻石会员_0613_0623.count">钻石会员</option>
+      <option value="金牌会员_0613_0623.count">金牌会员</option>
+      <option value="银牌会员_0613_0623.count">银牌会员</option>
+      <option value="铜牌会员_0613_0623.count">铜牌会员</option>
+      <option value="注册会员_0613_0623.count">注册会员</option>
+      <option value="">优化</option>
+      <option value="meilan_note3_1-3.csv">魅蓝NOTE3（1-3）</option>
+      <option value="meilan_note3_4-5.csv">魅蓝NOTE3（4-5）</option>
+    </select>
+    <hr>
+    <div class="overall">
+      整体：
+      <input type="text" id="text0">&nbsp;&nbsp;<button onclick="add(0)">GO</button>
+      <ul class="filterTexts" id="filterTexts0"></ul>
+      <div id="chart0"></div>
+    </div>
+    <div class="detail">
+      <div class="detail-item">
+        正向：
+        <input type="text" id="text1">&nbsp;&nbsp;<button onclick="add(1)">GO</button>
+        <ul class="filterTexts" id="filterTexts1"></ul>
+        <div id="chart1"></div>
+      </div>
+      <div class="detail-item">
+        负向：
+        <input type="text" id="text2">&nbsp;&nbsp;<button onclick="add(2)">GO</button>
+        <ul class="filterTexts" id="filterTexts2"></ul>
+        <div id="chart2"></div>
+      </div>
+      <div class="detail-item">
+        不确定：
+        <input type="text" id="text2">&nbsp;&nbsp;<button onclick="add(3)">GO</button>
+        <ul class="filterTexts" id="filterTexts3"></ul>
+        <div id="chart3"></div>
+      </div>
+    </div>
+
+    <script src="/js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+        baseURL: '/js/'
+      });
+      System.import('c3-cloud.js').then(function(c3){
+        window.c3 = c3;
+      });
+
+      function setMax(data){
+        var m = 0;
+
+        data.forEach(function(item){
+          if(item.count > m)
+            m = parseInt(item.count);
+        });
+
+        window.max = parseInt(m);
+      }
+      function add(type){
+        var text = d3.select("#text" + type).property("value"),
+            textList = d3.select("#filterTexts" + type).selectAll("li").data(),
+            cloudTextList = d3.select("#chart" + type).datum();
+
+        textList = textList.concat([text]);
+        d3.select("#text" + type).property("value", "");
+
+        redrawList(type, textList);
+        redrawCloud(cloudTextList.filter(function(obj){
+          return textList.join("|").indexOf(obj.lemma) == -1;
+        }), type);
+      }
+      function del(element, type){
+        var text = d3.select(element).text(), elements,
+            textList = d3.select("#filterTexts" + type).selectAll("li").data(),
+            cloudTextList = d3.select("#chart" + type).datum();
+
+        textList = textList.filter(function(_text){
+          return _text != text;
+        });
+
+        redrawList(type, textList);
+        redrawCloud(cloudTextList.filter(function(obj){
+          return textList.join("|").indexOf(obj.lemma) == -1;
+        }), type);
+      }
+      function redrawList(type, textList){
+        var elements;
+
+        elements = d3.select("#filterTexts" + type)
+          .selectAll("li")
+          .data(textList, function(d){
+            return d;
+          });
+        elements.exit().remove();
+        elements.enter()
+          .append("li")
+          .on("click", function(){
+            del(this, type);
+          })
+          .text(function(d){
+            return d;
+          });
+      }
+      function redrawCloud(data, type){
+        var positiveMax = data.reduce(function(cur, word) {
+            word.type == 1 && parseInt(word.count) > cur ? cur = parseInt(word.count) : cur = cur;
+            return cur;
+        }, 0);
+        var negativeMax = data.reduce(function(cur, word) {
+            word.type == -1 && parseInt(word.count) > cur ? cur = parseInt(word.count) : cur = cur;
+            return cur;
+        }, 0);
+        var positiveLinear = d3.scale.linear()
+            .domain([ 0, positiveMax/4, positiveMax/4*2, positiveMax/4*3, positiveMax])
+            .range(["#89e1d5", "#1ab06c", "#fce2aa", "#f8be49", "#f54e32"]);
+        var negativeLinear = d3.scale.linear()
+            .domain([ 0, negativeMax/4, negativeMax/4*2, negativeMax/4*3, negativeMax ])
+            .range(["#ffc6c0", "#be5be9", "#6fc4ff", "#213d91", "#899976"]);
+
+
+        window.setMax(data);
+
+        window["chart" + type] && window["chart" + type].destory && window["chart" + type].destory();
+        window["chart" + type] = window.c3.generate({
+          bindto: "#chart" + type,
+          "data":{
+            json: data,
+            keys: {
+              value: ["count", "lemma", "type"]
+            },
+            type: "cloud"
+          },
+          "legend":{"show":false},
+          cloud: {
+            domain: {
+              max: window.max
+            },
+            label: {
+              color: function(d){
+                if(d.type == 1)
+                  return positiveLinear(d.count);
+                else if(d.type == -1)
+                  return negativeLinear(d.count);
+                else
+                  return "#333";
+              }
+            }
+          }
+        });
+      }
+      function load(){
+        var file = document.querySelector("#file").value;
+
+        if(!file || !window.c3)return;
+
+        d3.xhr("../data/cloud/" + file, function (error, data) {
+            var texts = data.response.split("\n").filter(function(text){return !!text}),
+                positiveTexts = texts.filter(function(text){
+                  return text.indexOf(" + ") > -1;
+                }).map(function(text){
+                  return {
+                    "count": text.split(" + ")[1],
+                    "lemma": text.split(" + ")[0],
+                  };
+                }),
+                negativeTexts = texts.filter(function(text){
+                  return text.indexOf(" - ") > -1;
+                }).map(function(text){
+                  return {
+                    "count": text.split(" - ")[1],
+                    "lemma": text.split(" - ")[0],
+                  };
+                }),
+                neutralTexts = texts.filter(function(text){
+                  return text.indexOf(" 0 ") > -1;
+                }).map(function(text){
+                  return {
+                    "count": text.split(" 0 ")[1],
+                    "lemma": text.split(" 0 ")[0],
+                  };
+                });
+
+            texts = texts.map(function(text){
+              return {
+                "count": text.split(/[+-]/g)[1].replace(" ", ""),
+                "lemma": text.split(/[+-]/g)[0].replace(" ", ""),
+                "type": text.match(/\+/) ? 1 : text.match(/\-/) ? -1 : 0
+              };
+            });
+
+            d3.select("#chart0").datum(texts);
+            d3.select("#chart1").datum(positiveTexts);
+            d3.select("#chart2").datum(negativeTexts);
+            d3.select("#chart3").datum(neutralTexts);
+
+            redrawCloud(texts, 0);
+            redrawList(0, []);
+            // redrawCloud(positiveTexts, 1);
+            // redrawList(1, []);
+            // redrawCloud(negativeTexts, 2);
+            // redrawList(2, []);
+            // redrawCloud(neutralTexts, 3);
+            // redrawList(3, []);
+        });
+      }
+    </script>
+  </body>
+</html>

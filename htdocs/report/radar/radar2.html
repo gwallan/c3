@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      #chart{
+        height: 600px;
+      }
+      .c3-target-data2{
+        opacity: 0!important;
+      }
+    </style>
+    <div id="chart"></div>
+
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      System.config({
+        baseURL: '../../js/',
+        meta: {
+          'c3.js': {
+            format: 'cjs'
+          }
+        }
+      });
+      System.import('c3-radar.js').then(function(c3){
+        c3.generate({
+          padding: {
+            top: 10
+          },
+          "data":{
+            keys: {
+              x: "brand",
+              value: ["info"]
+            },
+            json: [
+              {"brand": "红米Note4", info: [
+                {axis:"服务",value:'1.0'},
+                {axis:"售后",value:'2.0'},
+                {axis:"质量",value:'3.0'},
+                {axis:"配送",value:'4.0'},
+                {axis:"客服",value:'3.5'},
+                {axis:"价格",value:'1.0'},
+                {axis:"外观",value:'4.8'},
+              ]},
+              {"brand": "魅蓝Note3", info: [
+                {axis:"服务",value:'2.3'},
+                {axis:"售后",value:'4.9'},
+                {axis:"质量",value:'2.3'},
+                {axis:"配送",value:'3.4'},
+                {axis:"客服",value:'4.1'},
+                {axis:"价格",value:'2.1'},
+                {axis:"外观",value:'1.8'},
+
+              ]}
+            ],
+            "type": "radar"
+          },
+          "radar": {
+            min: 0,//刻度最小值
+            max: 4.5,//刻度最大值
+            coor: {
+              labelFormat: function(v){
+                if (!v) return 0  // 0时返回0
+                if (parseInt(v) == v) return v  // 整形时,返回原值
+                if (parseFloat(v) == v) return parseFloat(v).toFixed(2)  // 数字时,取2位小数
+                return v;  // 非数字时,返回原值
+              }
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

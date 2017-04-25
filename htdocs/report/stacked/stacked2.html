@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          }
+      });
+      System.import('c3-bar.js').then(function(c3){
+        window.chart = c3.generate({
+            transition: {
+              enabled: true,
+              duration: 1500
+            },
+            "data":{
+              "selection": {
+                enabled: true,
+                grouped: true,
+                isselectable: function(){
+                  return false;
+                }
+              },
+               "rows": [
+                ["0-799","800-1299","1300-2199","2200-3499","3500-6099","6100以上"],
+                ['0.24','0.23','0.28','0.5','0.13','0'],
+                ['0.26','0.3','0.27','0.03','0','0'],
+                ['0.34','0.16','0.09','0.02','0','0'],
+                ['0','0','0.03','0.02','0.71','0.91'],
+                ['0.01','0.12','0.12','0.01','0','0'],
+                ['0.05','0.1','0.08','0','0','0'],
+                ['0.03','0.01','0.06','0.04','0.15','0.09'],
+                ['0.01','0.01','0.03','0.16','0','0'],
+                ['0','0','0.01','0.15','0.01','0'],
+              ],
+              "groups": [
+                  ["0-799","800-1299","1300-2199","2200-3499","3500-6099","6100以上"]
+              ],
+              type: 'bar',
+            },
+            "padding":{
+              "left": 50,//左边距
+              "right": 30,//右边距
+              "top": 10,//上边距
+              "bottom": 0//下边距
+            },
+            "grid": {
+              y: {
+                show: true
+              }
+            },
+            "axis":{
+              "x":{
+                "type":"category",
+                "label": "品牌",//X轴标签文本
+                "categories": ["华为","小米","魅族","苹果","乐视","360","三星","OPPO","vivo"],
+              },
+              "y":{
+                "label": "占有率",//Y轴标签文本
+                "min": 0,
+                "tick":{
+                  "count":5,
+                  "format": function(v){
+                  if (!v) return 0  // 0时返回0
+                  if (parseInt(v) == v) return v  // 整形时,返回原值
+                  if (parseFloat(v) == v) return parseFloat(v).toFixed(2)  // 数字时,取2位小数
+                  return v;  // 非数字时,返回原值
+                }
+                }
+              }
+            },
+            "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+            "legend":{
+              "show":true,
+              "shape":"circle",
+              "position": "inset",
+              "inset": {
+                "step": 2,
+                "anchor": "bottom-left",
+                "y": -10
+              }
+            },
+            point: {
+              show: false
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

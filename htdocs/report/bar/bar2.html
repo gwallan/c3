@@ -1,0 +1,138 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          },
+          map: {
+            "utility": "../../js/src/utility.js"
+          }
+      });
+      System.import('c3-bar.js').then(function(c3){
+        window.chart = c3.generate({
+            "data":{
+              "x":"x",
+              "rows":[
+                ['x', '小米', '魅族', 'OPPO'],
+                ['0', '0', '11147', '0'],
+                ['1', '0', '404', '2690'],
+                ['2', '0', '4627', '0'],
+                ['3', '0', '0', '0'],
+                ['4', '0', '0', '0'],
+                ['5', '0', '0', '0'],
+                ['6', '0', '0', '0'],
+                ['7', '1795', '0', '0'],
+                ['8', '6113', '1483', '11137'],
+                ['9', '31824', '17352', '16432'],
+                ['10', '142609', '229273', '80914'],
+                ['11', '241206', '85124', '80136'],
+                ['12', '11083', '19354', '23911'],
+                ['13', '9951', '22851', '301'],
+                ['14', '44443', '25617', '115321'],
+                ['15', '22132', '59191', '29362'],
+                ['16', '63369', '11694', '14802'],
+                ['17', '12153', '23160', '35416'],
+                ['18', '39746', '15222', '9590'],
+                ['19', '28036', '12575', '4721'],
+                ['20', '21233', '27631', '31156'],
+                ['21', '40871', '9485', '14944'],
+                ['22', '60659', '27921', '7935'],
+                ['23', '10078', '8729', '0'],
+              ],
+              "type": "bar"
+            },
+            "bar": {
+              "width": {
+                "ratio": 0.5
+              }
+            },
+            "padding":{
+              "left": 50,//左边距
+              "right": 30,//右边距
+              "top": 10,//上边距
+              "bottom": 0//下边距
+            },
+            "grid": {
+              "y": {
+                show: true
+              }
+            },
+            "axis":{
+              "x":{
+                "type":"category",
+                "label": "时间",//X轴标签文本
+              },
+              "y":{
+                "label": "销量",//Y轴标签文本
+                // "min": 0,
+                // "max": 4700,
+                "tick":{
+                  "count":5,
+                  "tick":{
+                  // "count":5,
+                  "format": function(v){
+                    if (!v) return 0  // 0时返回0
+                    if (parseInt(v) == v) return v  // 整形时,返回原值
+                    if (parseFloat(v) == v) return parseFloat(v).toFixed(2)  // 数字时,取2位小数
+                    return v;  // 非数字时,返回原值
+                  }
+                }
+                }
+              }
+            },
+            "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+            "legend":{
+              "show":true,
+              "shape":"square",
+              "position": "inset",
+              "inset": {
+                "step": 1,
+                "anchor": "top-right",
+                "y": -15
+              }
+            },
+            point: {
+              show: false
+            },
+            mark: {
+              max: {
+                show: true,
+                position: "top",
+                text: {
+                  color: null,
+                  size: null,
+                  content: function(d){
+                    return d.value;
+                  }
+                }
+              },
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

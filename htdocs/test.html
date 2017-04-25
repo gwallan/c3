@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <link href="css/c3.css" rel="stylesheet" type="text/css">
+    <script src="js/system.js"></script>
+  </head>
+  <body>
+    <style>
+      html{
+        box-sizing: border-box;
+      }
+      body{
+        font-family: "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans", Helvetica, Tahoma, Arial, SimSun, Heiti, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+        padding: 10px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../src/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          },
+          map: {
+            "underscore": "../node_modules/underscore/underscore.js",
+            "pathseg": "../node_modules/pathseg/pathseg.js",
+            "d3": "../node_modules/d3/d3.js"
+          }
+      });
+      System.import('../src/component/c3-line.js').then(function(c3){
+        window.chart = c3.generate({
+          data: {
+                    columns: [
+                        ['data1', 10, 20, 10, 40, 15, 25],
+                        ['data2', 50, 40, 30, 45, 25, 45]
+                    ]
+                },
+                axis: {
+                    y: {
+                        padding: {
+                            top: 200,
+                            bottom: 200
+                        }
+                    }
+                }
+        });
+      });
+    </script>
+  </body>
+</html>

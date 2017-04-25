@@ -1,11 +1,18 @@
-c3_chart_fn.legend = function () {};
-c3_chart_fn.legend.show = function (targetIds) {
+var utility = require("./utility");
+
+var APILegend = function () { };
+
+APILegend.prototype.legend = {};
+
+APILegend.prototype.legend.show = function (targetIds) {
     var $$ = this.internal;
     $$.showLegend($$.mapToTargetIds(targetIds));
-    $$.updateAndRedraw({withLegend: true});
+    $$.updateAndRedraw({ withLegend: true });
 };
-c3_chart_fn.legend.hide = function (targetIds) {
+APILegend.prototype.legend.hide = function (targetIds) {
     var $$ = this.internal;
     $$.hideLegend($$.mapToTargetIds(targetIds));
-    $$.updateAndRedraw({withLegend: true});
+    $$.updateAndRedraw({ withLegend: true });
 };
+
+module.exports = new APILegend();

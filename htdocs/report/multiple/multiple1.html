@@ -1,0 +1,109 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../js/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          }
+      });
+      Promise.all([
+        System.import('c3-line'),
+        System.import('c3-bar')
+      ]).then(function(modules){
+        var c3 = modules[1];
+
+        window.chart = c3.generate({
+            transition: {
+              enabled: true,
+              duration: 1500
+            },
+            "data":{
+              "x":"x",
+              "rows":[
+                ['x', '各品牌7月的京东评论占比', '各品牌8月的京东评论占比', '变化'],
+                ['华为', '29', '30', '0'],
+                ['小米', '24', '20', '4'],
+                ['魅族', '13', '14', '1'],
+                ['苹果', '6', '7', '2'],
+                ['乐视', '8', '7', '1'],
+                ['360', '7', '6', '1'],
+                ['三星', '4', '4', '0'],
+                ['OPPO', '4', '4', '0'],
+                ['vivo', '4', '3', '1'],
+                ['努比亚', '2', '3', '1'],
+              ],
+              type: 'line',
+              types: {
+                  "各品牌7月的京东评论占比": 'bar',
+                  "各品牌8月的京东评论占比": 'bar',
+              }
+            },
+            "padding":{
+              "left": 50,//左边距
+              "right": 30,//右边距
+              "top": 10,//上边距
+              "bottom": 0//下边距
+            },
+            "axis":{
+              "x":{
+                "type":"category",
+                "label": "时间",//X轴标签文本
+                "tick":{
+                  // "count":5,
+                }
+              },
+              "y":{
+                "label": "评论量",//Y轴标签文本
+                "min": 0,
+                "tick":{
+                  "count":5,
+                  "format": function(v){
+                    if (!v) return 0  // 0时返回0
+                    if (parseInt(v) == v) return v  // 整形时,返回原值
+                    if (parseFloat(v) == v) return parseFloat(v).toFixed(2)  // 数字时,取2位小数
+                    return v;  // 非数字时,返回原值
+                  }
+                }
+              }
+            },
+            point: {
+              show: true
+            },
+            "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+            "legend":{
+              "show":true,
+              "shape":"circle",
+              "position": "inset",
+              "inset": {
+                "step": 1,
+                "anchor": "top-right"
+              }
+            },
+          });
+      });
+    </script>
+  </body>
+</html>

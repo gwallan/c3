@@ -1,0 +1,122 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+    <style>
+      html,body{
+        position: relative;
+        height: 100%;
+      }
+      #chart{
+        position: absolute;
+        width: 50%;
+        height: 50%;
+      }
+      .c3-chart-treemap-node text{
+        font-size: 14px;
+        /*dominant-baseline: middle;*/
+      }
+    </style>
+  </head>
+  <body>
+    <script src="//cdn.bootcss.com/jquery/2.2.2/jquery.js"></script>
+    <div id="chart"></div>
+
+    <script src="../../js/system.js"></script>
+    <script>
+    System.defaultJSExtensions = true;
+    // set our baseURL reference path
+    System.config({
+        baseURL: '../../js/',
+        meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+        }
+    });
+    System.import('c3-cloud.js').then(function(c3){
+        var positiveLinear = d3.scale.linear()
+            .domain([ 0, 80267])
+            .range(["#9b046b", "#e80c4c"]);
+        var negativeLinear = d3.scale.linear()
+            .domain([ 0, 80267 ])
+            .range(["#3655a7", "#0194d2"]);
+
+        d3.xhr("../../data/cloud/demo.csv?121", function (error, data) {
+            var texts = JSON.parse(data.response), currentEle;
+
+            texts = texts.data.map(function(text){
+                return {
+                    "count": parseInt(text.num),
+                    "lemma": text.label_str,
+                    "type": text.label_polar.match(/\+/) ? 1 : text.label_polar.match(/\-/) ? -1 : 0
+                };
+            }).splice(0, 105);
+
+            // texts = [
+            //     {"count":6868.69,"lemma":"空1","type":1},
+            //     {"count":3434.34,"lemma":"空2","type":1},
+            //     {"count":3434.34,"lemma":"空3","type":1},
+            //     {"count":10,"lemma":"空4","type":1},
+            //     {"count":3434.34,"lemma":"空5","type":1},
+            //     {"count":3434.34,"lemma":"空6","type":1},
+            //     {"count":3434.34,"lemma":"空7","type":1},
+            //     {"count":3434.34,"lemma":"空8","type":1},
+            //     {"count":0.12,"lemma":"空9","type":1},
+            //     {"count":0.12,"lemma":"空11","type":1},
+            //     {"count":0.12,"lemma":"空12","type":1},
+            //     {"count":1.21,"lemma":"空13","type":1}
+            // ];
+
+            c3.generate({
+                bindto: "#chart",
+                padding: {
+                  top: 30,
+                  left: 0,
+                  right: 0,
+                  bottom: 30
+                },
+                "data":{
+                    json: texts,
+                    keys: {
+                        value: ["count", "lemma", "type"]
+                    },
+                    type: "cloud",
+                    onclick: function(d, ele){
+                        if(currentEle){
+                            currentEle.style.fill = currentEle.getAttribute("data-color");
+                        }
+
+                        currentEle = ele;
+                        currentEle.setAttribute("data-color", ele.style.fill);
+
+                        ele.style.fill = "#f36b54";
+                    }
+                },
+                "legend":{"show":false},
+                cloud: {
+                    // ratio: .8,
+                    title: {
+                        show: false
+                    },
+                    label: {
+                        font: "'Source Han Sans',Helvetica,Tahoma,Arial,'Hiragino Sans GB','Microsoft YaHei',SimSun,Heiti,sans-serif",
+                        color: function(d){
+                            if(d.type == 1)
+                              return positiveLinear(d.count);
+                            else if(d.type == -1)
+                              return negativeLinear(d.count);
+                            else
+                              return "#63308d";
+                        },
+                        highlight: {
+                            text: [""],
+                            color: "#f36b54"
+                        }
+                    }
+                }
+            });
+        });
+    });
+  </script>
+  </body>
+</html>
