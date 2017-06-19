@@ -22,14 +22,19 @@
       System.defaultJSExtensions = true;
       // set our baseURL reference path
       System.config({
-          baseURL: '../../js/',
+          baseURL: '../../../src/',
           meta: {
             'c3.js': {
               format: 'cjs'
             }
+          },
+          map: {
+            "pathseg": "../../../node_modules/pathseg/pathseg.js",
+            "underscore": "../../../node_modules/underscore/underscore.js",
+            "d3": "../../../node_modules/d3/d3.js"
           }
       });
-      System.import('c3-line.js').then(function(c3){
+      System.import('component/c3-line.js').then(function(c3){
         window.chart = c3.generate({
             transition: {
               enabled: true,

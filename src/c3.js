@@ -3478,8 +3478,9 @@
         var $$ = this,
             formatForY = forArc && !$$.hasType('gauge') ? $$.defaultArcValueFormat : $$.yFormat,
             formatForY2 = forArc && !$$.hasType('gauge') ? $$.defaultArcValueFormat : $$.y2Format;
+
         return function (v, ratio, id) {
-            var format = $$.axis.getId(id) === 'y2' ? formatForY2 : formatForY;
+            var format = $$.axis && $$.axis.getId(id) === 'y2' ? formatForY2 : formatForY;
             return format.call($$, v, ratio);
         };
     };

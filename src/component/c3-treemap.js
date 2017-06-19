@@ -1,6 +1,6 @@
-var c3 = require("./../c3"),
-    Tooltip = require("./../tooltip"),
-    Text = require("./../text");
+var c3 = require("../c3"),
+    Tooltip = require("../tooltip"),
+    Text = require("../text");
 
 function C3Treemap() {
     var self = this, treemapNodes, currentInfo;

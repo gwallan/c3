@@ -1,8 +1,8 @@
-var c3 = require("./../c3"),
-    utility = require("./../utility"),
-    Legend = require("./../legend"),
-    Tooltip = require("./../tooltip"),
-    Text = require("./../text");
+var c3 = require("../c3"),
+    utility = require("../utility"),
+    Legend = require("../legend"),
+    Tooltip = require("../tooltip"),
+    Text = require("../text");
 
 function C3Arc() {
     var self = this;

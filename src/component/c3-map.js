@@ -1,9 +1,8 @@
-var d3 = require("d3"),
-    c3 = require("./../c3"),
+var c3 = require("../c3"),
     topojson = require("topojson"),
-    utility = require("./../utility"),
-    Tooltip = require("./../tooltip"),
-    Text = require("./../text");
+    utility = require("../utility"),
+    Tooltip = require("../tooltip"),
+    Text = require("../text");
 
 var chinaGeo ={
   "type": "Topology",

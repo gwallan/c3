@@ -1,11 +1,11 @@
-var c3 = require("./../c3"),
-    utility = require("./../utility"),
-    Axis = require("./../axis"),
-    Grid = require("./../grid"),
-    Region = require("./../region"),
-    Legend = require("./../legend"),
-    Tooltip = require("./../tooltip"),
-    Text = require("./../text");
+var c3 = require("../c3"),
+    utility = require("../utility"),
+    Axis = require("../axis"),
+    Grid = require("../grid"),
+    Region = require("../region"),
+    Legend = require("../legend"),
+    Tooltip = require("../tooltip"),
+    Text = require("../text");
 
 function C3Line() {
     var self = this;

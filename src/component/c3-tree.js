@@ -1,6 +1,6 @@
-var c3 = require("./../c3"),
-    utility = require("./../utility"),
-    Tooltip = require("./../tooltip"),
+var c3 = require("../c3"),
+    utility = require("../utility"),
+    Tooltip = require("../tooltip"),
     Text = require("./src/text");
 
 function C3Tree() {
