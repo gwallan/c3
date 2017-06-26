@@ -37,8 +37,8 @@ function Mark(owner) {
     owner.mark = this;
 }
 Mark.prototype = {
-    init: function(){
-        var $$ = this.owner, config = $$.config, main = $$.main;
+    initMark: function(){
+        var $$ = this, config = $$.config, main = $$.main;
 
         this.markContainer = $$.svg
             .append("g")
@@ -46,8 +46,8 @@ Mark.prototype = {
             .style("pointer-events", "none")
             .style("display", "none");
     },
-    redraw: function(){
-        var self = this, $$ = this.owner, config = $$.config, main = $$.main;
+    redrawMark: function(){
+        var self = this, $$ = this, config = $$.config, main = $$.main;
         var hasMax = config.mark_max_show, hasMin = config.mark_min_show, max = [], min = [], group;
 
         //不支持非二维坐标系下图形的mark绘制

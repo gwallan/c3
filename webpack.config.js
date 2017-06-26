@@ -8,7 +8,7 @@ var additionalPaths = [];
 var srcPath = path.join(__dirname);
 var defaultSettings = {
     srcPath: srcPath,
-    publicPath: './dist/'
+    publicPath: __dirname + '/dist/'
 };
 
 module.exports = {

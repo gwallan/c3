@@ -9,8 +9,9 @@
     var apiAxis = require("./api.axis");
     var apiLegend = require("./api.legend");
     var apiTooltip = require("./api.tooltip");
-    var Mark = require("./mark");
     var Data = require("./data");
+    var Tooltip = require("./tooltip");
+    var Mark = require("./mark");
 
     var c3 = { version: "0.4.10" };
     var c3_chart_fn,
@@ -89,14 +90,23 @@
         return derived;
     }
 
-    function Chart(config) {
+    function Chart(config, fn) {
         var $$ = this.internal = new ChartInternal(this);
 
-        $$.mark = new Mark($$, API);
+        //装载默认的特性元素
+        Injector.dependencies["Tooltip"] = Tooltip;
+        Injector.dependencies["Mark"] = Mark;
 
         _.each(Injector.dependencies, function(Obj, name){
-            c3_chart_internal_fn = _.extend(c3_chart_internal_fn, new Obj($$));
+            var instance = new Obj($$);
+
+            if(name.toLowerCase() == "data"){
+                $$["parser"] = instance;
+            }
+            c3_chart_internal_fn = _.extend(c3_chart_internal_fn, instance.__proto__);
         });
+
+        fn && fn.call($$);
 
         //将插件图形的公开方法扩展到API下，同时在插件图形实例下引用C3内部上下文
         if(c3_chart_pluginChart){
@@ -133,8 +143,8 @@
         $$.axes = {};
     }
 
-    c3.generate = function (config) {
-        return new Chart(config);
+    c3.generate = function (config, fn) {
+        return new Chart(config, fn);
     };
     c3.register = function(name, imports, options, factory){
         var config = options.config,
@@ -699,7 +709,7 @@
             .selectAll('circle')
             .remove();
         // tooltip
-        $$.tooltip.style("display", "none");
+        // $$.tooltip.style("display", "none");
 
         // update legend and transform each g
         if (withLegend && config.legend_show) {
@@ -772,7 +782,7 @@
             $$.redrawEventRect();
         }
 
-        $$.mark.redraw();
+        // $$.mark.redraw();
 
         // update fadein condition
         $$.mapToIds($$.data.targets).forEach(function (id) {
@@ -1460,17 +1470,15 @@
     };
     c3_chart_internal_fn.getXDomainMin = function (targets) {
         var $$ = this, config = $$.config;
-        return isDefined(config.axis_x_min) ?
-            ($$.isTimeSeries() ? this.parseDate(config.axis_x_min) : config.axis_x_min) :
 
-        $$.d3.min(targets, function (t) { return $$.d3.min(t.values, function (v) { return v.x; }); });
+        return isDefined(config.axis_x_min) ?
+            ($$.isTimeSeries() ? this.parseDate(config.axis_x_min) : config.axis_x_min) : $$.d3.min(targets, function (t) { return $$.d3.min(t.values, function (v) { return v.x; }); });
     };
     c3_chart_internal_fn.getXDomainMax = function (targets) {
         var $$ = this, config = $$.config;
 
         return isDefined(config.axis_x_max) ?
-            ($$.isTimeSeries() ? this.parseDate(config.axis_x_max) : config.axis_x_max) :
-        $$.d3.max(targets, function (t) { return $$.d3.max(t.values, function (v) { return v.x; }); });
+            ($$.isTimeSeries() ? this.parseDate(config.axis_x_max) : config.axis_x_max) : $$.d3.max(targets, function (t) { return $$.d3.max(t.values, function (v) { return v.x; }); });
     };
     c3_chart_internal_fn.getXDomainPadding = function (domain) {
         var $$ = this, config = $$.config,
@@ -1520,6 +1528,7 @@
         if (lastX || lastX === 0) {
             max = $$.isTimeSeries() ? new Date(lastX.getTime() + padding.right) : lastX + padding.right;
         }
+
         return [min, max];
     };
     c3_chart_internal_fn.updateXDomain = function (targets, withUpdateXDomain, withUpdateOrgXDomain, withTrim, domain) {
@@ -1739,7 +1748,10 @@
     };
     c3_chart_internal_fn.mapTargetsToUniqueXs = function (targets) {
         var $$ = this;
-        var xs = $$.d3.set($$.d3.merge(targets.map(function (t) { return t.values.map(function (v) { return +v.x; }); }))).values();
+        var xs = $$.d3.set($$.d3.merge(targets.map(function (t) {
+            return t.values.map(function (v) { return +v.x; });
+        }))).values();
+
         return $$.isTimeSeries() ? xs.map(function (x) { return new Date(+x); }) : xs.map(function (x) { return +x; });
     };
     c3_chart_internal_fn.addHiddenTargetIds = function (targetIds) {

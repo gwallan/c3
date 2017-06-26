@@ -4,7 +4,6 @@ var c3 = require("../c3"),
     Grid = require("../grid"),
     Region = require("../region"),
     Legend = require("../legend"),
-    Tooltip = require("../tooltip"),
     Text = require("../text");
 
 function C3Bar() {
@@ -206,7 +205,7 @@ C3Bar.prototype = {
 
 };
 
-c3.register("bar", [Axis, Grid, Region, Legend, Tooltip, Text], {
+c3.register("bar", [Axis, Grid, Region, Legend, Text], {
     CLASS: {
         chartBar: 'c3-chart-bar',
         chartBars: 'c3-chart-bars',

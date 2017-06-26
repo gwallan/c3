@@ -88,8 +88,8 @@ try {
   phantom.exit(255)
 }
 
-if (phantom.version.major < 1 || (phantom.version.major === 1 && phantom.version.minor < 9)) {
-  stderr.writeLine('mocha-phantomjs requires PhantomJS > 1.9.1')
+if(!spec){
+  stderr.writeLine('缺失指定的spec目标!');
   phantom.exit(-2)
 }
 

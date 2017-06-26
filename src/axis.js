@@ -202,9 +202,12 @@ function c3_axis(d3, params, c3) {
             text = tick.select("text");
             tspan = text.selectAll('tspan')
                 .data(function (d, i) {
+                    // if(orient == "bottom"){
+                    //     debugger
+                    // }
                     //typeof d == "number" ? Math.round(d) :
                     // if(orient == "bottom"){debugger}
-                    var v = orient == "bottom" ? c3.xAxisTickValues && c3.config.axis_x_tick_values ? c3.config.axis_x_tick_values[i] : d : c3.yAxisTickValues ? c3.yAxisTickValues[i] : d;
+                    var v = orient == "bottom" ? c3.xAxisTickValues && c3.config.axis_x_tick_values && c3.config.axis_x_tick_values.length ? c3.config.axis_x_tick_values[i] : d : c3.yAxisTickValues ? c3.yAxisTickValues[i] : d;
                     var splitted = params.tickMultiline ? splitTickText(v, i, params.tickWivth) : [].concat(textFormatted(d, i));
                     counts[i] = splitted.length;
 
@@ -427,7 +430,7 @@ function Axis(owner){
                     culling_max: 10,
                     count: undefined,
                     fit: true,
-                    values: null,
+                    values: [],
                     rotate: 0,
                     outer: true,
                     multiline: true,

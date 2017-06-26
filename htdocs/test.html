@@ -39,32 +39,34 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-pie.js').then(function(c3){
+      System.import('component/c3-bar.js').then(function(c3){
         window.chart = c3.generate({
           data: {
-            columns: [
-                ['data1', 10, 20, 10, 40, 15, 25],
-                ['data2', 50, 40, 30, 45, 25, 45]
+            json: [
+              {upload: "1", download: 200, total: 400},
+              {upload: "2", download: 300, total: 400},
+              {upload: "3", download: 200, total: 500},
+              {upload: "4", download: 100, total: 500}
             ],
-            type: 'pie',
-            onclick: function (d, i) {
-              console.log('onclick', d, i)
+            json: {
+                data1: [30, 20, 50],
+                data2: [200, 130, 90]
             },
-            onmouseover: function (d, i) {
-              console.log('onmouseover', d, i)
-            },
-            onmouseout: function (d, i) {
-              console.log('onmouseout', d, i)
-            }
+            type: 'bar'
+          },
+          bar: {
+            width: 0.5
           },
           axis: {
-              y: {
-                  padding: {
-                      top: 200,
-                      bottom: 200
-                  }
+              x: {
+                type: "category"
               }
           }
+        }, function(){
+          this.parser
+            // .x("upload")
+            .y(["data1"])
+            .value("data2");
         });
       });
     </script>

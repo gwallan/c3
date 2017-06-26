@@ -13,6 +13,9 @@ module.exports = {
     isNumber: function (o) {
         return typeof o === 'number';
     },
+    isArray: function (o) {
+        return typeof o === 'object' && o instanceof Array && o.length > -1;
+    },
     isUndefined: function (v) {
         return typeof v === 'undefined';
     },

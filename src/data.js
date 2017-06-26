@@ -50,10 +50,29 @@ function Data(owner){
     });
 
     owner.config = _.extend(owner.config, flat);
+
+    this.__proto__.self = this;
+    this.x = function(key){
+        this.xKey = key;
+        return this;
+    };
+    this.y = function(key){
+        this.yKey = key;
+        return this;
+    };
+    this.value = function(key){
+        this.valueKey = key;
+        return this;
+    };
+    this.other = function(key){
+        this.otherKey = key;
+        return this;
+    };
 }
 
 Data.prototype.convertUrlToData = function (url, mimeType, keys, done) {
         var $$ = this, type = mimeType ? mimeType : 'csv';
+
         $$.d3.xhr(url, function (error, data) {
             var d;
             if (!data) {
@@ -109,14 +128,19 @@ Data.prototype.convertJsonToData = function (json, keys) {
             new_rows.push(new_row);
         });
         data = $$.convertRowsToData(new_rows);
-    }else if (json["children"]){
-        data = json;
-    } else {
+    }else if(json.length) {
+        new_rows.push(Object.keys(json[0]));
+        Object.keys(json).forEach(function (key) {
+            new_rows.push(Object.values(json[key]));
+        });
+        data = $$.convertRowsToData(new_rows);
+    }else {
         Object.keys(json).forEach(function (key) {
             new_rows.push([key].concat(json[key]));
         });
         data = $$.convertColumnsToData(new_rows);
     }
+
 
     return data;
 };
@@ -152,26 +176,17 @@ Data.prototype.convertColumnsToData = function (columns) {
 };
 Data.prototype.convertDataToTargets = function (data, appendXs) {
     var $$ = this, config = $$.config,
-        ids, xs, targets, extendKey;
+        ids, xs, targets;
 
-    if(config.data_type == "tree" || config.data_type == "treemap"){
-        data = data["children"];
-        ids = data.map(function(obj){return obj["name"]}).filter($$.isNotX, $$);
-        xs = data.map(function(obj){return obj["name"]}).filter($$.isX, $$);
-    }else if(config.data_json){
-        ids = $$.d3.keys(data[0]).filter($$.isNotX, $$);
-        xs = $$.d3.keys(data[0]).filter($$.isX, $$);
-    }else{
-        ids = $$.d3.keys(data[0]).filter($$.isNotX, $$);
-        xs = $$.d3.keys(data[0]).filter($$.isX, $$);
+    ids = $$.d3.keys(data[0]).filter($$.isNotX, $$);
+    xs = $$.d3.keys(data[0]).filter($$.isX, $$);
+
+    //自定义X和Y
+    if($$.self.xKey){
+        xs = utility.isString($$.self.xKey) ? [$$.self.xKey] : utility.isArray($$.self.xKey) ? $$.self.xKey : utility.isFunction($$.self.xKey) ? $$.self.xKey() : [];
     }
-
-    //针对散点图的额外处理
-    if(config.data_type == "scatter" && config.scatter_key){
-        ids = ids.filter(function(key){
-            return config.scatter_key.indexOf(key) == -1;
-        }, $$);
-        extendKey = config.scatter_key && _.object(ids, config.scatter_key);
+    if($$.self.yKey){
+        ids = utility.isString($$.self.yKey) ? [$$.self.yKey] : utility.isArray($$.self.yKey) ? $$.self.yKey : utility.isFunction($$.self.yKey) ? $$.self.yKey() : [];
     }
 
     // save x for update data by load when custom x and c3.x API
@@ -211,11 +226,12 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
     // convert to target
     targets = ids.map(function (id, index) {
         var convertedId = config.data_idConverter(id);
+
         return {
             id: convertedId,
             id_org: id,
             values: data.map(function (d, i) {
-                var xKey = $$.getXKey(id), rawX = d[xKey], x = $$.generateTargetX(rawX, id, i), extend = extendKey ? d[extendKey[id]] : null;
+                var xKey = $$.getXKey(id), rawX = d[xKey], x = $$.generateTargetX(rawX, id, i), data;
 
                 // use x as categories if custom x and categorized
                 if ($$.isCustomX() && $$.isCategorized() && index === 0 && rawX) {
@@ -226,8 +242,18 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
                 if (utility.isUndefined(d[id]) || $$.data.xs[id].length <= i) {
                     x = undefined;
                 }
+                //自定义X轴数值
+                if($$.self.xKey){
+                    $$.config.axis_x_tick_values.push(d[$$.self.xKey]);
+                }
 
-                return { x: x, value: d[id] !== null && !isNaN(d[id]) ? +d[id] : null, id: convertedId, extend: extend };
+                data = {
+                    x: x,
+                    value: $$.self.valueKey ? d[$$.self.valueKey] : d[id] !== null && !isNaN(d[id]) ? +d[id] : null,
+                    id: convertedId
+                };
+
+                return $$.self.otherKey ? _.extend(d[$$.self.otherKey], data) : data;
             }).filter(function (v) { return utility.isDefined(v.x); })
         };
     });
@@ -264,6 +290,7 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
         $$.addCache(d.id_org, d);
     });
 
+    // debugger
     return targets;
 };
 
