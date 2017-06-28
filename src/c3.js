@@ -154,10 +154,10 @@
     c3.generate = function (config, fn) {
         return new Chart(config, fn);
     };
-    c3.register = function(name, imports, options, factory){
+    c3.register = function(name, importList, options, factory){
         var config = options.config,
             CLASS = options.CLASS,
-            obj = Injector.get(imports, factory);
+            obj = Injector.get(importList, factory);
 
         function MergeRecursive(obj1, obj2) {
           for (var p in obj2) {
