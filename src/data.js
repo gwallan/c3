@@ -244,7 +244,7 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
                 }
                 //自定义X轴数值
                 if($$.self.xKey){
-                    $$.config.axis_x_tick_values.push(d[$$.self.xKey]);
+                    d[$$.self.xKey] && $$.config.axis_x_tick_values.push(d[$$.self.xKey]);
                 }
 
                 data = {

@@ -93,6 +93,8 @@
     function Chart(config, fn) {
         var $$ = this.internal = new ChartInternal(this);
 
+        $$["elements"] = {};
+
         //装载默认的特性元素
         Injector.dependencies["Tooltip"] = Tooltip;
         Injector.dependencies["Mark"] = Mark;
@@ -102,6 +104,12 @@
 
             if(name.toLowerCase() == "data"){
                 $$["parser"] = instance;
+            }
+            if(name.toLowerCase() == "legend"){
+                $$["elements"]["legend"] = instance;
+            }
+            if(name.toLowerCase() == "tooltip"){
+                $$["elements"]["tooltip"] = instance;
             }
             c3_chart_internal_fn = _.extend(c3_chart_internal_fn, instance.__proto__);
         });

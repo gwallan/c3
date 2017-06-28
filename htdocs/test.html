@@ -39,7 +39,7 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-bar.js').then(function(c3){
+      System.import('component/c3-pie.js').then(function(c3){
         window.chart = c3.generate({
           data: {
             json: [
@@ -48,14 +48,7 @@
               {upload: "3", download: 200, total: 500},
               {upload: "4", download: 100, total: 500}
             ],
-            json: {
-                data1: [30, 20, 50],
-                data2: [200, 130, 90]
-            },
-            type: 'bar'
-          },
-          bar: {
-            width: 0.5
+            type: 'pie'
           },
           axis: {
               x: {
@@ -64,9 +57,15 @@
           }
         }, function(){
           this.parser
-            // .x("upload")
+            .x("upload")
             .y(["data1"])
             .value("data2");
+          this.elements.legend
+            .draw(function(ele){
+            });
+          this.elements.tooltip
+            .draw(function(ele){
+            });
         });
       });
     </script>

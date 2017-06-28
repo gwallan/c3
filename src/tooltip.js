@@ -31,6 +31,13 @@ var CLASS = {
 function Tooltip(owner){
     owner.config = _.extend(owner.config, owner.convert({tooltip: config}));
     owner.CLASS = _.extend(owner.CLASS, CLASS);
+
+    this.__proto__.self = this;
+    this.draw = function(fn){
+        if(utility.isFunction(fn))
+            this.draw = fn;
+        return this;
+    };
 }
 
 Tooltip.prototype.initTooltip = function () {
@@ -170,6 +177,9 @@ Tooltip.prototype.showTooltip = function (selectedData, element) {
     $$.tooltip
         .style("top", position.top + "px")
         .style("left", position.left + 'px');
+
+    //图例自定义
+    $$.tooltip.call($$.self.draw);
 };
 Tooltip.prototype.hideTooltip = function () {
     this.tooltip.style("display", "none");

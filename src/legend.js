@@ -36,6 +36,13 @@ var CLASS = {
 function Legend(owner){
     owner.config = _.extend(owner.config, owner.convert({legend: config}));
     owner.CLASS = _.extend(owner.CLASS, CLASS);
+
+    this.__proto__.self = this;
+    this.draw = function(fn){
+        if(utility.isFunction(fn))
+            this.draw = fn;
+        return this;
+    };
 }
 
 Legend.prototype.initLegend = function () {
@@ -396,6 +403,9 @@ Legend.prototype.updateLegend = function (targetIds, options, transitions) {
     // Update g positions
     $$.transformAll(withTransitionForTransform, transitions);
     $$.legendHasRendered = true;
+
+    //图例自定义
+    $$.legend.call($$.self.draw);
 };
 Legend.prototype.isLegendToShow = function (targetId) {
     return this.hiddenLegendIds.indexOf(targetId) < 0;
