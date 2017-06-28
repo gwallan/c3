@@ -39,7 +39,7 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-pie.js').then(function(c3){
+      System.import('component/c3-line.js').then(function(c3){
         window.chart = c3.generate({
           data: {
             json: [
@@ -48,7 +48,7 @@
               {upload: "3", download: 200, total: 500},
               {upload: "4", download: 100, total: 500}
             ],
-            type: 'pie'
+            type: 'line'
           },
           axis: {
               x: {

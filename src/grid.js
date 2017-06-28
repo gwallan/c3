@@ -147,6 +147,7 @@ Grid.prototype.redrawGrid = function (withTransition) {
     var $$ = this, config = $$.config, xv = $$.xv.bind($$),
         lines = $$.xgridLines.select('line'),
         texts = $$.xgridLines.select('text');
+
     return [
         (withTransition ? lines.transition() : lines)
             .attr("x1", config.axis_rotated ? 0 : xv)

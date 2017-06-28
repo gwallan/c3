@@ -27,7 +27,7 @@
         add : function(qualifier, obj){
             this.dependencies[qualifier] = obj;
         },
-        get : function(imports, func){
+        get : function(importList, func){
             var dependencies;
 
             function newApply(Class, args) {
@@ -42,22 +42,22 @@
                 return new F();
             }
 
-            if(arguments < 2){
-                dependencies = this.resolveDependencies(imports);
+            if(arguments.length < 2){
+                dependencies = this.resolveDependencies(importList);
             }else{
-                dependencies = this.resolve(imports);
+                dependencies = this.resolve(importList);
             }
 
             return newApply(func, dependencies);
         },
-        resolve: function(imports){
+        resolve: function(importList){
             var dependencies = [];
 
-            for ( var i = 0; i < imports.length; i++) {
-                if(typeof imports[i] != "string"){
-                    this.add(imports[i].name, imports[i]);
+            for ( var i = 0; i < importList.length; i++) {
+                if(typeof importList[i] != "string"){
+                    this.add(importList[i].name, importList[i]);
                 }
-                dependencies.push(this.dependencies[imports[i]]);
+                dependencies.push(this.dependencies[importList[i]]);
             }
             return dependencies;
         },
