@@ -51,7 +51,7 @@ function Data(owner){
 
     owner.config = _.extend(owner.config, flat);
 
-    this.__proto__.self = this;
+    this.__proto__.chartData = this;
     this.x = function(key){
         this.xKey = key;
         return this;
@@ -182,11 +182,11 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
     xs = $$.d3.keys(data[0]).filter($$.isX, $$);
 
     //自定义X和Y
-    if($$.self.xKey){
-        xs = utility.isString($$.self.xKey) ? [$$.self.xKey] : utility.isArray($$.self.xKey) ? $$.self.xKey : utility.isFunction($$.self.xKey) ? $$.self.xKey() : [];
+    if($$.chartData.xKey){
+        xs = utility.isString($$.chartData.xKey) ? [$$.chartData.xKey] : utility.isArray($$.chartData.xKey) ? $$.chartData.xKey : utility.isFunction($$.chartData.xKey) ? $$.chartData.xKey() : [];
     }
-    if($$.self.yKey){
-        ids = utility.isString($$.self.yKey) ? [$$.self.yKey] : utility.isArray($$.self.yKey) ? $$.self.yKey : utility.isFunction($$.self.yKey) ? $$.self.yKey() : [];
+    if($$.chartData.yKey){
+        ids = utility.isString($$.chartData.yKey) ? [$$.chartData.yKey] : utility.isArray($$.chartData.yKey) ? $$.chartData.yKey : utility.isFunction($$.chartData.yKey) ? $$.chartData.yKey() : [];
     }
 
     // save x for update data by load when custom x and c3.x API
@@ -243,17 +243,17 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
                     x = undefined;
                 }
                 //自定义X轴数值
-                if($$.self.xKey){
-                    d[$$.self.xKey] && $$.config.axis_x_tick_values.push(d[$$.self.xKey]);
+                if($$.chartData.xKey){
+                    d[$$.chartData.xKey] && $$.config.axis_x_tick_values.push(d[$$.chartData.xKey]);
                 }
 
                 data = {
                     x: x,
-                    value: $$.self.valueKey ? d[$$.self.valueKey] : d[id] !== null && !isNaN(d[id]) ? +d[id] : null,
+                    value: $$.chartData.valueKey ? d[$$.chartData.valueKey] : d[id] !== null && !isNaN(d[id]) ? +d[id] : null,
                     id: convertedId
                 };
 
-                return $$.self.otherKey ? _.extend(d[$$.self.otherKey], data) : data;
+                return $$.chartData.otherKey ? _.extend(d[$$.chartData.otherKey], data) : data;
             }).filter(function (v) { return utility.isDefined(v.x); })
         };
     });

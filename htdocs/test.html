@@ -21,6 +21,9 @@
       .c3-line {
         stroke-width: 2px;
       }
+      .c3-bar._expanded_ {
+        fill-opacity: 1;
+      }
     </style>
     <div id="chart"></div>
     <script>
@@ -39,7 +42,7 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-line.js').then(function(c3){
+      System.import('component/c3-bar.js').then(function(c3){
         window.chart = c3.generate({
           data: {
             json: [
@@ -48,18 +51,32 @@
               {upload: "3", download: 200, total: 500},
               {upload: "4", download: 100, total: 500}
             ],
-            type: 'line'
+            type: 'bar',
+            onmouseover: function(d, ele){
+              var color = d3.rgb(d3.select(ele).style("fill")),
+                data = d3.select(ele).datum();
+
+              data.color = color;
+
+              d3.select(ele).style("fill", color.darker(.5));
+            },
+            onmouseout: function(d, ele){
+              var color = d3.rgb(d3.select(ele).style("fill")),
+                data = d3.select(ele).datum();
+
+              d3.select(ele).style("fill", data.color);
+            }
           },
           axis: {
               x: {
                 type: "category"
               }
-          }
+          },
         }, function(){
           this.parser
             .x("upload")
-            .y(["data1"])
-            .value("data2");
+            .y(["download"])
+            // .value("data2");
           this.elements.legend
             .draw(function(ele){
             });

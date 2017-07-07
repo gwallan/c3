@@ -57,7 +57,7 @@
                 if(typeof importList[i] != "string"){
                     this.add(importList[i].name, importList[i]);
                 }
-                dependencies.push(this.dependencies[importList[i]]);
+                dependencies.push(this.dependencies[importList[i].name]);
             }
             return dependencies;
         },

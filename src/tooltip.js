@@ -32,7 +32,7 @@ function Tooltip(owner){
     owner.config = _.extend(owner.config, owner.convert({tooltip: config}));
     owner.CLASS = _.extend(owner.CLASS, CLASS);
 
-    this.__proto__.self = this;
+    this.__proto__.chartTooltip = this;
     this.draw = function(fn){
         if(utility.isFunction(fn))
             this.draw = fn;
@@ -179,7 +179,7 @@ Tooltip.prototype.showTooltip = function (selectedData, element) {
         .style("left", position.left + 'px');
 
     //图例自定义
-    $$.tooltip.call($$.self.draw);
+    $$.tooltip.call($$.chartTooltip.draw);
 };
 Tooltip.prototype.hideTooltip = function () {
     this.tooltip.style("display", "none");

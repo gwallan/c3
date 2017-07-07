@@ -37,7 +37,7 @@ function Legend(owner){
     owner.config = _.extend(owner.config, owner.convert({legend: config}));
     owner.CLASS = _.extend(owner.CLASS, CLASS);
 
-    this.__proto__.self = this;
+    this.__proto__.chartLegend = this;
     this.draw = function(fn){
         if(utility.isFunction(fn))
             this.draw = fn;
@@ -405,7 +405,7 @@ Legend.prototype.updateLegend = function (targetIds, options, transitions) {
     $$.legendHasRendered = true;
 
     //图例自定义
-    $$.legend.call($$.self.draw);
+    $$.legend.call($$.chartLegend.draw);
 };
 Legend.prototype.isLegendToShow = function (targetId) {
     return this.hiddenLegendIds.indexOf(targetId) < 0;
