@@ -33,9 +33,17 @@
   stroke: #fff; }
 
 /*-- Axis --*/
+.c3 .c3-axis .domain,
+.c3 .c3-axis .tick line {
+  fill: none;
+  stroke: #91A4AD;
+}
+.c3 .c3-axis .tick text{
+  stroke: #5e5e5e;
+}
 /*-- Grid --*/
 .c3-grid line {
-  stroke: #aaa;
+  stroke: #E6EFF1;
 }
 
 .c3-grid text {
@@ -55,9 +63,10 @@
   stroke-width: 1px; }
 
 /*-- Point --*/
-.c3-circle._expanded_ {
-  stroke-width: 1px;
-  stroke: white; }
+.c3-shapes .c3-circle._expanded_ {
+  stroke-width: 3px;
+  fill: white;
+}
 
 .c3-selected-circle {
   fill: white;

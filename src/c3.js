@@ -1159,11 +1159,11 @@
             subchart_size_height: 60,
             subchart_onbrush: function () { },
             // color
-            color_pattern: [],
+            color_pattern: ['#7167EA', '#23A2F5', '#EE3758', '#FDBA50', '#80CB54', '#1F97A6', '#B364D8', '#FF7CDC', '#FDDD00', '#56D9F3', '#EC6901', '#47885E', '#275FDF', '#88A8BD'],
             color_threshold: {},
             // point - point of each data
             point_show: true,
-            point_r: 2.5,
+            point_r: 3,
             point_focus_expand_enabled: true,
             point_focus_expand_r: undefined,
             point_select_r: undefined,
@@ -2728,7 +2728,7 @@
         $$.mainCircle.enter().append("circle")
             .attr("class", $$.classCircle.bind($$))
             .attr("r", 1)
-            .style("fill", $$.color)
+            // .style("fill", $$.color)
             .style("opacity", $$.initialOpacityForCircle.bind($$))
             .transition().duration($$.config.transition_enabled && config.data_type == "scatter" ? $$.config.transition_duration : 0)
             .attr("r", $$.pointR.bind($$));
