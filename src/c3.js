@@ -2324,7 +2324,7 @@
                     $$.cancelClick = false;
                     return;
                 }
-                if ($$.isStepType(d) && config.line_step_type === 'step-after' && d3.mouse(this)[0] < $$.x($$.getXValue(d.id, index))) {
+                if ($$.isType(d, "step") && config.line_step_type === 'step-after' && d3.mouse(this)[0] < $$.x($$.getXValue(d.id, index))) {
                     index -= 1;
                 }
 
@@ -2333,7 +2333,7 @@
                     selectedData = single.data();
                 }
 
-                if(!config.data_selection_grouped || ($$.isBarType(d) && config.bar_focus == "single")){
+                if(config.bar_focus == "single"){
                     if($$.isCustomX() && $$.isCategorized()){
                         $$.config.data_onclick.call($$.api, $$.config.axis_x_categories[d.index], this);
                     }else{
@@ -2344,7 +2344,7 @@
                             $$.config.data_onclick.call($$.api, $$.config.axis_x_categories[d.index], this);
                         }
                     }
-                }else{
+                }else if($$.isType(d, "line") || $$.isType(d, "area") || $$.isType(d, "bar")){
                     $$.main.selectAll('.' + CLASS.shape + '-' + index).each(function (d) {
                         if (config.data_selection_grouped || $$.isWithinShape(this, d)) {
                             $$.toggleShape(this, d, index);
@@ -2657,7 +2657,7 @@
             isWithin = false;
         }
         else if (that.nodeName === 'circle') {
-            isWithin = $$.isStepType(d) ? $$.isWithinStep(that, $$.getYScale(d.id)(d.value)) : $$.isWithinCircle(that, $$.pointSelectR(d) * 1.5);
+            isWithin = $$.isType(d, "step") ? $$.isWithinStep(that, $$.getYScale(d.id)(d.value)) : $$.isWithinCircle(that, $$.pointSelectR(d) * 1.5);
         }
         else if (that.nodeName === 'path') {
             isWithin = shape.classed(CLASS.bar) ? $$.isWithinBar(that) : true;
@@ -3146,7 +3146,7 @@
     c3_chart_internal_fn.getToggle = function (that, d) {
         var $$ = this, toggle;
         if (that.nodeName === 'circle') {
-            if ($$.isStepType(d)) {
+            if ($$.isType(d, "step")) {
                 // circle is hidden in step chart, so treat as within the click area
                 toggle = function () { }; // TODO: how to select step chart?
             } else {

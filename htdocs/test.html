@@ -42,16 +42,19 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-bar.js').then(function(c3){
+      System.import('component/c3-line.js').then(function(c3){
         window.chart = c3.generate({
           data: {
+            selection: {
+              grouped: false
+            },
             json: [
               {upload: "1", download: 200, total: 400, sum: 200},
               {upload: "2", download: 300, total: 400, sum: 300},
               {upload: "3", download: 200, total: 500, sum: 800},
               {upload: "4", download: 100, total: 500, sum: 150}
             ],
-            type: 'bar',
+            type: 'line',
             onmouseover: function(d, ele){
               var color = d3.rgb(d3.select(ele).style("fill")),
                 data = d3.select(ele).datum();
@@ -65,6 +68,9 @@
                 data = d3.select(ele).datum();
 
               d3.select(ele).style("fill", data.color);
+            },
+            onclick: function(d, ele){
+              console.log(d, ele);
             }
           },
           axis: {
