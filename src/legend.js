@@ -191,8 +191,8 @@ Legend.prototype.updateLegend = function (targetIds, options, transitions) {
 
     function updatePositions(textElement, id, index) {
         var reset = index === 0, isLast = index === targetIds.length - 1,
-            box = textElement.getBoundingClientRect(),
-            // box = getTextBox(textElement, id),
+            // box = textElement.getBoundingClientRect(),
+            box = getTextBox(textElement, id),
             itemWidth = $$.config.legend_item_width || box.width + tileWidth + (isLast && !($$.isLegendRight || $$.isLegendInset) ? 0 : paddingRight) + $$.config.legend_item_paddingRight,
             itemHeight = $$.config.legend_item_height ||  box.height + paddingTop,
             itemLength = $$.isLegendRight || $$.isLegendInset ? itemHeight : itemWidth,
@@ -395,7 +395,7 @@ Legend.prototype.updateLegend = function (targetIds, options, transitions) {
     // Update all to reflect change of legend
     $$.updateLegendItemWidth(maxWidth);
     $$.updateLegendItemHeight(maxHeight);
-    $$.updateLegendStep(step);
+    $$.updateLegendStep(config.legend_inset_step - 1);
     // Update size and scale
     $$.updateSizes();
     $$.updateScales();

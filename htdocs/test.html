@@ -46,10 +46,10 @@
         window.chart = c3.generate({
           data: {
             json: [
-              {upload: "1", download: 200, total: 400},
-              {upload: "2", download: 300, total: 400},
-              {upload: "3", download: 200, total: 500},
-              {upload: "4", download: 100, total: 500}
+              {upload: "1", download: 200, total: 400, sum: 200},
+              {upload: "2", download: 300, total: 400, sum: 300},
+              {upload: "3", download: 200, total: 500, sum: 800},
+              {upload: "4", download: 100, total: 500, sum: 150}
             ],
             type: 'bar',
             onmouseover: function(d, ele){
@@ -83,11 +83,20 @@
           },
           bar: {
             width: 30
+          },
+          legend: {
+            show: true,
+            position: "inset",
+            inset: {
+              anchor: "bottom-left",
+              step: 3,
+              x: -10
+            }
           }
         }, function(){
           this.parser
             .x("upload")
-            .y(["download"])
+            .y(["download", "sum", "total"])
             // .value("data2");
           this.elements
             .legend
