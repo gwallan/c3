@@ -8,7 +8,7 @@ var utility = require("./utility");
 var tickTextCharSize;
 
 function c3_axis(d3, params, c3) {
-    var scale = d3.scale.linear(), orient = "bottom", innerTickSize = 6, outerTickSize, tickPadding = 3, tickValues = null, tickFormat, tickArguments;
+    var scale = d3.scale.linear(), orient = "bottom", innerTickSize = 6, outerTickSize, tickPadding = 9, tickValues = null, tickFormat, tickArguments;
     var tickOffset = 0, tickCulling = true, tickCentered;
     var config = c3.config;
 
@@ -309,11 +309,11 @@ function c3_axis(d3, params, c3) {
                             pathUpdate.attr("d", "M" + (config.axis_y_tick_width || outerTickSize) + "," + range[0] + "H0V" + range[1] + "H" + (config.axis_y_tick_width || outerTickSize));
                         }else{
                             lineEnter.attr("x2", -(config.axis_y_tick_width || innerTickSize));
-                            textEnter.attr("x", -tickLength);
+                            textEnter.attr("x", -tickLength - 5);
                             lineUpdate.attr("x2", -(config.axis_y_tick_width || innerTickSize)).attr("y1", tickY).attr("y2", tickY);
-                            textUpdate.attr("x", -tickLength).attr("y", tickOffset);
+                            textUpdate.attr("x", -tickLength - 5).attr("y", tickOffset);
                             text.style("text-anchor", "end");
-                            tspan.attr('x', -tickLength).attr("dy", tspanDy);
+                            tspan.attr('x', -tickLength - 5).attr("dy", tspanDy);
                             pathUpdate.attr("d", "M" + (config.axis_y_tick_mark ? -(config.axis_y_tick_width || outerTickSize) : 0) + "," + range[0] + "H0V" + range[1] + "H" + -(config.axis_y_tick_width || outerTickSize));
                         }
                         break;
@@ -438,7 +438,7 @@ function Axis(owner){
                     mark: false,//是否显示X轴两端刻度
                     alignment: false,//是否X轴标签与刻度对齐
                     zero: false,//是否显示X轴0刻度
-                    padding: 0,//轴文本显示间距
+                    padding: 9,//轴文本显示间距
                 },
             },
             y: {
