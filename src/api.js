@@ -11,7 +11,7 @@ API.prototype.focus = function (targetIds) {
     this.revert();
     this.defocus();
     candidates.classed($$.CLASS.focused, true).classed($$.CLASS.defocused, false);
-    if ($$.hasArcType() || $$.hasTreeType()) {
+    if ($$.hasType('arc') || $$.hasType('tree')) {
         $$.expandArc(targetIds);
     }
     $$.toggleFocusLegend(targetIds, true);
@@ -29,7 +29,7 @@ API.prototype.defocus = function (targetIds) {
     candidates = $$.svg.selectAll($$.selectorTargets(targetIds.filter($$.isTargetToShow, $$))),
 
     candidates.classed($$.CLASS.focused, false).classed($$.CLASS.defocused, true);
-    if ($$.hasArcType()) {
+    if ($$.hasType('arc')) {
         $$.unexpandArc(targetIds);
     }
     $$.toggleFocusLegend(targetIds, false);
@@ -118,7 +118,7 @@ API.prototype.hide = function (targetIds, options) {
 API.prototype.toggle = function (targetIds, options) {
     var that = this, $$ = this.internal, showTargets = [], hiddenTargetIds = [];
 
-    if($$.hasTreeType()){
+    if($$.hasType("tree")){
         $$.mapToTargetIds(targetIds).map(function (targetId) {
             $$.isTargetToShow(targetId) ? hiddenTargetIds.push(targetId) : showTargets.push(targetId);
         });

@@ -1186,7 +1186,10 @@
 
         return config;
     };
-    c3_chart_internal_fn.additionalConfig = {};
+    c3_chart_internal_fn.additionalConfig = {
+        //bar的宽度属性可以独立配置，但是无法合理合并属性，所以暂时写到这里
+        bar_width: undefined
+    };
 
     c3_chart_internal_fn.loadConfig = function (config) {
         var this_config = this.config, target, keys, read;

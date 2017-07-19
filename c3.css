@@ -9,9 +9,11 @@
 }
 
 .c3 text {
+  fill: #5e5e5e;
   -webkit-user-select: none;
   -moz-user-select: none;
-  user-select: none; }
+  user-select: none;
+}
 
 .c3-legend-item-tile, .c3-xgrid-focus, .c3-ygrid, .c3-event-rect, .c3-bars path {
   shape-rendering: geometricPrecision;
@@ -39,7 +41,7 @@
   stroke: #91A4AD;
 }
 .c3 .c3-axis .tick text{
-  stroke: #5e5e5e;
+  fill: #5e5e5e;
 }
 /*-- Grid --*/
 .c3-grid line {
@@ -47,7 +49,7 @@
 }
 
 .c3-grid text {
-  fill: #aaa;
+  fill: #5e5e5e;
 }
 
 .c3-xgrid, .c3-ygrid {
@@ -64,7 +66,7 @@
 
 /*-- Point --*/
 .c3-shapes .c3-circle._expanded_ {
-  stroke-width: 3px;
+  stroke-width: 1.5px;
   fill: white;
 }
 
