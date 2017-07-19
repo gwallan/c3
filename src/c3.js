@@ -2345,12 +2345,14 @@
                         }
                     }
                 }else if($$.isType(d, "line") || $$.isType(d, "area") || $$.isType(d, "bar")){
+                    selectedData = [];
                     $$.main.selectAll('.' + CLASS.shape + '-' + index).each(function (d) {
                         if (config.data_selection_grouped || $$.isWithinShape(this, d)) {
                             $$.toggleShape(this, d, index);
-                            $$.config.data_onclick.call($$.api, d, this);
+                            selectedData.push(d);
                         }
                     });
+                    $$.config.data_onclick.call($$.api, selectedData.length == 1 ? selectedData[0] : selectedData, this);
                 }
             })
             .call(

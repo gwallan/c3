@@ -42,7 +42,7 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-line.js').then(function(c3){
+      System.import('component/c3-bar.js').then(function(c3){
         window.chart = c3.generate({
           data: {
             selection: {
@@ -54,7 +54,7 @@
               {upload: "3", download: 200, total: 500, sum: 800},
               {upload: "4", download: 100, total: 500, sum: 150}
             ],
-            type: 'line',
+            type: 'bar',
             onmouseover: function(d, ele){
               var color = d3.rgb(d3.select(ele).style("fill")),
                 data = d3.select(ele).datum();
