@@ -111,6 +111,9 @@
             if(name.toLowerCase() == "tooltip"){
                 $$["elements"]["tooltip"] = instance;
             }
+            if(name.toLowerCase() == "grid"){
+                $$["elements"]["grid"] = instance;
+            }
             c3_chart_internal_fn = _.extend(c3_chart_internal_fn, instance.__proto__);
         });
 

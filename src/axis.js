@@ -601,13 +601,13 @@ function Axis(owner){
 
             if (config.axis_x_tick_format) {
                 if (utility.isFunction(config.axis_x_tick_format)) {
-                    //format = config.axis_x_tick_format;
-                    return function (v) { return config.axis_x_tick_format.call($$, v, format.call($$, v)); }
+                    format = config.axis_x_tick_format;
+                    // return function (v) { return config.axis_x_tick_format.call($$, v, format.call($$, v)); }
                 } else if ($$.isTimeSeries()) {
                     format = function (date) {
                         return date ? $$.axisTimeFormat(config.axis_x_tick_format)(date) : "";
                     };
-                    return function (v) { return format.call($$, v); };
+                    // return function (v) { return format.call($$, v); };
                 }
             }
             return utility.isFunction(format) ? function (v) { return format.call($$, v); } : format;
@@ -888,41 +888,43 @@ function Axis(owner){
                     minutes = date.getMinutes(),
                     second = date.getSeconds();
 
-                if(format.indexOf("%") > -1){
+                if(utility.isString(format) && format.indexOf("%") > -1){
                     format = format.substr(format.length - 1).toLowerCase();
-                }
 
-                switch(format){
-                    case "y":
-                        month = 1;
-                        day = 1;
-                        hour = 0;
-                        minutes = 0;
-                        second = 0;
-                        break;
-                    case "m":
-                        day = 1;
-                        hour = 0;
-                        minutes = 0;
-                        second = 0;
-                        break;
-                    case "d":
-                        hour = 0;
-                        minutes = 0;
-                        second = 0;
-                        break;
-                    case "i":
-                        minutes = 0;
-                        second = 0;
-                        break;
-                    case "m":
-                        second = 0;
-                        break;
-                    case "s":
-                        break;
-                }
+                    switch(format){
+                        case "y":
+                            month = 1;
+                            day = 1;
+                            hour = 0;
+                            minutes = 0;
+                            second = 0;
+                            break;
+                        case "m":
+                            day = 1;
+                            hour = 0;
+                            minutes = 0;
+                            second = 0;
+                            break;
+                        case "d":
+                            hour = 0;
+                            minutes = 0;
+                            second = 0;
+                            break;
+                        case "i":
+                            minutes = 0;
+                            second = 0;
+                            break;
+                        case "m":
+                            second = 0;
+                            break;
+                        case "s":
+                            break;
+                    }
 
-                return new Date(year, month, day, hour, minutes, second);
+                    return new Date(year, month, day, hour, minutes, second);
+                }else{
+                    return date;
+                }
             }
 
             if (tickCount) {

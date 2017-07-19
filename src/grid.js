@@ -35,6 +35,13 @@ function Grid(owner){
         ygridLine: 'c3-ygrid-line',
         ygridLines: 'c3-ygrid-lines',
     });
+
+    this.__proto__.chartGrid = this;
+    this.draw = function(fn){
+        if(utility.isFunction(fn))
+            this.draw = fn;
+        return this;
+    };
 }
 
 Grid.prototype.initGrid = function () {
@@ -142,6 +149,9 @@ Grid.prototype.updateGrid = function (duration) {
     $$.ygridLines.exit().transition().duration(duration)
         .style("opacity", 0)
         .remove();
+
+    //自定义
+    $$.grid.call($$.chartGrid.draw);
 };
 Grid.prototype.redrawGrid = function (withTransition) {
     var $$ = this, config = $$.config, xv = $$.xv.bind($$),
@@ -268,6 +278,9 @@ Grid.prototype.updateXGrid = function (withoutUpdate) {
 Grid.prototype.updateYGrid = function () {
     var $$ = this, config = $$.config,
         gridValues = $$.yAxis.tickValues() || $$.y.ticks(config.grid_y_ticks);
+
+    gridValues.shift();
+
     $$.ygrid = $$.main.select('.' + $$.CLASS.ygrids).selectAll('.' + $$.CLASS.ygrid)
         .data(gridValues);
     $$.ygrid.enter().append('line')

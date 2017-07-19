@@ -47,7 +47,7 @@ API.prototype.revert = function (targetIds) {
     candidates = $$.svg.selectAll($$.selectorTargets(targetIds)); // should be for all targets
 
     candidates.classed($$.CLASS.focused, false).classed($$.CLASS.defocused, false);
-    if ($$.hasArcType() || $$.hasTreeType()) {
+    if ($$.hasType('arc') || $$.hasType('tree')) {
         $$.unexpandArc(targetIds);
     }
     if ($$.config.legend_show) {

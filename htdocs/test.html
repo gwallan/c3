@@ -43,6 +43,8 @@
           }
       });
       System.import('component/c3-line.js').then(function(c3){
+        window.chart = c3.generate({"data":{"x":"x","type":"spline","columns":[["x","2017-07-10","2017-07-11","2017-07-12","2017-07-13","2017-07-14","2017-07-15","2017-07-16"],["抓取比例",0,0,0,0,0,0,0]]},"padding":{"top":20,"left":60,"right":50,"bottom":25},"axis":{"x":{"type":"timeseries","tick":{"count":7, "format": "%Y-%m-%d"}},"y":{"min":0,"tick":{"count":6},"max":1}},"color":{"pattern":["#91cae8","#cd514f"]},"point":{"show":true,"r":0,"focus":{"expand":{"enabled":true,"r":3}}},"legend":{"show":false,"shape":"circle"},"tooltip":{"focusline":{"show":true}}});
+        return;
         window.chart = c3.generate({
           data: {
             json: [
@@ -68,20 +70,36 @@
             }
           },
           axis: {
-              x: {
-                type: "category"
-              }
+            x: {
+              type: "category"
+            }
           },
+          grid: {
+            y: {
+                show: true,
+                lines: [
+                  {value: 200, text: '', class: 'label-200'}
+                ],
+                ticks: 0,
+            }
+          }
         }, function(){
           this.parser
             .x("upload")
             .y(["download"])
             // .value("data2");
-          this.elements.legend
+          this.elements
+            .legend
             .draw(function(ele){
             });
-          this.elements.tooltip
+          this.elements
+            .tooltip
             .draw(function(ele){
+            });
+          this.elements
+            .grid
+            .draw(function(ele){
+              // debugger
             });
         });
       });
