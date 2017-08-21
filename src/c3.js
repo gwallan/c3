@@ -2229,7 +2229,7 @@
                 if ($$.isAvailableEventRect()) { return; }
                 if($$.isTouchDevice){return;}
 
-                $$.unexpandBars && $$.hideXGridFocus();
+                $$.hideXGridFocus && $$.hideXGridFocus();
                 $$.hideTooltip && $$.hideTooltip();
                 $$.unexpandCircles && $$.unexpandCircles(index);
                 $$.unexpandBars && $$.unexpandBars();
