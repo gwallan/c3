@@ -395,7 +395,7 @@ Legend.prototype.updateLegend = function (targetIds, options, transitions) {
     // Update all to reflect change of legend
     $$.updateLegendItemWidth(maxWidth);
     $$.updateLegendItemHeight(maxHeight);
-    $$.updateLegendStep(config.legend_inset_step - 1);
+    $$.updateLegendStep((config.legend_inset_step || 1) - 1);
     // Update size and scale
     $$.updateSizes();
     $$.updateScales();

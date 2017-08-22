@@ -9,9 +9,11 @@
 }
 
 .c3 text {
+  fill: #5e5e5e;
   -webkit-user-select: none;
   -moz-user-select: none;
-  user-select: none; }
+  user-select: none;
+}
 
 .c3-legend-item-tile, .c3-xgrid-focus, .c3-ygrid, .c3-event-rect, .c3-bars path {
   shape-rendering: geometricPrecision;
@@ -33,13 +35,21 @@
   stroke: #fff; }
 
 /*-- Axis --*/
+.c3 .c3-axis .domain,
+.c3 .c3-axis .tick line {
+  fill: none;
+  stroke: #91A4AD;
+}
+.c3 .c3-axis .tick text{
+  fill: #5e5e5e;
+}
 /*-- Grid --*/
 .c3-grid line {
-  stroke: #aaa;
+  stroke: #E6EFF1;
 }
 
 .c3-grid text {
-  fill: #aaa;
+  fill: #5e5e5e;
 }
 
 .c3-xgrid, .c3-ygrid {
@@ -55,9 +65,10 @@
   stroke-width: 1px; }
 
 /*-- Point --*/
-.c3-circle._expanded_ {
-  stroke-width: 1px;
-  stroke: white; }
+.c3-shapes .c3-circle._expanded_ {
+  stroke-width: 1.5px;
+  fill: white;
+}
 
 .c3-selected-circle {
   fill: white;
