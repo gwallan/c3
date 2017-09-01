@@ -206,9 +206,13 @@ function c3_axis(d3, params, c3) {
                     //     debugger
                     // }
                     //typeof d == "number" ? Math.round(d) :
-                    // if(orient == "bottom"){debugger}
-                    var v = orient == "bottom" ? c3.xAxisTickValues && c3.config.axis_x_tick_values && c3.config.axis_x_tick_values.length ? c3.config.axis_x_tick_values[i] : d : c3.yAxisTickValues ? c3.yAxisTickValues[i] : d;
-                    var splitted = params.tickMultiline ? splitTickText(v, i, params.tickWivth) : [].concat(textFormatted(d, i));
+                    var v = orient == "bottom" ?
+                        (c3.config.axis_x_tick_values && c3.config.axis_x_tick_values[i] ? c3.config.axis_x_tick_values[i] : d) :
+                        c3.yAxisTickValues ? c3.yAxisTickValues[i] : d;
+                    var splitted = params.tickMultiline ?
+                        splitTickText(c3.config.axis_x_type == "timeseries" ? new Date(v) : v, i, params.tickWivth) :
+                        [].concat(textFormatted(d, i));
+
                     counts[i] = splitted.length;
 
                     return splitted.map(function (s) {

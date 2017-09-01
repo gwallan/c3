@@ -42,33 +42,8 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-bar.js').then(function(c3){
-        var x = [
-            "<0.050",
-            "<0.100",
-            "<0.150",
-            "<0.200",
-            "<0.250",
-            "<0.300",
-            "<0.350",
-            "<0.400",
-            "<0.450",
-            "<0.500",
-            "<0.550",
-            "<0.600",
-            "<0.650",
-            "<0.700",
-            "<0.750",
-            "<0.800",
-            "<0.850",
-            "<0.900",
-            "<0.950",
-            "<1.000",
-            "<100.000",
-            "<300.000",
-            ">=300.000"
-        ];
-        window.chart = c3.generate({"data":{"type":"bar","columns":[["评论频率分布","1382055","11148","4567","2136","1206","782","672","453","282","240","190","162","111","70","62","115","49","59","61","48","126",0,0]]},"axis":{"x":{"tick":{"count":5,format: function(d){console.log(d);return d;}},"type":"category"},"y":{"tick":{"count":6},"show":true}},"bar":{"width":{"max":61}},"size":{"width":732,"height":350}});
+      System.import('component/c3-line.js').then(function(c3){
+        window.chart = c3.generate({"axis":{"x":{"type":"timeseries","tick":{"values":["2017/06/25","2017/07/03","2017/07/10","2017/07/17","2017/07/24","2017/07/31"],"format":"%Y/%m/%d"}},"y":{"min":0,"max":444,"tick":{"count":3}},"y2":{"show":false}},"color":{"pattern":["#7167EA","#23A2F5","#EE3758","#FDBA50","#80CB54","#1F97A6","#B364D8","#FF7CDC","#FDDD00","#56D9F3","#EC6901","#47885E","#275FDF","#88A8BD"]},"data":{"x":"x",'xFormat': '%Y/%m/%d',"columns":[["x","2017/06/25","2017/07/03","2017/07/10","2017/07/17","2017/07/24","2017/07/31"],["data1",30,200,100,400,150,250],["data2",50,20,10,40,15,25]],"order":null,"axes":{},"selection":{"grouped":true},"colors":{"data1":"#7167EA","data2":"#23A2F5"},"type":"spline"},"grid":{"y":{"show":true},"y2":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-25,"step":1}},"padding":{"top":20,"bottom":10},"point":{"show":true,"r":0,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
         return;
 
         window.chart = c3.generate({
