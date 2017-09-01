@@ -42,8 +42,8 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-line.js').then(function(c3){
-        window.chart = c3.generate({"axis":{"x":{"type":"timeseries","tick":{"values":["2017/06/25","2017/07/03","2017/07/10","2017/07/17","2017/07/24","2017/07/31"],"format":"%Y/%m/%d"}},"y":{"min":0,"max":444,"tick":{"count":3}},"y2":{"show":false}},"color":{"pattern":["#7167EA","#23A2F5","#EE3758","#FDBA50","#80CB54","#1F97A6","#B364D8","#FF7CDC","#FDDD00","#56D9F3","#EC6901","#47885E","#275FDF","#88A8BD"]},"data":{"x":"x",'xFormat': '%Y/%m/%d',"columns":[["x","2017/06/25","2017/07/03","2017/07/10","2017/07/17","2017/07/24","2017/07/31"],["data1",30,200,100,400,150,250],["data2",50,20,10,40,15,25]],"order":null,"axes":{},"selection":{"grouped":true},"colors":{"data1":"#7167EA","data2":"#23A2F5"},"type":"spline"},"grid":{"y":{"show":true},"y2":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-25,"step":1}},"padding":{"top":20,"bottom":10},"point":{"show":true,"r":0,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
+      System.import('component/c3-pie.js').then(function(c3){
+        window.chart = c3.generate({"color":{"pattern":["#7167EA","#23A2F5","#EE3758","#FDBA50","#80CB54","#1F97A6","#B364D8","#FF7CDC","#FDDD00","#56D9F3","#EC6901","#47885E","#275FDF","#88A8BD"]},"data":{"type":"donut","columns":[["x","机型","其他"],["各机型销量",130,80]]},"donut":{"width":12,"label":{"position":"inner"}},"legend":{"show":false,"shape":"circle","position":"inset","inset":{},"width":180,"item":{"height":25}},"padding":{"top":40,"bottom":40},"tooltip":{"show":false}});
         return;
 
         window.chart = c3.generate({

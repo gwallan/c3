@@ -822,7 +822,7 @@
         $$.updateSizes();
         // MEMO: called in updateLegend in redraw if withLegend
         if (!(options.withLegend && config.legend_show)) {
-            transitions = $$.axis.generateTransitions(options.withTransitionForAxis ? config.transition_duration : 0);
+            transitions = $$.axis && $$.axis.generateTransitions(options.withTransitionForAxis ? config.transition_duration : 0);
             // Update scales
             $$.updateScales();
             $$.updateSvgSize();
