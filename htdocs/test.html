@@ -42,8 +42,8 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-pie.js').then(function(c3){
-        window.chart = c3.generate({"color":{"pattern":["#7167EA","#23A2F5","#EE3758","#FDBA50","#80CB54","#1F97A6","#B364D8","#FF7CDC","#FDDD00","#56D9F3","#EC6901","#47885E","#275FDF","#88A8BD"]},"data":{"type":"donut","columns":[["x","机型","其他"],["各机型销量",130,80]]},"donut":{"width":12,"label":{"position":"inner"}},"legend":{"show":false,"shape":"circle","position":"inset","inset":{},"width":180,"item":{"height":25}},"padding":{"top":40,"bottom":40},"tooltip":{"show":false}});
+      System.import('component/c3-bar.js').then(function(c3){
+        window.chart = c3.generate({"axis":{"x":{"type":"indexed","tick":{"count":12}},"y":{"min":0,"max":12108,"tick":{"count":3}},"y2":{"show":false}},"color":{"pattern":["#7167EA","#23A2F5","#EE3758","#FDBA50","#80CB54","#1F97A6","#B364D8","#FF7CDC","#FDDD00","#56D9F3","#EC6901","#47885E","#275FDF","#88A8BD"]},"data":{labels: true, "x":"x","xFormat":"%Y-%m","columns":[["x","2016-09","2016-10","2016-11","2016-12","2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08"],["全部",0,0,"11000","11000","6600",0,0,"6600",0,"5500",0,"1000"]],"order":null,"axes":{},"selection":{"grouped":true},"colors":{"全部":"#7167EA"},"type":"bar"},"grid":{"y":{"show":true},"y2":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},"padding":{"top":40},"point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
         return;
 
         window.chart = c3.generate({

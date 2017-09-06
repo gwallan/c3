@@ -123,6 +123,7 @@ Text.prototype.getYForText = function (points, d, textElement) {
     var $$ = this,
         box = textElement.getBoundingClientRect(),
         yPos;
+
     if ($$.config.axis_rotated) {
         yPos = (points[0][0] + points[2][0] + box.height * 0.6) / 2;
     } else {
@@ -136,7 +137,7 @@ Text.prototype.getYForText = function (points, d, textElement) {
                 yPos += 3;
             }
         } else {
-            yPos += $$.isType(d, "bar") ? -3 : -6;
+            yPos += $$.isType(d, "bar") ? -10 : -10;
         }
     }
     // show labels regardless of the domain if value is null

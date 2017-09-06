@@ -1084,7 +1084,7 @@ Axis.prototype.updateAxis = function(targetsToShow, transitions, options){
 
     // show/hide if manual culling needed
     if ((withUpdateXDomain || withUpdateXAxis) && targetsToShow.length) {
-        if (config.axis_x_tick_culling && tickValues) {
+        if (config.axis_x_tick_culling && !utility.isEmpty(config.axis_x_tick_culling) && tickValues) {
             for (var i = 1; i < tickValues.length; i++) {
                 if (tickValues.length / i < config.axis_x_tick_culling_max) {
                     intervalForCulling = i;

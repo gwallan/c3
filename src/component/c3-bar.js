@@ -205,7 +205,6 @@ C3Bar.prototype = {
 
 };
 
-debugger
 c3.register("bar", [Axis, Grid, Region, Legend, Text], {
     CLASS: {
         chartBar: 'c3-chart-bar',
