@@ -1,0 +1,217 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+    <style>
+      html,body{
+        position: relative;
+        height: 100%;
+      }
+      #chart{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .c3-chart-treemap-node text{
+        font-size: 14px;
+        /*dominant-baseline: middle;*/
+      }
+    </style>
+  </head>
+  <body>
+    <div id="sequence"></div>
+    <div id="chart"></div>
+
+    <script src="../../js/system.js"></script>
+    <script>
+    System.defaultJSExtensions = true;
+    System.config({
+        baseURL: '../../../src/',
+        meta: {
+            'c3.js': {
+                format: 'cjs'
+            }
+        },
+        map: {
+            "pathseg": "../../../node_modules/pathseg/pathseg.js",
+            "underscore": "../../../node_modules/underscore/underscore.js",
+            "d3": "../../../node_modules/d3/d3.js"
+        }
+    });
+    System.import('component/c3-tree.js').then(function(c3){
+        function updateBreadcrumbs(nodeArray) {
+            // Data join; key function combines name and depth (= position in sequence).
+            var g = d3.select("#trail")
+                .selectAll("g")
+                .data(nodeArray, function(d) { return d.name; });
+            // Add breadcrumb and label for entering nodes.
+            var entering = g.enter().append("svg:g");
+
+            entering.append("svg:polygon")
+                .attr("points", breadcrumbPoints)
+                .style("fill", function(d) { return colors[d.name] || colors["other"]; });
+            entering.append("svg:text")
+                .attr("x", (b.w + b.t) / 2)
+                .attr("y", b.h / 2)
+                .attr("dy", "0.35em")
+                .attr("text-anchor", "middle")
+                .text(function(d) { return d.name; });
+
+            // Set position for entering and updating nodes.
+            g.attr("transform", function(d, i) {
+                return "translate(" + i * (b.w + b.s) + ", 0)";
+            });
+            // Remove exiting nodes.
+            g.exit().remove();
+
+            // Make the breadcrumb trail visible, if it's hidden.
+            d3.select("#trail").style("visibility", "");
+        }
+        function breadcrumbPoints(d, i) {
+            var points = [];
+
+            points.push("0,0");
+            points.push(b.w + ",0");
+            points.push(b.w + b.t + "," + (b.h / 2));
+            points.push(b.w + "," + b.h);
+            points.push("0," + b.h);
+
+            if (i > 0) { // Leftmost breadcrumb; don't include 6th vertex.
+                points.push(b.t + "," + (b.h / 2));
+            }
+
+            return points.join(" ");
+        }
+        function getAncestors(node) {
+            var path = [];
+            var current = node;
+
+            while (current.parent) {
+                path.unshift(current);
+                current = current.parent;
+            }
+
+            return path;
+        }
+
+        var b = {w: 75, h: 30, s: 3, t: 10};
+        var colors = {
+            "线上": "#5687d1",
+            "线下": "#7b615c",
+            "运营商": "#de783b",
+            "其他": "#6ab975",
+            "other": "#a173d1",
+        };
+        var trail = d3.select("#sequence").append("svg:svg")
+            .attr("width", 600)
+            .attr("height", 50)
+            .attr("id", "trail");
+        var chart = c3.generate({
+            bindto: "#chart",
+                data: {
+                // names: {
+                //   1: "媒介营销组",
+                //   2: "社会化营销组",
+                //   3: "SEO组",
+                //   4: "创意营销组",
+                //   5: "电商营销组"
+                // },
+                json: {
+                  "name": "flare",
+                  "children": [
+                    {
+                      "name": "线上",
+                      "children": [
+                          {
+                              "name": "官网",
+                              "size": 73954
+                          },
+                          {
+                              "name": "天猫",
+                              "size": 70148
+                          },
+                          {
+                              "name": "京东",
+                              "size": 123611
+                          },
+                          {
+                              "name": "一号店",
+                              "size": 3270
+                          },
+                          {
+                              "name": "其他",
+                              "size": 0
+                          }
+                      ]
+                    },
+                    {
+                        "name": "线下",
+                        "children": [
+                            {
+                                "name": "专卖店",
+                                "size": 122120
+                            },
+                            {
+                                "name": "平台",
+                                "size": 105500
+                            },
+                            {
+                                "name": "苏宁",
+                                "size": 9240
+                            }
+                        ]
+                    },
+                    {
+                        "name": "运营商",
+                        "children": [
+                            {
+                                "name": "天音",
+                                "size": 300
+                            },
+                            {
+                                "name": "乐语",
+                                "size": 0
+                            },
+                            {
+                                "name": "爱施德",
+                                "size": 0
+                            },
+                            {
+                                "name": "ASD",
+                                "size": 0
+                            }
+                        ]
+                    },
+                    {
+                        "name": "其他",
+                        "children": [
+                            {
+                                "name": "其他",
+                                "size": 105740
+                            },
+                            {
+                                "name": "海外",
+                                "size": 0
+                            }
+                        ]
+                    }
+                  ]
+                },
+                type : 'tree',
+                colors: {"媒介营销组": "#564ea0"},
+                onmouseover: function(d){
+                    var sequenceArray = getAncestors(d);
+
+                    updateBreadcrumbs(sequenceArray);
+                },
+                onmouseout: function(){
+                    d3.select("#trail").style("visibility", "hidden");
+                }
+            },
+            legend: {
+                shape: "square"
+            }
+        });
+    });
+  </script>
+  </body>
+</html>

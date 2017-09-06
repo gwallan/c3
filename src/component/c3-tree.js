@@ -1,7 +1,8 @@
 var c3 = require("../c3"),
     utility = require("../utility"),
     Tooltip = require("../tooltip"),
-    Text = require("./src/text");
+    Legend = require("../legend"),
+    Text = require("../text");
 
 function C3Tree() {
     return {
@@ -16,7 +17,8 @@ function C3Tree() {
                 .attr("transform", $$.getTranslate('arc'));
         },
         hasTreeType: function (targets) {
-            return this.hasType('tree', targets);
+            var $$ = this;
+            return $$.config.data_json && $$.config.data_json["children"] ? true : false;
         },
         redrawTree: function (duration, durationForExit, withTransform) {
             var $$ = this, d3 = $$.d3, config = $$.config, main = this.main, mainTree;
@@ -61,8 +63,6 @@ function C3Tree() {
                 return {depth: d.depth, x: d.x, dx: d.dx};
             }
             function zoom(root, p) {
-                // if (document.documentElement.__transition__) return;
-
                 // Rescale outside angles to match the new layout.
                 var enterArc,
                     exitArc,
@@ -91,7 +91,8 @@ function C3Tree() {
 
                 mainTree = main.selectAll('.' + $$.CLASS.chartTree).selectAll("path");
                 mainTree = mainTree.data($$.partition.nodes(root).slice(1), function(d) { return d.key; });
-                d3.transition().duration(1500).each(function() {
+
+                d3.transition().duration(duration).each(function() {
                     mainTree.exit().transition()
                         .attrTween("d", function(d) { return arcTween.call(this, exitArc(d)); })
                         .remove();
@@ -119,8 +120,7 @@ function C3Tree() {
                 });
             }
             function over(d){
-                var percentage = (100 * d.value / nodes[0].sum).toPrecision(3);
-                var percentageString = percentage + "%";
+                var percentage = (d.value / nodes[0].sum).toPrecision(3);
                 var sequenceArray = getAncestors(d);
 
                 function getAncestors(node) {
@@ -135,12 +135,8 @@ function C3Tree() {
                     return path;
                 }
 
-                if (percentage < 0.1) {
-                    percentageString = "< 0.1%";
-                }
-                d.ratio = percentageString;
+                d.ratio = percentage;
 
-                // Fade all the segments.
                 mainTree
                     .style("opacity", 0.3)
                     .filter(function(node) {
@@ -149,7 +145,7 @@ function C3Tree() {
                     .style("opacity", 1);
 
                 $$.showTooltip([d], this);
-                $$.config.data_onmouseover();
+                $$.config.data_onmouseover(d);
             }
 
             nodes = $$.partition.nodes($$.data.origin);
@@ -209,7 +205,7 @@ function C3Tree() {
     }
 }
 
-c3.register("tree", [Tooltip, Text], {
+c3.register("tree", [Tooltip, Legend, Text], {
     CLASS: {
         chartTree: 'c3-chart-tree'
     },

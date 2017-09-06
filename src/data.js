@@ -134,13 +134,14 @@ Data.prototype.convertJsonToData = function (json, keys) {
             new_rows.push(Object.values(json[key]));
         });
         data = $$.convertRowsToData(new_rows);
-    }else {
+    }else if(!json["children"]){
         Object.keys(json).forEach(function (key) {
             new_rows.push([key].concat(json[key]));
         });
         data = $$.convertColumnsToData(new_rows);
+    }else{
+        data = json;
     }
-
 
     return data;
 };
@@ -178,107 +179,118 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
     var $$ = this, config = $$.config,
         ids, xs, targets;
 
-    ids = $$.d3.keys(data[0]).filter($$.isNotX, $$);
-    xs = $$.d3.keys(data[0]).filter($$.isX, $$);
+    if(config.data_json && config.data_json["children"] && data["children"]){
+        targets = data["children"].map(function(obj){
+            return {
+                id: obj["name"],
+                id_org: obj["name"],
+                type: config.data_type,
+                values: []
+            };
+        });
+    }else{
+        ids = $$.d3.keys(data[0]).filter($$.isNotX, $$);
+        xs = $$.d3.keys(data[0]).filter($$.isX, $$);
 
-    //自定义X和Y
-    if($$.chartData.xKey){
-        xs = utility.isString($$.chartData.xKey) ? [$$.chartData.xKey] : utility.isArray($$.chartData.xKey) ? $$.chartData.xKey : utility.isFunction($$.chartData.xKey) ? $$.chartData.xKey() : [];
-    }
-    if($$.chartData.yKey){
-        ids = utility.isString($$.chartData.yKey) ? [$$.chartData.yKey] : utility.isArray($$.chartData.yKey) ? $$.chartData.yKey : utility.isFunction($$.chartData.yKey) ? $$.chartData.yKey() : [];
-    }
-
-    // save x for update data by load when custom x and c3.x API
-    ids.forEach(function (id) {
-        var xKey = $$.getXKey(id);
-
-        if ($$.isCustomX() || $$.isTimeSeries()) {
-            // if included in input data
-            if (xs.indexOf(xKey) >= 0) {
-                $$.data.xs[id] = (appendXs && $$.data.xs[id] ? $$.data.xs[id] : []).concat(
-                    data.map(function (d) { return d[xKey]; })
-                        .filter(utility.isValue)
-                        .map(function (rawX, i) { return $$.generateTargetX(rawX, id, i); })
-                );
-            }
-            // if not included in input data, find from preloaded data of other id's x
-            else if (config.data_x) {
-                $$.data.xs[id] = $$.getOtherTargetXs();
-            }
-            // if not included in input data, find from preloaded data
-            else if (notEmpty(config.data_xs)) {
-                $$.data.xs[id] = $$.getXValuesOfXKey(xKey, $$.data.targets);
-            }
-            // MEMO: if no x included, use same x of current will be used
-        } else {
-            $$.data.xs[id] = data.map(function (d, i) { return i; });
+        //自定义X和Y
+        if($$.chartData.xKey){
+            xs = utility.isString($$.chartData.xKey) ? [$$.chartData.xKey] : utility.isArray($$.chartData.xKey) ? $$.chartData.xKey : utility.isFunction($$.chartData.xKey) ? $$.chartData.xKey() : [];
         }
-    });
-
-    // check x is defined
-    ids.forEach(function (id) {
-        if (!$$.data.xs[id]) {
-            throw new Error('x is not defined for id = "' + id + '".');
+        if($$.chartData.yKey){
+            ids = utility.isString($$.chartData.yKey) ? [$$.chartData.yKey] : utility.isArray($$.chartData.yKey) ? $$.chartData.yKey : utility.isFunction($$.chartData.yKey) ? $$.chartData.yKey() : [];
         }
-    });
 
-    // convert to target
-    targets = ids.map(function (id, index) {
-        var convertedId = config.data_idConverter(id);
+        // save x for update data by load when custom x and c3.x API
+        ids.forEach(function (id) {
+            var xKey = $$.getXKey(id);
 
-        return {
-            id: convertedId,
-            id_org: id,
-            values: data.map(function (d, i) {
-                var xKey = $$.getXKey(id), rawX = d[xKey], x = $$.generateTargetX(rawX, id, i), data;
-
-                // use x as categories if custom x and categorized
-                if ($$.isCustomX() && $$.isCategorized() && index === 0 && rawX) {
-                    if (i === 0) { config.axis_x_categories = []; }
-                    config.axis_x_categories.push(rawX);
+            if ($$.isCustomX() || $$.isTimeSeries()) {
+                // if included in input data
+                if (xs.indexOf(xKey) >= 0) {
+                    $$.data.xs[id] = (appendXs && $$.data.xs[id] ? $$.data.xs[id] : []).concat(
+                        data.map(function (d) { return d[xKey]; })
+                            .filter(utility.isValue)
+                            .map(function (rawX, i) { return $$.generateTargetX(rawX, id, i); })
+                    );
                 }
-                // mark as x = undefined if value is undefined and filter to remove after mapped
-                if (utility.isUndefined(d[id]) || $$.data.xs[id].length <= i) {
-                    x = undefined;
+                // if not included in input data, find from preloaded data of other id's x
+                else if (config.data_x) {
+                    $$.data.xs[id] = $$.getOtherTargetXs();
                 }
-                //自定义X轴数值
-                if($$.chartData.xKey){
-                    d[$$.chartData.xKey] && $$.config.axis_x_tick_values.push(d[$$.chartData.xKey]);
+                // if not included in input data, find from preloaded data
+                else if (notEmpty(config.data_xs)) {
+                    $$.data.xs[id] = $$.getXValuesOfXKey(xKey, $$.data.targets);
                 }
+                // MEMO: if no x included, use same x of current will be used
+            } else {
+                $$.data.xs[id] = data.map(function (d, i) { return i; });
+            }
+        });
 
-                data = {
-                    x: x,
-                    value: $$.chartData.valueKey ? d[$$.chartData.valueKey] : d[id] !== null && !isNaN(d[id]) ? +d[id] : null,
-                    id: convertedId
-                };
+        // check x is defined
+        ids.forEach(function (id) {
+            if (!$$.data.xs[id]) {
+                throw new Error('x is not defined for id = "' + id + '".');
+            }
+        });
 
-                return $$.chartData.otherKey ? _.extend(d[$$.chartData.otherKey], data) : data;
-            }).filter(function (v) { return utility.isDefined(v.x); })
-        };
-    });
+        // convert to target
+        targets = ids.map(function (id, index) {
+            var convertedId = config.data_idConverter(id);
 
-    // finish targets
-    targets.forEach(function (t) {
-        var i;
-        // sort values by its x
-        if (config.data_xSort) {
-            t.values = t.values.sort(function (v1, v2) {
-                var x1 = v1.x || v1.x === 0 ? v1.x : Infinity,
-                    x2 = v2.x || v2.x === 0 ? v2.x : Infinity;
-                return x1 - x2;
+            return {
+                id: convertedId,
+                id_org: id,
+                values: data.map(function (d, i) {
+                    var xKey = $$.getXKey(id), rawX = d[xKey], x = $$.generateTargetX(rawX, id, i), data;
+
+                    // use x as categories if custom x and categorized
+                    if ($$.isCustomX() && $$.isCategorized() && index === 0 && rawX) {
+                        if (i === 0) { config.axis_x_categories = []; }
+                        config.axis_x_categories.push(rawX);
+                    }
+                    // mark as x = undefined if value is undefined and filter to remove after mapped
+                    if (utility.isUndefined(d[id]) || $$.data.xs[id].length <= i) {
+                        x = undefined;
+                    }
+                    //自定义X轴数值
+                    if($$.chartData.xKey){
+                        d[$$.chartData.xKey] && $$.config.axis_x_tick_values.push(d[$$.chartData.xKey]);
+                    }
+
+                    data = {
+                        x: x,
+                        value: $$.chartData.valueKey ? d[$$.chartData.valueKey] : d[id] !== null && !isNaN(d[id]) ? +d[id] : null,
+                        id: convertedId
+                    };
+
+                    return $$.chartData.otherKey ? _.extend(d[$$.chartData.otherKey], data) : data;
+                }).filter(function (v) { return utility.isDefined(v.x); })
+            };
+        });
+
+        // finish targets
+        targets.forEach(function (t) {
+            var i;
+            // sort values by its x
+            if (config.data_xSort) {
+                t.values = t.values.sort(function (v1, v2) {
+                    var x1 = v1.x || v1.x === 0 ? v1.x : Infinity,
+                        x2 = v2.x || v2.x === 0 ? v2.x : Infinity;
+                    return x1 - x2;
+                });
+            }
+            // indexing each value
+            i = 0;
+            t.values.forEach(function (v) {
+                v.index = i++;
             });
-        }
-        // indexing each value
-        i = 0;
-        t.values.forEach(function (v) {
-            v.index = i++;
+            // this needs to be sorted because its index and value.index is identical
+            $$.data.xs[t.id].sort(function (v1, v2) {
+                return v1 - v2;
+            });
         });
-        // this needs to be sorted because its index and value.index is identical
-        $$.data.xs[t.id].sort(function (v1, v2) {
-            return v1 - v2;
-        });
-    });
+    }
 
     // set target types
     if (config.data_type) {
@@ -290,7 +302,6 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
         $$.addCache(d.id_org, d);
     });
 
-    // debugger
     return targets;
 };
 

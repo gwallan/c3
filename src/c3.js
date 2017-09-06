@@ -3526,6 +3526,7 @@
         return isValue(v) ? +v : "";
     };
     c3_chart_internal_fn.defaultArcValueFormat = function (v, ratio) {
+        ratio = utility.isString(ratio) ? parseFloat(ratio) : ratio;
         return (ratio * 100).toFixed(1) + '%';
     };
     c3_chart_internal_fn.dataLabelFormat = function (targetId) {

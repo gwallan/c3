@@ -159,14 +159,16 @@ Tooltip.prototype.tooltipPosition = function (dataToShow, tWidth, tHeight, eleme
 Tooltip.prototype.showTooltip = function (selectedData, element) {
     var $$ = this, config = $$.config;
     var tWidth, tHeight, position;
-    var forArc = $$.hasType("arc"),
+    var forArc = $$.hasType("arc") || $$.hasType("tree"),
         dataToShow = selectedData.filter(function (d) { return d && utility.isValue(d.value); }),
-        positionFunction = config.tooltip_position || $$.tooltipPosition;
+        positionFunction = config.tooltip_position || $$.tooltipPosition,
+        titleFormat = forArc ? function(t){return ""} : null,
+        valueFormat = forArc ? $$.getYFormat(forArc) : null;
 
     if (dataToShow.length === 0 || !config.tooltip_show) {
         return;
     }
-    $$.tooltip.html(config.tooltip_contents.call($$, selectedData, $$.axis ? $$.axis.getXAxisTickFormat() : null, $$.getYFormat(forArc), $$.color)).style("display", "block");
+    $$.tooltip.html(config.tooltip_contents.call($$, selectedData, $$.axis ? $$.axis.getXAxisTickFormat() : titleFormat, valueFormat, $$.color)).style("display", "block");
 
     // Get tooltip dimensions
     tWidth = $$.tooltip.property('offsetWidth');
@@ -178,7 +180,7 @@ Tooltip.prototype.showTooltip = function (selectedData, element) {
         .style("top", position.top + "px")
         .style("left", position.left + 'px');
 
-    //图例自定义
+    //自定义
     $$.tooltip.call($$.chartTooltip.draw);
 };
 Tooltip.prototype.hideTooltip = function () {
