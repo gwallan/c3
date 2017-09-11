@@ -163,7 +163,7 @@ Tooltip.prototype.showTooltip = function (selectedData, element) {
         dataToShow = selectedData.filter(function (d) { return d && utility.isValue(d.value); }),
         positionFunction = config.tooltip_position || $$.tooltipPosition,
         titleFormat = forArc ? function(t){return ""} : null,
-        valueFormat = forArc ? $$.getYFormat(forArc) : null;
+        valueFormat = $$.getYFormat(forArc);
 
     if (dataToShow.length === 0 || !config.tooltip_show) {
         return;
