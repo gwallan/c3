@@ -601,7 +601,7 @@ function C3Arc() {
                     return $$.levelColor ? $$.levelColor(d.data.values[0].value) : $$.color(d.data.id);
                 }) // Where gauge reading color would receive customization.
                 .style("opacity", 1)
-                .style("stroke", "#fff")
+                // .style("stroke", "#fff")
                 .style("stroke-width", "1.5px")
                 .call($$.endall, function () {
                     $$.transiting = false;
