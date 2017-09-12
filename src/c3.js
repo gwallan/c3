@@ -1419,9 +1419,10 @@
         yDomainMin = isValue(yMin) && !isFunction(yMin) ? yMin : isValue(yMax) && !isFunction(yMax) ? (yDomainMin < yMax ? yDomainMin : yMax - 10) : yDomainMin;
         yDomainMax = isValue(yMax) && !isFunction(yMax) ? yMax : isValue(yMin) && !isFunction(yMin) ? (yMin < yDomainMax ? yDomainMax : yMin + 10) : yDomainMax;
 
-        if (yTargets.length === 0) { // use current domain if target of axisId is none
-            return axisId === 'y2' ? $$.y2.domain() : $$.y.domain();
-        }
+        // use current domain if target of axisId is none
+        // if (yTargets.length === 0) {
+        //     return axisId === 'y2' ? $$.y2.domain(): $$.y.domain();
+        // }
         if (isNaN(yDomainMin)) { // set minimum to zero when not number
             yDomainMin = 0;
         }
@@ -2668,7 +2669,7 @@
     };
 
     c3_chart_internal_fn.initCombin = function () {
-        var $$ = this, types = [this.config.data_type];
+        var $$ = this, types = this.config.data_type ? [this.config.data_type] : [];
 
         types = types.concat(_.values(this.config.data_types));
         types = d3.map(types, function(d){return d;}).keys();
