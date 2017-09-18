@@ -15,6 +15,7 @@
         background-color: white;
       }
       #chart{
+        width: 600px;
         height: 600px;
         padding: 10px;
       }
@@ -43,56 +44,16 @@
           }
       });
       System.import('component/c3-combin.js').then(function(c3){
+        window.chart = c3.generate({"axis":{"x":{"type":"indexed","tick":{"values":["2016-09","2016-10","2016-11","2016-12","2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08"],"responsive":true}},"y":{"min":0,"max":90.6816359262231,"tick":{"count":4}},"y2":{"show":false,"min":0,"max":10,"tick":{"count":3}}},"data":{"x":"x","type":"spline","xFormat":"%Y-%m-%d","columns":[["x","2016-09","2016-10","2016-11","2016-12","2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08"],["海外",0,0,0,0,16.925198207515,34.583598219962,82.43785084202099,79.052989290653,66.560136695883,0,0,0]],"order":null,"axes":{},"selection":{"grouped":true},"colors":{"海外":"#7167EA"}},"grid":{"y":{"show":true},"y2":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},"padding":{"top":40,"right":40},"point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
+        return;
         window.chart = c3.generate({
-            "axis":{"x":{"type":"category"},"y":{"min":0,"max":441,"tick":{"count":3}},"y2":{"show":true,"min":0,"max":441,"tick":{"count":3}}},
-            "data":{
-              "x":"x",
-              "xFormat":"%Y-%m-%d",
-              "columns":[
-                ["x","分类1","分类2","分类3","分类4","分类5","分类6","分类7","分类8","分类9","分类10"],
-                // ["test-bar",30,200,100,400,150,250,50,10,40,25],
-                // ["test-line",30,200,100,400,150,250,50,10,40,25]
-              ],
-              "order":null,
-              // "axes":{
-              //   'test-bar': 'y',
-              //   'test-line': 'y2'
-              // },
-              "selection":{"grouped":true},
-              "colors":{"test-bar":"#23A2F5","test-line":"#EE3758"},
-              "types":{"test-line":"line","test-bar":"bar"}
-            },"bar":{"width":20},"grid":{"y":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},"padding":{"top":40,"right":100,"left":120},"point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
-        // window.chart = c3.generate({
-        //   "axis":{
-        //     "x":{"type":"indexed","tick":{"count":12}},
-        //     "y":{"min":0,"max":12108,"tick":{"count":3}},
-        //     "y2":{
-        //       "show":true,
-        //       "max": 60
-        //     }
-        //   },
-        //   "color":{"pattern":["#7167EA","#23A2F5","#EE3758","#FDBA50","#80CB54","#1F97A6","#B364D8","#FF7CDC","#FDDD00","#56D9F3","#EC6901","#47885E","#275FDF","#88A8BD"]},
-        //   "data":{
-        //     "x":"x",
-        //     "xFormat":"%Y-%m",
-        //     "columns":[
-        //       ["x","2016-09","2016-10","2016-11","2016-12","2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08"],
-        //       ['data1', 30, 20, 50, 40, 60, 50, null, null, null, null, null, null],
-        //       ["全部",0,0,"11000","11000","6600",0,0,"6600",0,"5500",0,"1000"],
-        //     ],
-        //     "order":null,
-        //     "axes":{
-        //       '全部': 'y',
-        //       'data1': 'y2'
-        //     },
-        //     "selection":{"grouped":true},
-        //     "colors":{"全部":"#7167EA"},
-        //     "types": {
-        //       "全部": 'bar',
-        //       "data1": 'line'
-        //     }
-        //   },
-        //   "grid":{"y":{"show":true},"y2":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},"padding":{"top":40, "right": 80},"point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
+          "axis":{"x":{"type": "timeseries", "tick":{"format": "%Y-%m", "responsive": true}},"y":{"min":0,"max":5756,"tick":{"count":4}},"y2":{"show":false,"min":0,"max":0,"tick":{}}},
+          "data":{"x":"x","xFormat":"%Y-%m-%d","columns":[["x","2016-09-01","2016-10-01","2016-11-01","2016-12-01","2017-01-01","2017-02-01","2017-03-01","2017-04-01","2017-05-01","2017-06-01","2017-07-01","2017-08-01"],["全网通",0,0,0,0,0,0,0,0,0,0,0,"5230"]],"order":null,"axes":{},"selection":{"grouped":true},"colors":{"全网通":"#7167EA"},"type":"spline"},
+          "grid":{"y":{"show":true},"y2":{"show":true}},
+          "legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},
+          "padding":{"top":40,"right":40},
+          "point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},
+          "tooltip":{"show":true,"focusline":{"show":true}}});
         return;
 
         window.chart = c3.generate({

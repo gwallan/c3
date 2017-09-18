@@ -14,7 +14,7 @@ function Data(owner){
             classes: {},
             groups: [],
             axes: {},
-            type: undefined,
+            type: 'line',
             types: {},
             labels: {},
             order: 'desc',

@@ -428,6 +428,7 @@ function Axis(owner){
                 label: null,
                 padding: {},
                 tick: {
+                    responsive: false,
                     centered: false,
                     format: undefined,
                     culling: {},
@@ -546,7 +547,7 @@ function Axis(owner){
                 axis = c3_axis($$.d3, axisParams, $$).scale(scale).orient(orient);
 
             if(axisParams.isCategory && tickValues){
-                // debugger
+
             }
             if ($$.isTimeSeries() && tickValues) {
                 tickValues = tickValues.map(function (v) { return $$.parseDate(v); });
@@ -821,8 +822,17 @@ function Axis(owner){
                     this.updateXAxisTickValues(targetsToShow, axis);
                 }
 
-                dummy = $$.d3.select('body').append('div').classed('c3', true);
-                svg = dummy.append("svg").style('visibility', 'hidden').style('position', 'fixed').style('top', 0).style('left', 0),
+                dummy = $$.d3
+                    .select('body')
+                    .append('div')
+                    .classed('c3', true);
+                svg = dummy
+                    .append("svg")
+                    .style('visibility', 'hidden')
+                    .style('position', 'fixed')
+                    .style('top', 0)
+                    .style('left', 0);
+
                 svg.append('g').call(axis).each(function () {
                     //上述复制轴逻辑有问题，暂时通过直接获取已经绘制的轴元素来筛选出刻度最大值
                     var target;
@@ -882,7 +892,7 @@ function Axis(owner){
             return domainLength * (pixels / length);
         },
         generateTickValues: function generateTickValues(values, tickCount, forTimeSeries, format) {
-            var tickValues = values, targetCount, start, end, count, interval, i, tickValue;
+            var $$ = owner, tickValues = values, targetCount, start, end, count, interval, i, tickValue;
 
             function fix(date, format){
                 var year = date.getFullYear(),
@@ -1084,7 +1094,10 @@ Axis.prototype.updateAxis = function(targetsToShow, transitions, options){
 
     // show/hide if manual culling needed
     if ((withUpdateXDomain || withUpdateXAxis) && targetsToShow.length) {
-        if (config.axis_x_tick_culling && !utility.isEmpty(config.axis_x_tick_culling) && tickValues) {
+        if(config.axis_x_tick_responsive){
+            config.axis_x_tick_culling_max = parseInt($$.width/$$.axis.getMaxTickWidth("x") - 1);
+        }
+        if (config.axis_x_tick_culling_max && tickValues) {
             for (var i = 1; i < tickValues.length; i++) {
                 if (tickValues.length / i < config.axis_x_tick_culling_max) {
                     intervalForCulling = i;
