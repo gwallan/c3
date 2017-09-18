@@ -8215,7 +8215,7 @@ function C3Map(defsDropshadow){
                     $$.config.data_onmouseout.call($$.api, d, this);
                 })
                 .on("click", function(){
-                    $$.config.map_event_click && $$.config.map_event_click.apply($$.api, arguments);
+                    $$.config.data_onclick && $$.config.data_onclick.apply($$.api, arguments);
                 });
             mainGeoPathUpdate.attr("d", $$.mapPath);
 
@@ -8280,9 +8280,6 @@ c3.register("map", [Tooltip, Text], {
             label: {
                 show: false,
                 format: null
-            },
-            event: {
-                click: null
             }
         }
     },

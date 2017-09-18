@@ -21,16 +21,21 @@
     <script src="../../js/system.js"></script>
     <script>
     System.defaultJSExtensions = true;
-    // set our baseURL reference path
     System.config({
-      baseURL: '../../js/',
-      meta: {
-        'c3.js': {
-          format: 'cjs'
+        baseURL: '../../../src/',
+        meta: {
+            'c3.js': {
+                format: 'cjs'
+            }
+        },
+        map: {
+            "pathseg": "../../../node_modules/pathseg/pathseg.js",
+            "underscore": "../../../node_modules/underscore/underscore.js",
+            "topojson": "../../../node_modules/topojson/build/topojson.js",
+            "d3": "../../../node_modules/d3/d3.js"
         }
-      }
     });
-    System.import('c3-map.js').then(function(c3){
+    System.import('component/c3-map.js').then(function(c3){
       var data=[["Gansu", 48],["Qinghai", 47],["Guangxi", 45],["Guizhou", 35],["Chongqing", 34],["Beijing", 12],["Fujian", 35],["Anhui", 6],["Guangdong", 40],["Xizang", 3],["Xinjiang", 12],["Hainan", 21],["Ningxia", 8],["Shaanxi", 40],["Shanxi", 11],["Hubei", 1],["Hunan", 23],["Sichuan", 19],["Yunnan", 19],["Hebei", 34],["Henan", 20],["Liaoning", 14],["Shandong", 0],["Tianjin", 12],["Jiangxi", 20],["Jiangsu", 37],["Shanghai", 34],["Zhejiang", 46],["Jilin", 38],["Inner Mongol", 10],["Heilongjiang", 0],["Taiwan", 45],["Xianggang", 35],["Macau", 10]];
       var chart = c3.generate({
         "onrendered": function(){
