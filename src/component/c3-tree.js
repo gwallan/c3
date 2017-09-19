@@ -100,6 +100,8 @@ function C3Tree() {
                         .style("fill-opacity", function(d) { return d.depth === 2 - (root === p) ? 1 : 0; })
                         .style("fill", function(d) { return d.fill; })
                         .on("click", function(p){
+                            if(!config.interaction_enabled)return;
+
                             if (p.depth > 1) p = p.parent;
                             if (!p.children) return;
                             zoom(p, p);
@@ -211,7 +213,6 @@ c3.register("tree", [Tooltip, Legend, Text], {
     },
     config: {
         tree: {
-
         }
     },
     exceptElements: ["rectEvent", "axis"]
