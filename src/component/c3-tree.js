@@ -100,16 +100,18 @@ function C3Tree() {
                         .style("fill-opacity", function(d) { return d.depth === 2 - (root === p) ? 1 : 0; })
                         .style("fill", function(d) { return d.fill; })
                         .on("click", function(p){
-                            if(!config.interaction_enabled)return;
+                            if(config.interaction_enabled){
+                                if (p.depth > 1) p = p.parent;
+                                if (!p.children) return;
+                                zoom(p, p);
 
-                            if (p.depth > 1) p = p.parent;
-                            if (!p.children) return;
-                            zoom(p, p);
+                                $$.legend
+                                    .selectAll('.' + $$.CLASS.legendItem)
+                                    .attr("style","visibility: visible; cursor: pointer;")
+                                    .classed($$.CLASS.legendItemHidden, function (id) { return id !== p.key.split(".")[0].split("|")[0]; });
+                            }
 
-                            $$.legend
-                                .selectAll('.' + $$.CLASS.legendItem)
-                                .attr("style","visibility: visible; cursor: pointer;")
-                                .classed($$.CLASS.legendItemHidden, function (id) { return id !== p.key.split(".")[0].split("|")[0]; });
+                            $$.config.data_onclick && $$.config.data_onclick.apply($$.api, arguments);
                         })
                         .on("mouseover", over)
                         .each(function(d) { this._current = enterArc(d); })
@@ -147,7 +149,8 @@ function C3Tree() {
                     .style("opacity", 1);
 
                 $$.showTooltip([d], this);
-                $$.config.data_onmouseover(d);
+
+                $$.config.data_onmouseover && $$.config.data_onmouseover.apply($$.api, arguments);
             }
 
             nodes = $$.partition.nodes($$.data.origin);
