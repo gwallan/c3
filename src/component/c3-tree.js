@@ -98,7 +98,7 @@ function C3Tree() {
                         .remove();
                     mainTree.enter().append("path")
                         .style("fill-opacity", function(d) { return d.depth === 2 - (root === p) ? 1 : 0; })
-                        .style("fill", function(d) { return d.fill; })
+                        .style("fill", function(d) { return config.tree_color != "decrease" ? $$.color(d) : d.fill; })
                         .on("click", function(p){
                             if(config.interaction_enabled){
                                 if (p.depth > 1) p = p.parent;
@@ -116,7 +116,7 @@ function C3Tree() {
                         .on("mouseover", over)
                         .each(function(d) { this._current = enterArc(d); })
                         .attr("class", function(d){
-                            return $$.CLASS.treeNode + " " + d.key.split(".")[0].split("|")[0];
+                            return $$.CLASS.chartTreeNode + " " + d.key.split(".").map(function(s){return s.split("|")[0]}).join("-");
                         });
                     mainTree.transition()
                         .style("fill-opacity", 1)
@@ -212,10 +212,12 @@ function C3Tree() {
 
 c3.register("tree", [Tooltip, Legend, Text], {
     CLASS: {
-        chartTree: 'c3-chart-tree'
+        chartTree: 'c3-chart-tree',
+        chartTreeNode: 'c3-chart-tree-node'
     },
     config: {
         tree: {
+            color: "random"
         }
     },
     exceptElements: ["rectEvent", "axis"]

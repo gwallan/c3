@@ -48,7 +48,7 @@
 
             entering.append("svg:polygon")
                 .attr("points", breadcrumbPoints)
-                .style("fill", function(d) { return colors[d.name] || colors["other"]; });
+                .style("fill", function(d) { console.log(d.depth);return colors[d.name] || d3.scale.category10().range()[d.depth]; });
             entering.append("svg:text")
                 .attr("x", (b.w + b.t) / 2)
                 .attr("y", b.h / 2)
@@ -95,11 +95,11 @@
 
         var b = {w: 75, h: 30, s: 3, t: 10};
         var colors = {
-            "线上": "#5687d1",
-            "线下": "#7b615c",
-            "运营商": "#de783b",
-            "其他": "#6ab975",
-            "other": "#a173d1",
+            // "线上": "#5687d1",
+            // "线下": "#7b615c",
+            // "运营商": "#de783b",
+            // "其他": "#6ab975",
+            // "other": "#a173d1",
         };
         var trail = d3.select("#sequence").append("svg:svg")
             .attr("width", 600)
@@ -197,7 +197,7 @@
                   ]
                 },
                 type : 'tree',
-                colors: {"媒介营销组": "#564ea0"},
+                colors: {"colors": "#564ea0"},
                 onmouseover: function(d){
                     var sequenceArray = getAncestors(d);
 
