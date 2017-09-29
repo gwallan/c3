@@ -43,17 +43,8 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-combin.js').then(function(c3){
-        window.chart = c3.generate({"axis":{"x":{"type":"indexed","tick":{"values":["2016-09","2016-10","2016-11","2016-12","2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08"],"responsive":true}},"y":{"min":0,"max":90.6816359262231,"tick":{"count":4}},"y2":{"show":false,"min":0,"max":10,"tick":{"count":3}}},"data":{"x":"x","type":"spline","xFormat":"%Y-%m-%d","columns":[["x","2016-09","2016-10","2016-11","2016-12","2017-01","2017-02","2017-03","2017-04","2017-05","2017-06","2017-07","2017-08"],["海外",0,0,0,0,16.925198207515,34.583598219962,82.43785084202099,79.052989290653,66.560136695883,0,0,0]],"order":null,"axes":{},"selection":{"grouped":true},"colors":{"海外":"#7167EA"}},"grid":{"y":{"show":true},"y2":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},"padding":{"top":40,"right":40},"point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
-        return;
-        window.chart = c3.generate({
-          "axis":{"x":{"type": "timeseries", "tick":{"format": "%Y-%m", "responsive": true}},"y":{"min":0,"max":5756,"tick":{"count":4}},"y2":{"show":false,"min":0,"max":0,"tick":{}}},
-          "data":{"x":"x","xFormat":"%Y-%m-%d","columns":[["x","2016-09-01","2016-10-01","2016-11-01","2016-12-01","2017-01-01","2017-02-01","2017-03-01","2017-04-01","2017-05-01","2017-06-01","2017-07-01","2017-08-01"],["全网通",0,0,0,0,0,0,0,0,0,0,0,"5230"]],"order":null,"axes":{},"selection":{"grouped":true},"colors":{"全网通":"#7167EA"},"type":"spline"},
-          "grid":{"y":{"show":true},"y2":{"show":true}},
-          "legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},
-          "padding":{"top":40,"right":40},
-          "point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},
-          "tooltip":{"show":true,"focusline":{"show":true}}});
+      System.import('component/c3-pie.js').then(function(c3){
+        window.chart = c3.generate({"data":{"order": "asc", "type":"donut","columns":[["32","117984.0"],["30","19663.0"],["29","19129.0"],["31","12243.0"]],"colors":{"29":"#EE3758","30":"#23A2F5","31":"#FDBA50","32":"#7167EA"},"names":{"29":"电信","30":"全网通","31":"移动","32":"海外"}},"donut":{"width":10,"label":{"position":"inner"}},"padding":{"top":0},"legend":{"show":true,"shape":"circle","position":"right","inset":{"anchor":"top-right","x":-30,"y":40},"width":240,"item":{"height":25}},"tooltip":{"show":false}});
         return;
 
         window.chart = c3.generate({

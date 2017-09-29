@@ -17,6 +17,13 @@ function C3Arc() {
 
             if (!config.data_order) {
                 $$.pie.sort(null);
+            }else if(config.data_order.match(/desc|asc/ig)){
+                $$.pie.sort(function(a, b){
+                    if(config.data_order == "asc")
+                        return a.values[0].value - b.values[0].value;
+                    if(config.data_order == "desc")
+                        return b.values[0].value - a.values[0].value;
+                });
             }
 
             $$.arcs = $$.main.select('.' + $$.CLASS.chart).append("g")
@@ -648,9 +655,9 @@ function C3Arc() {
                 })
                 .transition().duration(duration);
             main.selectAll('.' + $$.CLASS.chartArc)
-                .sort(function(d1, d2){
-                    return d3.descending(d1.value, d2.value);
-                })
+                // .sort(function(d1, d2){
+                //     return d3.ascending(d1.value, d2.value);
+                // })
                 .select('text')
                 .text($$.textForArcLabel.bind($$))
                 .attr('class', function (d) { return $$.isGaugeType(d.data) ? $$.CLASS.gaugeValue : 'c3-chart-arc-value'; })

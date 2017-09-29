@@ -161,6 +161,7 @@ Data.prototype.convertRowsToData = function (rows) {
 };
 Data.prototype.convertColumnsToData = function (columns) {
     var new_rows = [], i, j, key;
+
     for (i = 0; i < columns.length; i++) {
         key = columns[i][0];
         for (j = 1; j < columns[i].length; j++) {

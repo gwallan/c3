@@ -1826,7 +1826,7 @@
                 var reducer = function (p, c) { return p + Math.abs(c.value); };
                 var t1Sum = t1.values.reduce(reducer, 0),
                     t2Sum = t2.values.reduce(reducer, 0);
-                return orderAsc ? t2Sum - t1Sum : t1Sum - t2Sum;
+                return orderAsc ? t1Sum - t2Sum : t2Sum - t1Sum;
             });
         } else if (isFunction(config.data_order)) {
             targets.sort(config.data_order);
