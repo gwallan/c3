@@ -2228,7 +2228,6 @@
                 $$.main.selectAll('path.' + CLASS.shape + '-' + index).each(function (d) {
                     config.data_onmouseover.call($$.api, d, this);
                 });
-
             })
             .on('mouseout', function (d) {
                 var index = d.index;
@@ -2628,7 +2627,7 @@
         var $$ = this, scale = isSub ? $$.subX : $$.x;
         return function (d) {
             var index = d.id in indices ? indices[d.id] : 0;
-            return d.x || d.x === 0 ? scale(d.x) - offset * (targetsNum / 2 - index) : 0;
+            return d.x || d.x === 0 ? scale(d.x) - offset * ((targetsNum || 1) / 2 - index) : 0;
         };
     };
     c3_chart_internal_fn.getShapeY = function (isSub) {

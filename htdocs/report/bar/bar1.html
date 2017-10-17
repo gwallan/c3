@@ -37,7 +37,7 @@
       System.import('component/c3-bar.js').then(function(c3){
         window.chart = c3.generate({
             transition: {
-              enabled: false,
+              enabled: true,
               duration: 1000
             },
             "data":{
@@ -55,7 +55,10 @@
                 ['vivo Y51', '97.5'],
                 ['三星Galaxy Note7', '97.5'],
               ],
-              "type": "bar"
+              "type": "bar",
+              "labels": {
+                show: true
+              }
             },
             "bar": {
               "width": 20
@@ -103,7 +106,7 @@
               // }
             },
             point: {
-              show: false
+              show: true
             },
             mark: {
               max: {

@@ -69,8 +69,7 @@ function C3Bar() {
                 .attr("d", function(d, i){
                     var outline;
 
-                    if(!d.outline)
-                        d.outline = drawBar(d, i);
+                    d.outline = drawBar(d, i);
                     outline = d.outline.split(" ");
 
                     outline[2] = outline[1];
