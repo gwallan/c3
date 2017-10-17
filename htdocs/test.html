@@ -43,8 +43,8 @@
             "d3": "../node_modules/d3/d3.js"
           }
       });
-      System.import('component/c3-pie.js').then(function(c3){
-        window.chart = c3.generate({"data":{"order": "asc", "type":"donut","columns":[["32","117984.0"],["30","19663.0"],["29","19129.0"],["31","12243.0"]],"colors":{"29":"#EE3758","30":"#23A2F5","31":"#FDBA50","32":"#7167EA"},"names":{"29":"电信","30":"全网通","31":"移动","32":"海外"}},"donut":{"width":10,"label":{"position":"inner"}},"padding":{"top":0},"legend":{"show":true,"shape":"circle","position":"right","inset":{"anchor":"top-right","x":-30,"y":40},"width":240,"item":{"height":25}},"tooltip":{"show":false}});
+      System.import('component/c3-combin.js').then(function(c3){
+        window.chart = c3.generate({"axis":{"x":{"type":"category"},"y":{"min":0,"max":125.51,"tick":{"count":3}},"y2":{"show":true,"min":0,"max":13.636343882278295,"tick":{"count":3}}},"data":{"x":"x","xFormat":"%Y-%m-%d","columns":[["x","魅蓝E","U20","Metal","魅蓝3","魅蓝1","U10","魅蓝5","note3","魅蓝X","魅蓝MAX"],["销量","114.1","82.0","74.8","74.2","68.3","67.8","59.4","53.2","44.9","43.4"],["占比","114.1","82.0","74.8","74.2","68.3","67.8","59.4","53.2","44.9","43.4"]],"order":null,"selection":{"grouped":true},"colors":{"销量":"#23A2F5","占比":"#EE3758"},"types":{"销量":"bar","114.1":"line"}},"bar":{"width":20},"grid":{"y":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},"padding":{"top":40,"right":100,"left":120},"point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
         return;
 
         window.chart = c3.generate({

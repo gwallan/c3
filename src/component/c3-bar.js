@@ -66,15 +66,17 @@ function C3Bar() {
             this.mainBar
                 .style("fill", this.color)
                 .style("opacity", 1)
-                .each(function(d, i){
+                .attr("d", function(d, i){
                     var outline;
 
-                    d.outline = drawBar(d, i);
+                    if(!d.outline)
+                        d.outline = drawBar(d, i);
                     outline = d.outline.split(" ");
 
                     outline[2] = outline[1];
                     outline[3] = outline[4];
-                    this.setAttribute("d", outline.join(" "));
+
+                    return outline.join(" ");
                 });
 
             withTransition = withTransition || $$.config.transition_enabled;

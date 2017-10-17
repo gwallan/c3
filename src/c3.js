@@ -1427,9 +1427,9 @@
         yDomainMax = isValue(yMax) && !isFunction(yMax) ? yMax : isValue(yMin) && !isFunction(yMin) ? (yMin < yDomainMax ? yDomainMax : yMin + 10) : yDomainMax;
 
         // use current domain if target of axisId is none
-        // if (yTargets.length === 0) {
-        //     return axisId === 'y2' ? $$.y2.domain(): $$.y.domain();
-        // }
+        if (yTargets.length === 0) {
+            return axisId === 'y2' ? $$.y2.domain(): $$.y.domain();
+        }
         if (isNaN(yDomainMin)) { // set minimum to zero when not number
             yDomainMin = 0;
         }

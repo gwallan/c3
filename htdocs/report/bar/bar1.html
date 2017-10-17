@@ -37,7 +37,7 @@
       System.import('component/c3-bar.js').then(function(c3){
         window.chart = c3.generate({
             transition: {
-              enabled: true,
+              enabled: false,
               duration: 1000
             },
             "data":{
@@ -58,9 +58,7 @@
               "type": "bar"
             },
             "bar": {
-              "width": {
-                "ratio": 0.5
-              }
+              "width": 20
             },
             "padding":{
               "left": 50,//左边距
@@ -81,7 +79,7 @@
               },
               "y":{
                 "label": "好评率",//Y轴标签文本
-                // "min": 0,//Y轴最小值
+                "min": 0,//Y轴最小值
                 // "max": 4700,//Y轴最大值
                 "tick":{
                   "count":5,

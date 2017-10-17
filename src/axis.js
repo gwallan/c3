@@ -432,7 +432,7 @@ function Axis(owner){
                     centered: false,
                     format: undefined,
                     culling: {},
-                    culling_max: 10,
+                    culling_max: null,
                     count: undefined,
                     fit: true,
                     values: [],
