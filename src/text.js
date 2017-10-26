@@ -129,12 +129,12 @@ Text.prototype.getYForText = function (points, d, textElement) {
     } else {
         yPos = points[2][1];
         if (d.value < 0) {
-            yPos += box.height;
+            yPos += box.height + 5;
             if ($$.isType(d, "bar") && $$.isSafari()) {
-                yPos -= 3;
+                yPos -= 10;
             }
             else if (!$$.isType(d, "bar") && $$.isChrome()) {
-                yPos += 3;
+                yPos += 10;
             }
         } else {
             yPos += $$.isType(d, "bar") ? -10 : -10;

@@ -44,7 +44,35 @@
           }
       });
       System.import('component/c3-combin.js').then(function(c3){
-        window.chart = c3.generate({"axis":{"x":{"type":"category"},"y":{"min":0,"max":125.51,"tick":{"count":3}},"y2":{"show":true,"min":0,"max":13.636343882278295,"tick":{"count":3}}},"data":{"x":"x","xFormat":"%Y-%m-%d","columns":[["x","魅蓝E","U20","Metal","魅蓝3","魅蓝1","U10","魅蓝5","note3","魅蓝X","魅蓝MAX"],["销量","114.1","82.0","74.8","74.2","68.3","67.8","59.4","53.2","44.9","43.4"],["占比","114.1","82.0","74.8","74.2","68.3","67.8","59.4","53.2","44.9","43.4"]],"order":null,"selection":{"grouped":true},"colors":{"销量":"#23A2F5","占比":"#EE3758"},"types":{"销量":"bar","114.1":"line"}},"bar":{"width":20},"grid":{"y":{"show":true}},"legend":{"shape":"circle","show":true,"position":"inset","inset":{"anchor":"top-right","x":0,"y":-45,"step":1}},"padding":{"top":40,"right":100,"left":120},"point":{"show":true,"r":3,"focus":{"expand":{"enabled":true,"r":3}}},"tooltip":{"show":true,"focusline":{"show":true}}});
+        window.chart = c3.generate({
+          "size":{"height":88},
+          "data":{
+            "x":"x",
+            "columns":[
+              ["x","2017-10-17","2017-10-18","2017-10-19","2017-10-20","2017-10-21","2017-10-22","2017-10-23"],
+              ["y","73969281","73969281","73969281","73969281","73969281","73969281","111"]
+            ],
+            "type":"spline"
+          },
+          "padding":{"top":0,"right":40,"bottom":0},"color":{"pattern":["#91cae8"]},
+          "axis":{
+            "x":{
+                "show":true,
+                "type":"timeseries",
+                "tick":{
+                  "count":7,
+                  "format": function(d){
+                    return d ? d.getDate() : "";
+                  }
+                },
+            },
+            "y":{"show":false,"tick":{"count":4}}
+          },
+          "point":{"show":false,"focus":{"expand":{"enabled":false}}},
+          "tooltip":{"show":false,"focusline":{"show":true}},
+          "legend":{"show":false,"shape":"circle"},
+          "line":{"connectNull":true}
+        });
         return;
 
         window.chart = c3.generate({
