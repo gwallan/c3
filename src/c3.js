@@ -2225,7 +2225,7 @@
                 }
 
                 // Call event handler
-                $$.main.selectAll('path.' + CLASS.shape + '-' + index).each(function (d) {
+                $$.main.selectAll('.' + CLASS.shape + '-' + index).each(function (d) {
                     config.data_onmouseover.call($$.api, d, this);
                 });
             })
@@ -2242,7 +2242,7 @@
                 $$.unexpandBars && $$.unexpandBars();
 
                 // Call event handler
-                $$.main.selectAll('path.' + CLASS.shape + '-' + index).each(function (d) {
+                $$.main.selectAll('.' + CLASS.shape + '-' + index).each(function (d) {
                     config.data_onmouseout.call($$.api, d, this);
                 });
             })
