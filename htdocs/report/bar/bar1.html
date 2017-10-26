@@ -58,7 +58,10 @@
               "type": "bar",
               "labels": {
                 show: true
-              }
+              },
+              onmouseover: function (d) {
+                console.log(d);
+              },
             },
             "bar": {
               "width": 20
