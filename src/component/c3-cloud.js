@@ -1,5 +1,6 @@
 var cloud = require("d3-cloud");
 var c3 = require("../c3"),
+    utility = require("../utility"),
     Tooltip = require("../tooltip"),
     Text = require("../text");
 
@@ -11,8 +12,8 @@ function C3Cloud() {
             var $$ = this,
                 fontSizeMin = $$.config.cloud_size_min,
                 fontSizeMax = $$.config.cloud_size_max,
-                domainMin = $$.config.cloud_domain_min || _.min(this.data.origin, function(obj){return obj.count}).count,
-                domainMax = $$.config.cloud_domain_max || _.max(this.data.origin, function(obj){return obj.count}).count,
+                domainMin = $$.config.cloud_domain_min || d3.min(this.data.origin, function(obj){return obj.count}),
+                domainMax = $$.config.cloud_domain_max || d3.max(this.data.origin, function(obj){return obj.count}),
                 fontSize;
 
             if((domainMax - domainMin) <= (fontSizeMax - fontSizeMin)){
