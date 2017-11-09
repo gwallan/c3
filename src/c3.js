@@ -19,8 +19,8 @@
         c3_chart_internal_axis_fn,
         c3_chart_pluginChart;
     var except = {
-        rectEvent: ["pie", "donut", "tree", "radar", "geo"],
-        axis: ["pie", "donut", "tree", "radar", "geo"]
+        rectEvent: ["pie", "donut", "tree", "radar", "geo", "gauge"],
+        axis: ["pie", "donut", "tree", "radar", "geo", "gauge"]
     };
     var Injector = {
         dependencies: {},
@@ -650,7 +650,7 @@
         $$.arcWidth = $$.width - ($$.isLegendRight ? legendWidth + 10 : 0);
         $$.arcHeight = $$.height - ($$.isLegendRight ? 0 : 10);
         if ($$.hasType('gauge')) {
-            $$.arcHeight += $$.height - $$.getGaugeLabelHeight();
+            // $$.arcHeight += $$.height - $$.getGaugeLabelHeight();
         }
         if ($$.updateRadius) { $$.updateRadius(); }
 
@@ -672,6 +672,8 @@
         if ($$.updateTargetsForArc && $$.hasArcType()) { $$.updateTargetsForArc(targets); }
         //-- Bubble --//
         if ($$.updateTargetsForBubble && $$.hasBubbleType()) { $$.updateTargetsForBubble(targets); }
+        //-- Gauge --//
+        if ($$.updateTargetsForGauge && $$.hasGaugeType()) { $$.updateTargetsForGauge(targets); }
         //-- Map --//
         if ($$.updateTargetsForMap && $$.hasMapType()) { $$.updateTargetsForMap(targets); }
         //-- Map --//
@@ -891,7 +893,7 @@
             x = $$.arcWidth / 2;
             y = $$.arcHeight / 2;
 
-            if ($$.hasBubbleType()) {
+            if ($$.hasBubbleType && $$.hasBubbleType()) {
                 x = 0;
                 y = 0;
             }
@@ -2918,9 +2920,6 @@
                 break;
         }
         return is;
-    };
-    c3_chart_internal_fn.hasBubbleType = function (targets) {
-        return this.hasType('bubble', targets);
     };
     c3_chart_internal_fn.isScatterType = function (d) {
         var id = isString(d) ? d : d.id;

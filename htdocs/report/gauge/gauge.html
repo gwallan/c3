@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <link href="../../css/c3.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+        background-color: white;
+      }
+      #chart{
+        height: 600px;
+      }
+      .c3-line {
+        stroke-width: 2px;
+      }
+    </style>
+    <div id="chart"></div>
+    <script src="../../js/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true;
+      // set our baseURL reference path
+      System.config({
+          baseURL: '../../../src/',
+          meta: {
+            'c3.js': {
+              format: 'cjs'
+            }
+          },
+          map: {
+            "underscore": "../../../node_modules/underscore/underscore.js",
+            "pathseg": "../../../node_modules/pathseg/pathseg.js",
+            "d3": "../../../node_modules/d3/d3.js"
+          }
+      });
+      System.import('component/c3-pie.js').then(function(c3){
+        c3.generate({
+          transition: {
+            enabled: true,
+            duration: 1500
+          },
+          "data":{
+            type : 'gauge',
+            "columns":[
+              ['data', 71.4]
+            ],
+          },
+          "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
+          "gauge": {
+            "label": {
+              // "show": false,
+              "position": "inner"
+            },
+            "width": 20,
+            "range": [
+              {"start": 0, "end": 20, "color": "#63308d"},
+              {"start": 20, "end": 80, "color": "#0691d2"},
+              {"start": 80, "end": 100, "color": "#e80c4c"}
+            ],
+            "interval": 10
+          }
+        }, function(){
+
+        });
+
+        window.c3 = c3;
+      });
+    </script>
+  </body>
+</html>

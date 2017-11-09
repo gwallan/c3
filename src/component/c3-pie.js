@@ -35,24 +35,39 @@ function C3Arc() {
                 .text($$.getArcTitle());
         },
         initGauge: function () {
-            var arcs = this.arcs;
+            var $$ = this, d3 = $$.d3, config = $$.config;
 
-            if (this.hasType('gauge')) {
-                arcs.append('path')
-                    .attr("class", $$.CLASS.chartArcsBackground);
-                arcs.append("text")
-                    .attr("class", $$.CLASS.chartArcsGaugeUnit)
-                    .style("text-anchor", "middle")
-                    .style("pointer-events", "none");
-                arcs.append("text")
-                    .attr("class", $$.CLASS.chartArcsGaugeMin)
-                    .style("text-anchor", "middle")
-                    .style("pointer-events", "none");
-                arcs.append("text")
-                    .attr("class", $$.CLASS.chartArcsGaugeMax)
-                    .style("text-anchor", "middle")
-                    .style("pointer-events", "none");
-            }
+            config.legend_show = false;
+
+            $$.arcs = $$.main.select('.' + $$.CLASS.chart).append("g")
+                .attr("class", $$.CLASS.chartArcs)
+                .attr("transform", $$.hasBubbleType() ? "" : $$.getTranslate('arc'));
+            $$.arcs.append('text')
+                .attr('class', $$.CLASS.chartArcsTitle)
+                .style("text-anchor", "middle")
+                .text($$.getArcTitle());
+
+            $$.arcs.append('path')
+                .attr("class", $$.CLASS.chartArcsBackground);
+            $$.arcs.append("text")
+                .attr("class", $$.CLASS.chartArcsGaugeUnit)
+                .style("text-anchor", "middle")
+                .style("pointer-events", "none");
+            $$.arcs.append("g")
+                .attr("class", $$.CLASS.chartArcsGaugeRanges);
+            $$.arcs.append("g")
+                .attr("class", $$.CLASS.chartArcsGaugeTicks);
+            $$.arcs.append("g")
+                .attr("class", $$.CLASS.chartArcsGaugePointer);
+
+            // $$.arcs.append("text")
+            //     .attr("class", $$.CLASS.chartArcsGaugeMin)
+            //     .style("text-anchor", "middle")
+            //     .style("pointer-events", "none");
+            // $$.arcs.append("text")
+            //     .attr("class", $$.CLASS.chartArcsGaugeMax)
+            //     .style("text-anchor", "middle")
+            //     .style("pointer-events", "none");
         },
         isNoneArc: function (d) {
             return this.hasTarget(this.data.targets, d.id);
@@ -77,6 +92,12 @@ function C3Arc() {
         },
         hasArcType: function (targets) {
             return this.hasType('pie', targets) || this.hasType('donut', targets) || this.hasType('gauge', targets);// || this.hasType('tree', targets);
+        },
+        hasBubbleType: function (targets) {
+            return this.hasType('bubble', targets);
+        },
+        hasGaugeType: function (targets) {
+            return this.hasType('gauge', targets);
         },
         arcData: function (d, i) {
             // return this.isArcType(d.data) ? [d] : [];
@@ -433,6 +454,8 @@ function C3Arc() {
                 classArcs = $$.classArcs.bind($$),
                 classFocus = $$.classFocus.bind($$);
 
+            if($$.hasType('gauge'))return;
+
             mainPieUpdate = main.select('.' + $$.CLASS.chartArcs).selectAll('.' + $$.CLASS.chartArc)
                 .data($$.pie(targets))
                 .attr("class", function (d) { return classChartArc(d) + classFocus(d.data); });
@@ -459,6 +482,7 @@ function C3Arc() {
                 classChartBubble = $$.classChartBubble.bind($$),
                 classBubbles = $$.classBubbles.bind($$),
                 classFocus = $$.classFocus.bind($$);
+
             var root = {
                 "children": targets.length > 1 ? targets.reduce(function (a, b) {
                     if (a.values)
@@ -479,6 +503,52 @@ function C3Arc() {
                 .style("opacity", 0)
                 .style("text-anchor", "middle")
                 .style("pointer-events", "none");
+        },
+        updateTargetsForGauge: function(targets){
+            var $$ = this, d3 = $$.d3, config = $$.config, main = $$.main,
+                mainArc;
+            var data = config.gauge_range, interval = config.gauge_interval;
+
+            if(config.gauge_interval){
+                data = config.gauge_range.map(function(r){
+                    if(r["end"] - r["start"] < interval)
+                        return [r]
+                    else{
+                        var diff = (r["end"] - r["start"]) / interval, i = 0, arr = [];
+                        while(i < diff){
+                            arr.push({
+                                "start": r["start"] + i * interval,
+                                "end": i + 1 != Math.round(diff) ? r["start"] + (i + 1) * interval : r["end"],
+                                "color": r["color"]
+                            })
+                            i++;
+                        }
+                        return arr;
+                    }
+                }).reduce(function(resulte, item){
+                    resulte = resulte.concat(item);
+                    return resulte;
+                }, []);
+            }
+
+            $$.arcs.select('.' + $$.CLASS.chartArcsGaugePointer)
+                .selectAll("path")
+                .data(targets[0]["values"])
+                .enter()
+                .append("path");
+            $$.arcs.select('.' + $$.CLASS.chartArcsGaugeUnit)
+                .data(targets[0]["values"]);
+            $$.arcs.select('.' + $$.CLASS.chartArcsGaugeRanges)
+                .selectAll('.' + $$.CLASS.chartArcsGaugeRange)
+                .data(data)
+                .enter()
+                .append("path")
+                .attr("class", $$.CLASS.chartArcsGaugeRange);
+            $$.arcs.select('.' + $$.CLASS.chartArcsGaugeTicks)
+                .selectAll("text")
+                .data([{"start": 0, "end": 0}].concat(data))
+                .enter()
+                .append("text");
         },
         getGaugeLabelHeight: function () {
             return this.config.gauge_label_show ? 20 : 0;
@@ -741,24 +811,89 @@ function C3Arc() {
                     .attr("d", function () {
                         var d = {
                             data: [{ value: config.gauge_max }],
-                            startAngle: -1 * (Math.PI / 2),
-                            endAngle: Math.PI / 2
+                            startAngle: 0,
+                            endAngle: Math.PI * 2
                         };
                         return $$.getArc(d, true, true);
                     });
+                $$.arcs.select('.' + $$.CLASS.chartArcsGaugeRanges)
+                    .selectAll('.' + $$.CLASS.chartArcsGaugeRange)
+                    .attr("d", function(d, i){
+                        var d = {
+                            startAngle: d["start"]/config.gauge_max*1.5*Math.PI + Math.PI*1.25,
+                            endAngle: d["end"]/config.gauge_max*1.5*Math.PI + Math.PI*1.25
+                        };
+                        return $$.getArc(d, true, true);
+                    })
+                    .style("fill", function(d){
+                        return d.color;
+                    });
+                $$.arcs.select('.' + $$.CLASS.chartArcsGaugeTicks)
+                    .selectAll("text")
+                    .text(function(d){
+                        return d["end"];
+                    })
+                    .attr("text-anchor", "middle")
+                    .attr("x", function(d){
+                        return ($$.radius - 36) * Math.sin(d["end"]/config.gauge_max*1.5*Math.PI + Math.PI*1.25)
+                    })
+                    .attr("y", function(d){
+                        return -1 * ($$.radius - 36) * Math.cos(d["end"]/config.gauge_max*1.5*Math.PI + Math.PI*1.25)
+                    })
+                    .attr("dy", 6)
+                    .style("fill", function(d){
+                        return d.color;
+                    });
                 $$.arcs.select('.' + $$.CLASS.chartArcsGaugeUnit)
-                    .attr("dy", ".75em")
-                    .text(config.gauge_label_show ? config.gauge_units : '');
-                $$.arcs.select('.' + $$.CLASS.chartArcsGaugeMin)
-                    .attr("dx", -1 * ($$.innerRadius + (($$.radius - $$.innerRadius) / 2)) + "px")
-                    .attr("dy", "1.2em")
-                    .text(config.gauge_label_show ? config.gauge_min : '');
-                $$.arcs.select('.' + $$.CLASS.chartArcsGaugeMax)
-                    .attr("dx", $$.innerRadius + (($$.radius - $$.innerRadius) / 2) + "px")
-                    .attr("dy", "1.2em")
-                    .text(config.gauge_label_show ? config.gauge_max : '');
+                    .attr("dy", $$.radius * 0.6)
+                    .text(function(d){
+                        if(!$$.config.gauge_label_show)
+                            return "";
+
+                        if($$.config.gauge_label_format && utility.isFunction($$.config.gauge_label_format)){
+                            return $$.config.gauge_label_format(d.value);
+                        }else{
+                            return d.value;
+                        }
+                    })
+                    .style("fill", "#0691d2");
+                $$.arcs.select('.' + $$.CLASS.chartArcsGaugePointer)
+                    .select("path")
+                    .attr('d', function(){
+                        var data = [
+                            [-5, 0],
+                            [0, $$.radius - 55],
+                            [5, 0],
+                            [0, -6],
+                            [-5, 0]
+                        ];
+                        return d3.svg.line().interpolate('monotone')(data);
+                    })
+                    .style("stroke", "#0691d2")
+                    .style("fill", "#0691d2")
+                    .attr('transform', function(d){
+                        return 'rotate(' + 45 + ')';
+                    })
+                    .transition()
+                    .duration($$.config.transition_duration)
+                    .attrTween( 'transform', function(d) {
+                        var interpolator = d3.interpolateNumber(0, d.value);
+
+                        return function( t ) {
+                            return 'rotate(' + (45 + 27*(interpolator(t)/$$.config.gauge_interval)) + ')';
+                        };
+                    });
+                // $$.arcs.select('.' + $$.CLASS.chartArcsGaugeMin)
+                //     .attr("dx", -1 * ($$.innerRadius + (($$.radius - $$.innerRadius) / 2)) + "px")
+                //     .attr("dy", "1.2em")
+                //     .text(config.gauge_label_show ? config.gauge_min : '');
+                // $$.arcs.select('.' + $$.CLASS.chartArcsGaugeMax)
+                //     .attr("dx", $$.innerRadius + (($$.radius - $$.innerRadius) / 2) + "px")
+                //     .attr("dy", "1.2em")
+                //     .text(config.gauge_label_show ? config.gauge_max : '');
             }
         },
+
         classArc: function (d) {
             return this.classShape(d.data) + this.generateClass(this.CLASS.arc, d.data.id);
         },
@@ -784,6 +919,10 @@ c3.register("arc", [Legend, Tooltip, Text], {
         chartArcsGaugeUnit: 'c3-chart-arcs-gauge-unit',
         chartArcsGaugeMax: 'c3-chart-arcs-gauge-max',
         chartArcsGaugeMin: 'c3-chart-arcs-gauge-min',
+        chartArcsGaugeRanges: 'c3-chart-arcs-gauge-ranges',
+        chartArcsGaugeRange: 'c3-chart-arcs-gauge-range',
+        chartArcsGaugeTicks: 'c3-chart-arcs-gauge-ticks',
+        chartArcsGaugePointer: 'c3-chart-arcs-gauge-pointer',
         gaugeValue: 'c3-gauge-value',
         treeRoot: 'c3-tree-root',
         treeNode: 'c3-tree-node',
@@ -814,11 +953,12 @@ c3.register("arc", [Legend, Tooltip, Text], {
                 show: true,
                 format: undefined,
             },
-            expand: true,
             min: 0,
             max: 100,
             units: undefined,
             width: undefined,
+            range: [],
+            interval: null
         },
         donut: {
             label: {

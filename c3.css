@@ -171,8 +171,13 @@
   font-size: 1.3em; }
 
 .c3-chart-arcs .c3-chart-arcs-background {
-  fill: #e0e0e0;
-  stroke: none; }
+  fill: #fff;
+  stroke: none;
+}
+.c3-chart-arcs .c3-chart-arcs-gauge-range {
+  stroke: #fff;
+  stroke-width: 1px;
+}
 
 .c3-chart-arcs .c3-chart-arcs-gauge-unit {
   fill: #000;
