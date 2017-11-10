@@ -10,7 +10,8 @@
         background-color: white;
       }
       #chart{
-        height: 600px;
+        width: 220px;
+        height: 267px;
       }
       .c3-line {
         stroke-width: 2px;
@@ -43,16 +44,23 @@
           "data":{
             type : 'gauge',
             "columns":[
-              ['data', 71.4]
+              ['data', 50]
             ],
           },
           "color":{"pattern":["#0691d2","#3655a7","#63308d","#9b046b","#e80c4c"]},
           "gauge": {
             "label": {
-              // "show": false,
-              "position": "inner"
+              "show": false,
+              "position": {
+                "x": 0,
+                "y": 50
+              }
             },
-            "width": 20,
+            "pointer": {
+              "show": true,
+              "width": 3
+            },
+            "width": 10,
             "range": [
               {"start": 0, "end": 20, "color": "#63308d"},
               {"start": 20, "end": 80, "color": "#0691d2"},

@@ -49,16 +49,20 @@ function C3Arc() {
 
             $$.arcs.append('path')
                 .attr("class", $$.CLASS.chartArcsBackground);
-            $$.arcs.append("text")
-                .attr("class", $$.CLASS.chartArcsGaugeUnit)
-                .style("text-anchor", "middle")
-                .style("pointer-events", "none");
+            if($$.config.gauge_pointer_show){
+                $$.arcs.append("text")
+                    .attr("class", $$.CLASS.chartArcsGaugeUnit)
+                    .style("text-anchor", "middle")
+                    .style("pointer-events", "none");
+            }
             $$.arcs.append("g")
                 .attr("class", $$.CLASS.chartArcsGaugeRanges);
             $$.arcs.append("g")
                 .attr("class", $$.CLASS.chartArcsGaugeTicks);
-            $$.arcs.append("g")
-                .attr("class", $$.CLASS.chartArcsGaugePointer);
+            if($$.config.gauge_pointer_show){
+                $$.arcs.append("g")
+                    .attr("class", $$.CLASS.chartArcsGaugePointer);
+            }
 
             // $$.arcs.append("text")
             //     .attr("class", $$.CLASS.chartArcsGaugeMin)
@@ -835,17 +839,22 @@ function C3Arc() {
                     })
                     .attr("text-anchor", "middle")
                     .attr("x", function(d){
-                        return ($$.radius - 36) * Math.sin(d["end"]/config.gauge_max*1.5*Math.PI + Math.PI*1.25)
+                        return ($$.innerRadius - 10) * Math.sin(d["end"]/config.gauge_max*1.5*Math.PI + Math.PI*1.25)
                     })
                     .attr("y", function(d){
-                        return -1 * ($$.radius - 36) * Math.cos(d["end"]/config.gauge_max*1.5*Math.PI + Math.PI*1.25)
+                        return -1 * ($$.innerRadius - 10) * Math.cos(d["end"]/config.gauge_max*1.5*Math.PI + Math.PI*1.25)
                     })
                     .attr("dy", 6)
                     .style("fill", function(d){
                         return d.color;
                     });
                 $$.arcs.select('.' + $$.CLASS.chartArcsGaugeUnit)
-                    .attr("dy", $$.radius * 0.6)
+                    .attr("dx", function(){
+                        return $$.config.gauge_label_position ? $$.config.gauge_label_position["x"] : 0
+                    })
+                    .attr("dy", function(){
+                        return $$.config.gauge_label_position ? $$.config.gauge_label_position["y"] : $$.radius * 0.6
+                    })
                     .text(function(d){
                         if(!$$.config.gauge_label_show)
                             return "";
@@ -861,11 +870,11 @@ function C3Arc() {
                     .select("path")
                     .attr('d', function(){
                         var data = [
-                            [-5, 0],
-                            [0, $$.radius - 55],
-                            [5, 0],
-                            [0, -6],
-                            [-5, 0]
+                            [-$$.config.gauge_pointer_width, 0],
+                            [0, $$.innerRadius - 22],
+                            [$$.config.gauge_pointer_width, 0],
+                            [0, -$$.config.gauge_pointer_width - 2],
+                            [-$$.config.gauge_pointer_width, 0]
                         ];
                         return d3.svg.line().interpolate('monotone')(data);
                     })
@@ -952,6 +961,11 @@ c3.register("arc", [Legend, Tooltip, Text], {
             label: {
                 show: true,
                 format: undefined,
+                position: undefined
+            },
+            pointer: {
+                show: true,
+                width: 5
             },
             min: 0,
             max: 100,
