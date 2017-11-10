@@ -10,7 +10,7 @@
         background-color: white;
       }
       #chart{
-        width: 220px;
+        width: 620px;
         height: 267px;
       }
       .c3-line {
@@ -37,6 +37,10 @@
       });
       System.import('component/c3-pie.js').then(function(c3){
         c3.generate({
+          padding: {
+            top: 0,
+            bottom: 0
+          },
           transition: {
             enabled: true,
             duration: 1500

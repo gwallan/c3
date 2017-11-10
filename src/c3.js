@@ -647,11 +647,9 @@
         if ($$.height2 < 0) { $$.height2 = 0; }
 
         // for arc
-        $$.arcWidth = $$.width - ($$.isLegendRight ? legendWidth + 10 : 0);
-        $$.arcHeight = $$.height - ($$.isLegendRight ? 0 : 10);
-        if ($$.hasType('gauge')) {
-            // $$.arcHeight += $$.height - $$.getGaugeLabelHeight();
-        }
+        $$.arcWidth = $$.width - ($$.isLegendRight || $$.isLegendLeft ? legendWidth + 10 : 0);
+        $$.arcHeight = $$.height - ($$.isLegendRight || $$.isLegendLeft || (legendWidth == 0 && legendHeight == 0) ? 0 : 10);
+
         if ($$.updateRadius) { $$.updateRadius(); }
 
         if ($$.isLegendRight && hasArc) {

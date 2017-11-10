@@ -121,7 +121,7 @@ function C3Arc() {
             var $$ = this, config = $$.config,
                 w = config.gauge_width || config.donut_width;
 
-            $$.radiusExpanded = ($$.hasType('pie') && !config.pie_split) || ($$.hasType('donut') && !config.donut_split) ? Math.min($$.arcWidth, $$.arcHeight) / 2 : Math.min($$.arcHeight/2, $$.arcWidth/$$.data.targets.length/2) - 20;
+            $$.radiusExpanded = ($$.hasType('pie') && !config.pie_split) || ($$.hasType('donut') && !config.donut_split) ? Math.min($$.arcWidth, $$.arcHeight) / 2 : Math.min($$.arcHeight/2, $$.arcWidth/$$.data.targets.length/2);
             $$.radius = $$.radiusExpanded * ( config.pie_label_position == 'extend' || config.donut_label_position == 'extend' ? 0.75 : 0.95);
             $$.innerRadiusRatio = w ? ($$.radius - w) / $$.radius : 0.6;
             $$.innerRadius = $$.hasType('donut') || $$.hasType('gauge') ? $$.radius * $$.innerRadiusRatio : 0;
