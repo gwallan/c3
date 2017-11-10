@@ -173,8 +173,8 @@ function C3Bar() {
                 return [
                     [posX, offset],
                     [posX, posY - (y0 - offset)],
-                    [posX + barW, posY - (y0 - offset)],
-                    [posX + barW, offset]
+                    [posX + barW + (barTargetsNum > 1 ? -1 : 0), posY - (y0 - offset)],
+                    [posX + barW + (barTargetsNum > 1 ? -1 : 0), offset]
                 ];
             };
         },

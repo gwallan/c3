@@ -2227,9 +2227,18 @@
                 }
 
                 // Call event handler
-                $$.main.select('.' + CLASS.shape + '-' + index).each(function (d) {
-                    config.data_onmouseover.call($$.api, d, this);
-                });
+                // $$.main.select('.' + CLASS.shape + '-' + index).each(function (d) {
+                //     config.data_onmouseover.call($$.api, d, this);
+                // });
+                $$.main
+                    .select('.' + CLASS.chart)
+                    .selectAll('path.' + CLASS.shape + '-' + index)
+                    .call(function(){
+                        if(this.length)
+                            config.data_onmouseover.call($$.api, this.data(), this[0]);
+                        else
+                            config.data_onmouseover.call($$.api, this.data()[0], this[0][0]);
+                    });
             })
             .on('mouseout', function (d) {
                 var index = d.index;
@@ -2244,9 +2253,18 @@
                 $$.unexpandBars && $$.unexpandBars();
 
                 // Call event handler
-                $$.main.select('.' + CLASS.shape + '-' + index).each(function (d) {
-                    config.data_onmouseout.call($$.api, d, this);
-                });
+                // $$.main.select('.' + CLASS.shape + '-' + index).each(function (d) {
+                //     config.data_onmouseout.call($$.api, d, this);
+                // });
+                $$.main
+                    .select('.' + CLASS.chart)
+                    .selectAll('path.' + CLASS.shape + '-' + index)
+                    .call(function(){
+                        if(this.length)
+                            config.data_onmouseout.call($$.api, this.data(), this[0]);
+                        else
+                            config.data_onmouseout.call($$.api, this.data()[0], this[0][0]);
+                    });
             })
             .on($$.isTouchDevice ? 'touchmove' : 'mousemove', function (d) {
                 var selectedData, index = d.index,

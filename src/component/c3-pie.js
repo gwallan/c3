@@ -849,20 +849,23 @@ function C3Arc() {
                         return d.color;
                     });
                 $$.arcs.select('.' + $$.CLASS.chartArcsGaugeUnit)
-                    .attr("dx", function(){
-                        return $$.config.gauge_label_position ? $$.config.gauge_label_position["x"] : 0
-                    })
-                    .attr("dy", function(){
-                        return $$.config.gauge_label_position ? $$.config.gauge_label_position["y"] : $$.radius * 0.6
-                    })
                     .text(function(d){
-                        if(!$$.config.gauge_label_show)
-                            return "";
-
                         if($$.config.gauge_label_format && utility.isFunction($$.config.gauge_label_format)){
                             return $$.config.gauge_label_format(d.value);
                         }else{
                             return d.value;
+                        }
+                    })
+                    .call(function(){
+                        if(!$$.config.gauge_label_position){
+                            d3.select(this[0][0]).attr("dx", 0).attr("dy", $$.radius);
+                        }else{
+                            if(utility.isFunction($$.config.gauge_label_position)){
+                                var pos = $$.config.gauge_label_position($$.radius);
+                                d3.select(this[0][0]).attr("dx", pos["x"] || 0).attr("dy", pos["y"] || 0);
+                            }else if($$.config.gauge_label_position["x"] && $$.config.gauge_label_position["y"]){
+                              d3.select(this[0][0]).attr("dx", $$.config.gauge_label_position["x"]).attr("dy", $$.config.gauge_label_position["y"]);
+                            }
                         }
                     })
                     .style("fill", "#0691d2");

@@ -51,9 +51,11 @@
           "gauge": {
             "label": {
               "show": false,
-              "position": {
-                "x": 0,
-                "y": 50
+              "position": function(r){
+                return {
+                  "x": 0,
+                  "y": 50
+                };
               }
             },
             "pointer": {
