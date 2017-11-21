@@ -82,9 +82,27 @@
               {"start": 80, "end": 100, "color": "#e80c4c"}
             ],
             "interval": 10
+          },
+          "onrendered": function(){
+            // this.arcs
+            //   .selectAll(".title")
+            //   .remove();
+            // this.arcs
+            //   .append("text")
+            //   .text("负面")
+            //   .attr("class", "title")
+            //   .attr("x", -this.innerRadius*.7)
+            //   .attr("y", this.innerRadius)
+            //   .attr("text-anchor", "middle")
+            // this.arcs
+            //   .append("text")
+            //   .text("正面")
+            //   .attr("class", "title")
+            //   .attr("x", this.innerRadius*.7)
+            //   .attr("y", this.innerRadius)
+            //   .attr("text-anchor", "middle")
           }
         }, function(){
-
         });
         c3.generate({
           bindto: "#chart3",

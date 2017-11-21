@@ -972,7 +972,6 @@ c3.register("arc", [Legend, Tooltip, Text], {
             },
             min: 0,
             max: 100,
-            units: undefined,
             width: undefined,
             range: [],
             interval: null

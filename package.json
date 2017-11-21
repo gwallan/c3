@@ -27,6 +27,7 @@
     "d3-cloud": "^1.2.1",
     "d3-svg-legend": "^1.10.0",
     "pathseg": "^1.0.2",
+    "semantic-release": "^8.2.0",
     "semver": "^5.4.1",
     "topojson": "^1.6.26"
   },
