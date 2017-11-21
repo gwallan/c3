@@ -279,10 +279,8 @@ Grid.prototype.updateYGrid = function () {
     var $$ = this, config = $$.config,
         gridValues = $$.yAxis.tickValues() || $$.y.ticks(config.grid_y_ticks);
 
-    gridValues.shift();
-
     $$.ygrid = $$.main.select('.' + $$.CLASS.ygrids).selectAll('.' + $$.CLASS.ygrid)
-        .data(gridValues);
+        .data(gridValues.slice(1));
     $$.ygrid.enter().append('line')
         .attr('class', $$.CLASS.ygrid);
     $$.ygrid.attr("x1", config.axis_rotated ? $$.y : 0)
