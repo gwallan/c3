@@ -1,6 +1,6 @@
 {
   "name": "c3",
-  "version": "0.4.11",
+  "version": "1.0.0",
   "description": "D3-based reusable chart library",
   "main": "c3.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "d3-cloud": "^1.2.1",
     "d3-svg-legend": "^1.10.0",
     "pathseg": "^1.0.2",
+    "semver": "^5.4.1",
     "topojson": "^1.6.26"
   },
   "devDependencies": {
