@@ -663,19 +663,33 @@
         //-- Text --//
         $$.updateTargetsForText(targets);
         //-- Bar --//
-        if ($$.updateTargetsForBar && $$.hasType("bar")) { $$.updateTargetsForBar(targets); }
+        if ($$.updateTargetsForBar && $$.hasType("bar")) {
+            $$.updateTargetsForBar(targets);
+        }
         //-- Line --//
-        if ($$.updateTargetsForLine && $$.hasType("line")) { $$.updateTargetsForLine(targets); }
+        if ($$.updateTargetsForLine && ($$.hasType("line") || $$.hasType("scatter"))) {
+            $$.updateTargetsForLine(targets);
+        }
         //-- Arc --//
-        if ($$.updateTargetsForArc && $$.hasArcType()) { $$.updateTargetsForArc(targets); }
+        if ($$.updateTargetsForArc && $$.hasArcType()) {
+            $$.updateTargetsForArc(targets);
+        }
         //-- Bubble --//
-        if ($$.updateTargetsForBubble && $$.hasBubbleType()) { $$.updateTargetsForBubble(targets); }
+        if ($$.updateTargetsForBubble && $$.hasBubbleType()) {
+            $$.updateTargetsForBubble(targets);
+        }
         //-- Gauge --//
-        if ($$.updateTargetsForGauge && $$.hasGaugeType()) { $$.updateTargetsForGauge(targets); }
+        if ($$.updateTargetsForGauge && $$.hasGaugeType()) {
+            $$.updateTargetsForGauge(targets);
+        }
         //-- Map --//
-        if ($$.updateTargetsForMap && $$.hasMapType()) { $$.updateTargetsForMap(targets); }
+        if ($$.updateTargetsForMap && $$.hasMapType()) {
+            $$.updateTargetsForMap(targets);
+        }
         //-- Map --//
-        if ($$.updateTargetsForRadar && $$.hasRadarType()) { $$.updateTargetsForRadar(targets); }
+        if ($$.updateTargetsForRadar && $$.hasRadarType()) {
+            $$.updateTargetsForRadar(targets);
+        }
         /*-- Sub --*/
         //if ($$.updateTargetsForSubchart) { $$.updateTargetsForSubchart(targets); }
 
@@ -2408,7 +2422,7 @@
             .attr('class', CLASS.eventRect)
             .on('mouseout', function () {
                 if (!$$.config) { return; } // chart is destroyed
-                if ($$.hasArcType()) { return; }
+                if ($$.hasArcType && $$.hasArcType()) { return; }
                 mouseout();
             })
             .on('mousemove', function () {
@@ -2416,7 +2430,7 @@
                 var mouse, closest, sameXData, selectedData;
 
                 if ($$.dragging) { return; } // do nothing when dragging
-                if ($$.hasArcType(targetsToShow)) { return; }
+                if ($$.hasArcType && $$.hasArcType(targetsToShow)) { return; }
 
                 mouse = d3.mouse(this);
                 closest = $$.findClosestFromTargets(targetsToShow, mouse);
@@ -2465,7 +2479,7 @@
                 var targetsToShow = $$.filterTargetsToShow($$.data.targets);
                 var mouse, closest;
 
-                if ($$.hasArcType(targetsToShow)) { return; }
+                if ($$.hasArcType && $$.hasArcType(targetsToShow)) { return; }
 
                 mouse = d3.mouse(this);
                 closest = $$.findClosestFromTargets(targetsToShow, mouse);
@@ -2745,12 +2759,13 @@
 
             $$.main.selectAll('.' + CLASS.circles).data().forEach(function(obj){
                 min.push(d3.min(obj["values"], function(obj){
-                    return obj["extend"];
+                    return obj["value"];
                 }));
                 max.push(d3.max(obj["values"], function(obj){
-                    return obj["extend"];
+                    return obj["value"];
                 }));
             });
+
             $$.scatterScale = d3.scale.linear()
                 .domain([d3.min(min), d3.max(max)*1.2])
                 .range([$$.config.scatter_symbol_min || 1, $$.config.scatter_symbol_max || $$.width*$$.height/20000]);
@@ -2761,15 +2776,15 @@
         $$.mainCircle.enter().append("circle")
             .attr("class", $$.classCircle.bind($$))
             .attr("r", 1)
-            // .style("fill", $$.color)
+            .style("fill", config.data_type == "scatter" ? $$.color : "inherit")
             .style("opacity", $$.initialOpacityForCircle.bind($$))
-            .transition().duration($$.config.transition_enabled && config.data_type == "scatter" ? $$.config.transition_duration : 0)
+            .transition()
+            .duration($$.config.transition_enabled && config.data_type == "scatter" ? $$.config.transition_duration : 0)
             .attr("r", $$.pointR.bind($$));
         $$.mainCircle.exit().remove();
     };
     c3_chart_internal_fn.redrawCircle = function (withTransition) {
         var $$ = this, selectedCircles = this.main.selectAll('.' + CLASS.selectedCircle);
-
         // generate circle x/y functions depending on updated params
         var cx = ($$.config.axis_rotated ? $$.circleY : $$.circleX).bind($$);
         var cy = ($$.config.axis_rotated ? $$.circleX : $$.circleY).bind($$);
@@ -2783,7 +2798,7 @@
         return [
             (withTransition ? this.mainCircle.transition() : this.mainCircle)
                 .style('opacity', this.opacityForCircle.bind(this))
-                .style("stroke", $$.config.data_type == "scatter" ? "tranparent" : this.color)
+                .style("stroke", this.color)
                 .attr("transform", function(d){
                     return "translate(" + cx(d) + " ," + cy(d) + ")";
                 }),
@@ -2857,7 +2872,17 @@
     c3_chart_internal_fn.scatterPointR = function (d) {
         var $$ = this, config = $$.config;
 
-        d.r = config.scatter_size ? config.scatter_size.call($$, d) : d.r = $$.scatterScale(d.extend);
+        function extendKey(d, key){
+            if(utility.isArray(key)){
+                key = key.filter(function(k){
+                    return d[k];
+                });
+            }
+
+            return d[key] || d.value;
+        }
+
+        d.r = config.scatter_size ? config.scatter_size.call($$, d) : d.r = $$.scatterScale(config.scatter_key ? extendKey(d, config.scatter_key) : d.value );
         return d.r;
     };
     c3_chart_internal_fn.pointR = function (d) {

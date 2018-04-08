@@ -219,7 +219,7 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
                     $$.data.xs[id] = $$.getOtherTargetXs();
                 }
                 // if not included in input data, find from preloaded data
-                else if (notEmpty(config.data_xs)) {
+                else if (utility.notEmpty(config.data_xs)) {
                     $$.data.xs[id] = $$.getXValuesOfXKey(xKey, $$.data.targets);
                 }
                 // MEMO: if no x included, use same x of current will be used
@@ -265,8 +265,21 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
                         id: convertedId
                     };
 
-                    return $$.chartData.otherKey ? _.extend(d[$$.chartData.otherKey], data) : data;
-                }).filter(function (v) { return utility.isDefined(v.x); })
+                    //根据otherKey扩展数据
+                    if($$.chartData.otherKey){
+                        if(utility.isString($$.chartData.otherKey)){
+                            data[$$.chartData.otherKey] = d[$$.chartData.otherKey];
+                        }else{
+                            data[$$.chartData.otherKey[xKey]] = d[$$.chartData.otherKey[xKey]];
+                        }
+                        return data;
+
+                    }else
+                        return data;
+                })
+                .filter(function (v) {
+                    return v && v.x ? utility.isDefined(v.x): false;
+                })
             };
         });
 

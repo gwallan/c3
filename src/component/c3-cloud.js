@@ -73,6 +73,7 @@ function C3Cloud() {
                 .select("." + this.CLASS.chartCloud)
                 .attr("transform", "translate(" + width/2 + "," + height/2 + ")");
 
+            console.log($$.data.origin)
             $$.cloud
                 .size([width * ratio, height * ratio])
                 .words($$.data.origin)
