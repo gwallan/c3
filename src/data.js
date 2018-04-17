@@ -278,7 +278,7 @@ Data.prototype.convertDataToTargets = function (data, appendXs) {
                         return data;
                 })
                 .filter(function (v) {
-                    return v && v.x ? utility.isDefined(v.x): false;
+                    return v && v.hasOwnProperty("x") ? utility.isDefined(v.x): false;
                 })
             };
         });
