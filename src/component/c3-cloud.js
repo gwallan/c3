@@ -20,7 +20,6 @@ function C3Cloud() {
                 fontSizeMax = parseInt((fontSizeMax - fontSizeMin)/2 + fontSizeMin + (domainMax - domainMin)/2);
                 fontSizeMin = parseInt((fontSizeMax - fontSizeMin)/2 + fontSizeMin + (domainMax - domainMin)/2);
             }
-
             fontSize = d3.scale.log().domain([domainMin, domainMax]).range([fontSizeMin, fontSizeMax])
 
             $$.main.select('.' + $$.CLASS.chart)
@@ -73,11 +72,11 @@ function C3Cloud() {
                 .select("." + this.CLASS.chartCloud)
                 .attr("transform", "translate(" + width/2 + "," + height/2 + ")");
 
-            console.log($$.data.origin)
             $$.cloud
                 .size([width * ratio, height * ratio])
                 .words($$.data.origin)
                 .on("end", function(words) {
+                    console.log(words)
                     var enterG, enterText, enterRect, batchSize = 20;
 
                     if(!words)return;
@@ -180,7 +179,7 @@ c3.register("cloud", [Tooltip, Text], {
             ratio: 1,
             size: {
                 min: 12,
-                max: 40
+                max: 36
             },
             domain: {
                 min: null,
