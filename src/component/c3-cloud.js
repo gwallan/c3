@@ -76,7 +76,6 @@ function C3Cloud() {
                 .size([width * ratio, height * ratio])
                 .words($$.data.origin)
                 .on("end", function(words) {
-                    console.log(words)
                     var enterG, enterText, enterRect, batchSize = 20;
 
                     if(!words)return;
