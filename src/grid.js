@@ -46,9 +46,11 @@ function Grid(owner){
 
 Grid.prototype.initGrid = function () {
     var $$ = this, config = $$.config, d3 = $$.d3;
+
     $$.grid = $$.main.append('g')
-        .attr("clip-path", $$.clipPathForGrid)
+        // .attr("clip-path", $$.clipPathForGrid)
         .attr('class', $$.CLASS.grid);
+
     if (config.grid_x_show) {
         $$.grid.append("g").attr("class", $$.CLASS.xgrids);
     }
@@ -61,6 +63,7 @@ Grid.prototype.initGrid = function () {
             .append('line')
             .attr('class', $$.CLASS.xgridFocus);
     }
+
     $$.xgrid = d3.selectAll([]);
     if (!config.grid_lines_front) { $$.initGridLines(); }
 };
@@ -270,8 +273,11 @@ Grid.prototype.updateXGrid = function (withoutUpdate) {
         .data(xgridData);
     $$.xgrid.enter().append('line').attr("class", $$.CLASS.xgrid);
     if (!withoutUpdate) {
-        $$.xgrid.attr($$.xgridAttr)
-            .style("opacity", function () { return +d3.select(this).attr(config.axis_rotated ? 'y1' : 'x1') === (config.axis_rotated ? $$.height : 0) ? 0 : 1; });
+        $$.xgrid
+            .attr($$.xgridAttr)
+            .style("opacity", function () {
+                return +d3.select(this).attr(config.axis_rotated ? 'y1' : 'x1') === (config.axis_rotated ? $$.height : 0) ? 0 : 1;
+            });
     }
     $$.xgrid.exit().remove();
 };

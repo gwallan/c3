@@ -25,7 +25,6 @@
   "dependencies": {
     "d3": "^3.5.17",
     "d3-cloud": "^1.2.5",
-    "d3.layout.cloud": "^1.2.0",
     "d3-svg-legend": "^1.10.0",
     "pathseg": "^1.0.2",
     "semantic-release": "^8.2.0",
@@ -61,8 +60,6 @@
     "phantomjs": "^1.9.18",
     "shelljs": "^0.7.5",
     "style-loader": "^0.14.0",
-    "topojson": "^1.6.27",
-    "underscore": "^1.9.0",
     "webpack": "^2.2.1",
     "yargs": "^6.6.0"
   },
