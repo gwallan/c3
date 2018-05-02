@@ -112,6 +112,9 @@ function c3_axis(d3, params, c3) {
     }
     function axis(g) {
         g.each(function () {
+            // if(orient == "bottom"){
+            //     debugger
+            // }
             var g = axis.g = d3.select(this);
             var scale0 = this.__chart__ || scale, scale1 = this.__chart__ = copyScale();
             var ticks = tickValues ? tickValues : generateTicks(scale1),
@@ -202,9 +205,6 @@ function c3_axis(d3, params, c3) {
             text = tick.select("text");
             tspan = text.selectAll('tspan')
                 .data(function (d, i) {
-                    // if(orient == "bottom"){
-                    //     debugger
-                    // }
                     //typeof d == "number" ? Math.round(d) :
                     var v = orient == "bottom" ?
                         (c3.config.axis_x_tick_values && c3.config.axis_x_tick_values[i] ? c3.config.axis_x_tick_values[i] : d) :
@@ -568,7 +568,16 @@ function Axis(owner){
             var $$ = owner, config = $$.config, tickValues;
 
             if (config.axis_x_tick_fit || config.axis_x_tick_count) {
-                tickValues = this.generateTickValues($$.mapTargetsToUniqueXs(targets), config.axis_x_tick_count, $$.isTimeSeries(), config.axis_x_tick_format);
+                var targets = $$.mapTargetsToUniqueXs(targets);
+                if(targets.length == 1){
+                    if(typeof config.axis_x_min != "undefined"){
+                        targets = [config.axis_x_min].concat(targets);
+                    }
+                    if(typeof config.axis_x_max != "undefined"){
+                        targets.push(config.axis_x_max);
+                    }
+                }
+                tickValues = this.generateTickValues(targets, config.axis_x_tick_count, $$.isTimeSeries(), config.axis_x_tick_format);
                 // tickValues = this.generateTickValues($$.xAxisTickValues, config.axis_x_tick_count, $$.isTimeSeries());
             }
             if (axis) {
