@@ -13,7 +13,7 @@
     var Tooltip = require("./tooltip");
     var Mark = require("./mark");
 
-    var c3 = { version: "0.4.10" };
+    var c3 = { version: "1.4.10" };
     var c3_chart_fn,
         c3_chart_internal_fn,
         c3_chart_internal_axis_fn,
@@ -3974,6 +3974,7 @@
         };
     }
 
+    console.log("%cc3 version: " + c3.version, "color: rgb(253, 186, 80); font-style: italic; padding: 2px")
     if (typeof define === "function" && define.amd)
         window.c3 = c3, define(c3);
     else if (typeof module === "object" && module.exports)

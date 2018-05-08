@@ -1081,6 +1081,7 @@ Axis.prototype.updateAxis = function(targetsToShow, transitions, options){
         $$.xAxis.tickValues([]);
         $$.subXAxis.tickValues([]);
     }
+    console.log(tickValues)
 
     if (config.zoom_rescale && !options.flow) {
         xDomainForZoom = $$.x.orgDomain();
